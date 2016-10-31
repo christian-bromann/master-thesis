@@ -1,0 +1,73 @@
+\documentclass[
+	bibliography=totoc,
+	listof=totoc,							% falls Index verwendet, ergänze "index=totoc" zu den Optionen
+	BCOR=5mm,							% Rand für Bindung: 5mm
+	DIV=12]{scrbook}
+\usepackage{bibgerm}       					% deutsche Literaturverzeichnisse
+\usepackage[utf8]{inputenc}		       			% Umlaute im Text
+\usepackage{graphicx} 						% Einfügen von Grafiken  - für PDF-Latex: .pdf und .png (.jpg möglich, sollte aber vermieden werden)
+\usepackage{setspace}
+\usepackage{fancyvrb, listings}          			% Für Code Ausgaben mit Highlighting
+\usepackage{caption}
+\usepackage[usenames]{color}
+\usepackage[english]{babel}
+
+\definecolor{lightgray}{RGB}{230,230,230}
+\definecolor{darkgrey}{RGB}{88,88,88}
+\definecolor{purple}{RGB}{153,17,153}
+\definecolor{darkgreen}{RGB}{3,120,65}
+\definecolor{orange}{rgb}{1,0.5,0}
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgrey}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{darkgreen}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+  emph=[1]{prototype,methodName,createElement,append,require,writeFile,log,asynchronousFunction,series,then,post,stringify,send,listen,capturePage,getSelected,sendMessage,setTimeout,captureVisibleTab,onload,drawImage,addListener,cb,takeScreenshot,extend},
+  emphstyle=[1]\color{purple},
+}
+\lstset{
+   language=JavaScript,
+   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b,
+   frame=single
+}
+\selectlanguage{english}
+
+\def\cchapter#1{{\let\cleardoublepage\relax\chapter{#1}}}
+
+\usepackage{url}           						% URL's (z.B. in Literatur) schöner formatieren
+\usepackage{hyperref} 						% sorgt für Hyperlinks in PDF-Dokumenten
+\usepackage[toc]{glossaries}						% Glossary Paket einbinden
+\makeglossaries
+\graphicspath{./images/}	 					% Pfad zu den Bildern des Dokumentes
+\linespread{1.3}
+
+\begin{document}
+
+% ---------------------------------------------------------------
+
+\frontmatter
+    \include{./title}
+
+\mainmatter
+    \input{./content/index}
+
+\end{document}
