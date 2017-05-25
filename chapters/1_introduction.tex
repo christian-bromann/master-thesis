@@ -11,14 +11,14 @@ television. The device was one of the first electronic devices that introduced a
 human equiment that everyone suppose to have.\\
 Despites innovations like colored displays or flat screen devices the television quickly lost the race against
 the mobile phone as well as the personal computer and later laptop. Even though it is still a very popular
-medium, people nowadays use their smart phone or personal computer way more frequest as it was at the end of the
+medium, people nowadays use their smart phone or personal computer way more frequent as it was at the end of the
 20th century. One of the major reasons was the innovation of the internet. The more people were able to connect
-each other and consum media over the world wide web the more became the television the less frequest choice.
+each other and consum media over the world wide web the more became the television the less frequent choice.
 The new generation of kids grows up with web media portals like YouTube\footnote{\url{https://www.youtube.com/}}
 and generates billions and billions of clicks, views and revenue for advertisment companies every day.\\
 Thanks to the most recent big innovations in television technology that are setup boxes and standards like
 Hybrid Broadcast Broadband (short for HbbTV) the TV industries tries to keep up with other technologies by
-introducing the so called smart televisions or sometime referred to as connected TV or hybrid televisions.
+introducing the so called smart televisions or sometimes referred to as connected TV or hybrid televisions.
 It is the first generation of such devices that are connected to the world wide web and therefor can provide
 digital content in a non linear way for the first time.\\
 Since then the market and the amount of smart TVs has been growing fast. With that the HbbTV standared evolved
@@ -31,16 +31,17 @@ from linear TV stream to non linear media content ondemand.
 \section{Motivation\label{sec:motivation}}
 
 By introducing TVs to the Internet it automatically opened the door for web technologies to become standards
-on these devices. While early setup boxes like Chromecast enabled some web-browsing experience, HbbTV has
-been the first real technology that brought websites to the big screen. Instead of just watching a stream with
-linear content, HbbTV supported devices also provide web sources that contextually fits to the viewed content
-and allow the user to navigate through an app to watch non linera content ondemand.\\
+on these devices. While early setup boxes like Chromecast\footnote{\url{https://www.google.com/intl/de_de/chromecast/}}
+enabled some web-browsing experience, HbbTV has been the first real technology that brought websites to the big screen.
+Instead of just watching a stream with linear content, HbbTV supported devices also provide web sources that
+contextually fits to the viewed content and allow the user to navigate through an app to watch non linera content
+ondemand.\\
 These apps are webpages with JavaScript heavy functionality that are rendered in proparitary browsers. Unlike
 normal browsers though there is no navigation menu or status bar. The page is rendered with a transparent background
 so that you can show the TV stream in the back while navigating through the app. Depending on the TV manufacture
 the embedded browser in the TV is mostly a clone to the existing desktop browsers though with less compatibility.
 Early HbbTV supported devices are compatible with desktop browsers that have been shipped more than 10 years ago.
-Especially since HbbTV run a lot of JavaScript to show its content in a dynamic way this makes it hard for
+Especially since HbbTV runs a lot of JavaScript to show its content in a dynamic way this makes it hard for
 developers to build their apps.\\
 Compared to modern web development where almost everything is made out of web components, build together in a
 modular fashion using tools like React, Polymer or Angular, HbbTV apps are still build like JavaScript single
@@ -52,7 +53,7 @@ Companies constantly build frameworks, tools and integrations that makes buildin
 maintainable. Especially browser vendors like Google or Mozilla are interested in providing an excellent
 developing experiences as this has become the only differentiator between browsers these days. After web
 technologies has been standardised by the W3 Consortium\footnote{e.g. latest HTML specification: \url{https://www.w3.org/TR/html5/}}
-the compatition between browsers is not based on the question who can interpet the HTML code better and therefor
+the compatition between browsers is not based on the question who can interpret the HTML code better and therefor
 render the page more correctly but more on which browser supports the latest recommended standards and fanciest
 technologies.\\
 Unfortunatelly this is not the case for all embedded browser in smart TVs. The HbbTV standard was developed as
@@ -67,15 +68,18 @@ front of the screen.\\
 This yields a problem that has been around in web development for ages but almost died due to the standardisation
 of web technology. With more support for the HbbTV standard the manufacture started to improve the functionaility
 of embedded browser not only by adding more computing power to smart TVs but also by providing better compatibility
-to already accepted web standards. Also the HbbTV standard itself evolved and requires now certain technology to be
-supported in order to allow the TV to label itself as HbbTV compliant. The problem with this is that not everyone
-buys a new TV as soon as there is a better one on the market. Especially since they last longer than usual mobile
-phones or computer the update cycles of televisions are long. This creates a highly fragmented user market with
-tons of different devices over time that all support a different level of HTML and JavaScript. Building qualitiv
-HbbTV apps that suppose to run on the majority of devices in peoples households becomes super time consuming
-and expensive since you don't know if the device can execute your scripts or if you've used functionality that
-is not supported. As a developer you not only have to have all the TV devices which is literally impossible but you
-also need to manually test your app on each one of these. This process is cumbersome and not scaleable.
+to already accepted web standards. In addition to that the HbbTV standard itself evolved and requires now certain
+technology to be supported in order to allow the TV to label itself as HbbTV compliant. The problem with this is
+that not everyone buys a new TV as soon as there is a better one on the market. Especially since they last longer
+than usual mobile phones or computer the update cycles of televisions are long. Compared to desktop browser which
+update themself automatically and have reached version numbers in the fifties, the browser within todays smart
+TVs don't update and stick as long as the owner keeps the television. This creates a highly fragmented
+user market with tons of different devices over time that all support a different level of HTML and JavaScript.
+Building qualitiv HbbTV apps that suppose to run on the majority of devices in peoples households becomes super
+time consuming and expensive since you don't know if the device can execute your scripts or if you've used
+functionality that is not supported. As a developer you not only have to have all the TV devices which is literally
+impossible but you also need to manually test your app on each one of these. This process is cumbersome and not
+scaleable.
 
 \section{Objective\label{sec:objective}}
 
@@ -86,7 +90,7 @@ In addition to that since the browser that renders the app is embedded on a remo
 way more difficult to not only build HbbTV applications but also to debug them in case a certain TV doesn't
 run a certain functionality. In addition to that since HbbTV is a fairly new standard on the market it has not
 even closed developed a community around the technology compared to the modern web on desktop and mobile. Not
-more than a handful frameworks has been developed so far that can simplify the work of an HbbTV developer. Most
+more than a handful frameworks has been developed so far that can simplify the work of an HbbTV app developer. Most
 of the problems still have to be solved individually which increases the probability of introducing errors and
 issues that have to be fixed.\\
 
