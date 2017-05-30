@@ -1,48 +1,43 @@
-\chapter{State of the Art\label{cha:chapter2}}
+% Chapter 2 is usually termed 'Related Work', 'State of the Art' or 'Fundamentals'. Here you will describe
+% relevant technologies and standards related to your topic. What did other scientists propose regarding
+% your topic? This chapter makes about 20-30 percent of the complete thesis.
+%
+% This section is intended to give an introduction about relevant terms, technologies
+% and standards in the field of X. You do not have to explain common technologies such
+% as HTML or XML.
+%
+% This section describes relevant technologies, starting with X followed by Y, concluding with Z.
 
-Chapter 2 is usually termed 'Related Work', 'State of the Art' or 'Fundamentals'. Here you will describe
-relevant technologies and standards related to your topic. What did other scientists propose regarding
-your topic? This chapter makes about 20-30 percent of the complete thesis.
+\chapter{State of the Art\label{cha:state_of_the_art}}
 
-This section is intended to give an introduction about relevant terms, technologies
-and standards in the field of X. You do not have to explain common technologies such
-as HTML or XML.
-
-This section describes relevant technologies, starting with X followed by Y, concluding with Z.
+There are literally two main standards/protocols that are used in this thesis and will be described in
+depth in this chapter: the HbbTV standard and the Webdriver protocol. Both are fairly new standards that
+have been defined within the last 5 years. Another important protocol for this work is the Chrome Remote
+Debugging protocol which is used by the automation driver to drive the Webdriver tests get data out of
+the HbbTV app. This thesis tries to connect the standards to allow interoperability between them to
+increase the level of integration to a wide variety of tools that has not been possible before.
 
 \section{HbbTV\label{sec:hbbtv}}
 
-It's always a good idea to explain a technology or a system with a citation of a prominent
-source, such as a widely accepted technical book or a famous person or organization.
-
-Exmple: Tim-Berners-Lee describes the ''WorldWideWeb'' as follows:\\
-\textit{''The WorldWideWeb (W3) is a wide-area hypermedia information retrieval initiative
-aiming to give universal access to a large universe of documents.''} \cite{timwww}\\
-\\
-You can also cite different claims about the same term.\\
-
-According to Bill Gates
-\textit{''Windows 7 is the best operating system that has ever been released''} \cite{billgates} (no real quote)
-
-In opposite Steve Jobs claims Leopard to be
-\textit{''the one and only operating system''} \cite{stevejobs}
-
-\subsection{The Standard in Detail\label{sec:hbbtvstandard}}
-
-- Where it is defined\\
-- What does the standard contain\\
-- How does it differ from other standards
-
-\subsection{Distribution and Support\label{sec:distandsup}}
+% It's always a good idea to explain a technology or a system with a citation of a prominent
+% source, such as a widely accepted technical book or a famous person or organization.
 
 - How does the market look like
 - Where it is supported
 - In which contries will it be supported
 - long term plans for HbbTV
 
-\subsection{Devices and Setup\label{sec:deviceandsetup}}
-
 - What is required to use HbbTV
+
+\section{HbbTV Runtime Environment\label{sec:hbbtvruntimeenvironment}}
+
+- What's the lifetime cycle for HbbTV apps
+
+\subsection{The Standard in Detail\label{sec:hbbtvstandard}}
+
+- Where it is defined\\
+- What does the standard contain\\
+- How does it differ from other standards
 
 \subsection{Development of HbbTV Applications\label{sec:devofhbbtv}}
 
@@ -89,3 +84,24 @@ as described in section \ref{sec:hbbtv}.
 - How do devices differ
 - only input remote control
 - what could the future bring to us?
+
+\section{Chrome Remote Debugging Protocol}
+
+- What is it
+- for what is it used for
+- what about other browser (remotedebug.org)
+- somethine from https://github.com/ChromeDevTools/awesome-chrome-devtools
+
+\subsection{Functional Principles of modern Web Browser\label{sec:howbrowserwork}}
+
+- How browser work
+
+\subsection{Communication between Chrome DevTools Frontend and the Browser}
+
+- How does the devtools frontend gets all the data from the browser
+- why does it not affect the performance
+
+\section{HbbTV and Web Platform Tests}
+
+- How HbbTV devices get tested
+- how other standards get tested
