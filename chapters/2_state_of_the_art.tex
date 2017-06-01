@@ -33,10 +33,12 @@ the normal TV to a Smart TV. It made it even more difficult for content provider
 to all TV platforms.\\
 With the open ETSI standard called HbbTV a new way was build to create digital applications for
 broadcaster and content provider that runs on every TV supporting that standard. It \textit{''is
-a globally initiative technology mainly developed by industry leaders''} \cite{zte}. HbbTV
-applications are HTML webpages with additional features that enabled certain interaction between
-broadcast and broadband. This means that from a running broadcast stream it allows customers
-to open apps that provide additional content to the image on the screen. From that you can start
+a globally initiative technology mainly developed by industry leaders''} \cite{zte}. The standard
+itself introduces only a handful technical components and is mainly based on existing standards. HbbTV
+applications are HTML webpages with additional features that enable certain interaction between
+broadcast and broadband. It is sometimes referred to as Hybrid Television since the TV device receives
+data from both of these sources in parallel. This means that from a running broadcast stream it allows
+customers to open apps that provide additional content to the image on the screen. From that you can start
 even more applications that provide different content in non linera fashion. We have to differentiate
 here between two different types of apps. There are broadcast-independent applications that are not
 connected to any broadcast service and are downloaded and accessed via broadband. The other type are
@@ -115,7 +117,7 @@ Application Discovery over Broadband is a workaround to solve this problem.
 \begin{figure}[htb]
   \centering
   \includegraphics[width=15cm]{application_discovery_over_broadband.pdf}\\
-  \caption{App delivery workflow of HbbTV applications}\label{fig:application_discovery_over_broadband}
+  \caption{App delivery workflow of HbbTV applications over broadband discovery}\label{fig:application_discovery_over_broadband}
 \end{figure}
 
 As described in Figure \ref{fig:application_discovery_over_broadband} the TV gets the AIT package
@@ -191,8 +193,51 @@ behavior as this plugins are already tested against common Smart TV devices.
 
 \subsection{HbbTV Runtime Environment\label{sec:hbbtvruntimeenvironment}}
 
-- What's the lifetime cycle for HbbTV apps
-- see spec (autoload etc.)
+The Runtime Environment of an HbbTV application is formed by the browser and an Application Manager who
+\textit{''evaluates the AIT to control the lifecycle for an interactive application''}\cite{hbbtv15}.
+The browser on the other side which is in many cases a clone of an already existing web browser with
+a subset of supported features is responsible to render the HbbTV app. The TV receives from the broadcast
+stream the AIT package, an A/V signal as well as application data and stream events. While the A/V
+stream is processed like a standard non-hybrid DVB stream it still can provide some information like
+channel list or tuning functions to the Runtime Environment. Furthermore receives the environment
+the application data and event streams from the object carousel using a DSM-CC client which is a
+toolkit defined in the MPEG-2 stanard that provides a control channel to access the broadcast stream
+and push data to the Application Manager.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=15cm]{app_env.png}\\
+  \caption{
+    Functional components of a hybrid terminal
+  }
+  \label{fig:app_env}
+\end{figure}
+
+In order to allow the HbbTV app to embed the running broadcast stream within the application the
+as a video the Media Player component is required which receives that data after the broadcast
+stream was processed. It can also receive A/V content from the broadband source in linear or non
+linear form.\\
+As described in section \ref{sec:hbbtv} once the HbbTV application is loaded via broadband stream
+it starts either directly by the end-user by pressing a dedicated button on the remote control, in
+response to an event stream or by an already running application, e.g. when the user wants to open
+an application within the application. With HbbTV version 2 it became also possible to start the
+app with a companion screen. However it is often the case that the app is a broadcast related
+autostart application which displays a \textit{''Red Button''} notification to inform the user
+that an application is available. These are called \textit{''Red Button''} applications. To not
+disrupt the video stream they only show something like a small image and leave the rest of the
+screen transparent using CSS. This has been agreed in a guideline to not annoy the viewer with
+undesired overlays and to allow a uniform experience for the application start. If no action
+is taken by the user this indicator disappears again. Since radio services don't have this
+indicator, because they don't use the video channel, the full user interface will be displayed.
+Some applications like digital teletext apps are not run with autostart enabled. They have
+to be specifically triggered by the user without, in this case using the teletext button on
+the remote. Triggered one time it starts the digital teletext which is an HbbTV based application.
+If triggered twice it closes this app and starts the standard old fashioned teletext. By pushing
+the button for the third time it closes also that.\\
+HbbTV apps are not only tied to a specific broadcaster. The so called broadcast-independent
+applications \textit{''can be electronic programme guides (EPGs) or “TV editions” of existing
+web services such as flickr, YouTube and very many more that may be provided by the big brands
+as well as on a regional level or even by individuals.''}\cite{biapps}
 
 \subsection{Development of HbbTV Applications\label{sec:devofhbbtv}}
 
