@@ -144,17 +144,50 @@ service in a variety of ways.
 
 All these features allow broadcasters to implement not only an additional content outlet but also
 to create tailored advertisment strategies to a specified audience. With methods like geotargeting
-or targeted advertisment content provider can reach their audience based on a certain profile where
-a push on the red button of the remote control opens up and webpage on e.g. your tablet with a
-service can be personalised so that a younger person would get a different service offer than an
-older person. This completely changes the way we watch commercials in the future. Depending on
-the user profile a broadcaster can show personalised advertisment during the commercial break by
-jumping from a broadcast stream to a broadband video and back once the commercials are over.
-Broadband videos are already prebuffered before the commercial starts so that the transition from
-broadcast to broadband is almost seamlessly. Usecases like that are already developed and will
-get applied once a broader market share supports the latest HbbTV specification.\\
+or targeted advertisment. Geotargeting can be used in HbbTV applications by leveraging a users
+IP address in order show regional products or services. Combined with a broadcast stream it
+enables interesting opportunities. In an advertisment campaign launched by Germans private
+broadcaster RTL they promoted a pharmaceutical with help of an HbbTV app. The pharmaceutical
+\textit{''Wick Medinait''} was advertised along with a banner that showed the regional weather
+forecast. It had the effect that the HbbTV app banner supported the TV spot so that it increased
+the impact of the advertisment itself.
 
-- HbbTV show cases (1 or 2)
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=10cm]{geotargeting.jpg}\\
+  \caption{
+    Use case of geotargeting via HbbTV\\
+    {\tiny Image Source: https://goo.gl/rab8XD}
+  }
+  \label{fig:geotargeting}
+\end{figure}
+
+This is also called Addressable TV advertising. It \textit{''enable[s] advertisers to selectively
+segment TV audiences and serve different ads or ad pods (groups of ads) within a common program or
+navigation screen. Segmentation can occur at geographic, demographic, behavioral and (in some cases)
+self-selected individual household levels [...]''}\cite{adrTV}.\\
+Another interesting use case outside of advertisment is content authoring of HbbTV applications.
+Usually an HbbTV application is a custom web app that is build to serve a specific content for
+a service or show. Once you want to promote a new service or show it requires to build a new
+app with new content. This takes time and cost money. A solution to this problem was adapted from
+the web. By using a Content Management System (CMS) like Wordpress\footnote{\url{https://wordpress.org/}}
+broadcaster can create or modify the content of their apps using a simple web interface.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=10cm]{mpat.png}\\
+  \caption{
+    Modifying HbbTV content via a web interface
+  }
+  \label{fig:mpat}
+\end{figure}
+
+Figure \ref{fig:mpat} shows how this looks like with a tool called MPAT\footnote{\url{https://www.fokus.fraunhofer.de/en/fame/project/mpat}},
+a project that was funded by the European Union and developed and led by Fraunhofer Fokus.
+It uses Wordpress as CMS to enable authors to modify content, look or functionality of an HbbTV
+app. Thanks to its plug\&play functionality the tool can easily add new features like Chat and Video or
+Image Galleries without requiring someone to implement it. With that it reduces the risk of unexpected
+behavior as this plugins are already tested against common Smart TV devices.
 
 \subsection{HbbTV Runtime Environment\label{sec:hbbtvruntimeenvironment}}
 
