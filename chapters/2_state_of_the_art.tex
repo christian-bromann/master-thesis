@@ -241,6 +241,26 @@ as well as on a regional level or even by individuals.''}\cite{biapps}
 
 \subsection{Development of HbbTV Applications\label{sec:devofhbbtv}}
 
+As mentioned in \ref{sec:hbbtv} HbbTV applications are written in CE-HTML which is an XHTML
+based standard to build webpages for consumer electronics like televisions. With the release
+of HbbTV version 2 support for HTML5 was added which allows developer to use the latest
+web technologies in their apps. Until the majority of devices have support for that apps will
+still delivered in the CE-HTML format. Per specification the doctype of the document needs
+to be either XHTML 1.0 strict or has to have an HbbTV specific declaration which is
+
+\vspace{1cm}
+\begin{lstlisting}[caption=HbbTV Doctype Declaration,label=doctype]
+<!DOCTYPE html PUBLIC "-//HbbTV//1.1.1//EN"
+  "http://www.hbbtv.org/dtd/HbbTV-1.1.1.dtd\"
+>
+\end{lstlisting}
+\vspace{0.5cm}
+
+Also the html tag needs to have XML namespace and the page needs to be served with a
+\textit{''application/vnd.hbbtv.xml+xhtml''} content type otherwise the app is going to be
+ignored by the device. The browser window has a fixed size of 1280x720 pixel and therefor
+fits perfectly in full screen on a 16:9 device.
+
 - How do engineer build HbbTV apps these days (show HbbTV app boilerplate)
 - What are typical app structures
 - What kind of tooling does already exist (HAT project)
