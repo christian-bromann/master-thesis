@@ -357,18 +357,29 @@ such as DVB or DASH.
 
 \section{Test Automation\label{sec:testautomation}}
 
-For internal references use the 'ref' tag of LaTeX. Technology B is similar to Technology A
-as described in section \ref{sec:hbbtv}.
+There is a lot of different ways on how to test software. Depending on its type and the scope of
+the tested functionality there are multiple testing methods that can be applied. From unit testing
+that only covers individual software components and code segments to load testing which makes sure
+that a specific performance metric is met these methods are used at different stages of the
+development lifecycle. With test automation these testing methods can be executed with use of
+special software that controls the execution of tests and compares the actual outcome with a
+certain predicted outcome. This happens in an automated fashion so that the test itself is mostly
+triggered by a certain event (e.g. code changes) in a CI/CD like environment.\\
+From the agile world where coding and testing are one process a concept developed by Mike Cohn
+became popular that describes how \textit{''an effectitve test automation strategy calls for
+automating tests at three levels: unit, service an UI''} \cite{testautomation}. It explains
+that \textit{''unit testing should be the foundation of a solid test automation strategy and as
+such represents the largest part of the pyramid''} \cite{unittesting}.
+
+\subsection{History of Selenium and Webdriver\label{sec:history}}
+
+- How Selenium and Appium has evolved
 
 \subsection{How Test Automation Changed the Industry\label{sec:howitchanged}}
 
 - Study cases of how current top companies test their apps (not necessarry HbbTV)
 - demonstrate how similar apps get tested these days
 - outline the gap between both worlds
-
-\subsection{History of Automated Testing\label{sec:history}}
-
-- How Selenium and Appium has evolved
 
 \subsection{Webdriver Protocol\label{sec:webdriver}}
 
