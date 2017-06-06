@@ -312,8 +312,48 @@ on the TV with some sort of debug overlay that prints custom debug messages.
 
 \subsection{Available test solutions\label{sec:availabletestsolutions}}
 
-- How do engineer ensure quality of HbbTV apps
-- give a glimb of existing product and reference of chapter 6
+Most of the standard static code analysis tools like JavaScript or CSS linter also apply for HbbTV app
+development. These tools ensure that the code can be parsed by the TV device. Specifically for
+HbbTV apps the \textit{''Institut für Rundfunktechnik GmbH''} authored a validator that checks
+for common pitfalls. It not only warns you if you serve the app with a wrong content-type
+it also makes sure that other specifications are met like having the right doctype or required
+XML namespace attributes set. However these helper can only detect obvious issues that are relevant
+to all HbbTV devices. Problems that only appear on TVs from certain manufactures can not be found
+with these kind of tools. It usually requires manual work which ends up being very tedious and
+expensive. There are some companies that tried to solve this problem.\\
+A Czech company called Suite.st has developed a system to run e2e tests based on a web GUI on
+arbitrary devices either in a remote office or in a local environment. It allows to run these
+tests in parallel and provides a comprehensive report about the test result over time. The
+GUI allows their user to simply click together one or multiple test scenarios where common
+actions are open the app via URL, press a button on the remote and assert that a certain element
+contains a certain property. Every aspect of your test can be seperated into sub steps and
+reused in other tests. The main idea is that you don't need any coding skills to put together
+a test. Figure \ref{fig:suitest} shows how simple the GUI looks like and how tests are being put
+together.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=15cm]{suitest.png}\\
+  \caption{Suite.st Test Editor GUI}\label{fig:suitest}
+\end{figure}
+
+To gain access to the device the company provides a setup box that comes with infraret blasters
+in order to simulate remote control events. You can also inject a script into your HbbTV app
+to instrument either your browser or TV device to allow Suite.st to run your tests. In case
+you don't own a targeted device Suite.st provides a handful of devices from their own datacenter.
+It requires a paid plan though which start with 156\euro{} up to 899\euro{}.\\
+Another company providing an e2e test solution for HbbTV apps on Smart TVs is \textit{Eurofins Digital Testing}\footnote{\url{http://www.eurofins-digitaltesting.com/}}.
+Next to HbbTV applications they also offer multiple device types such as Set-Top Boxes, standard
+web-apps or mobile apps on tablets and phones. Their TestWizard Manager\footnote{\url{http://www.eurofins-digitaltesting.com/testwizard/infrastructure/}}
+controls a set of set of TestWizard Robots that contain a different variety of devices depending
+on the requirements of the application. Unlike Suite.st the company offers a development tool
+called \textit{ScriptStudio} that allows customer to also write automated tests \textit{''without
+requirement for extensive knowledge of scripting languages''} \cite{scriptstudio}. Since other
+devices types that they offer for mobile and desktop can be tested via test automation scripts
+it is also possible to write e2e tests via Selenium and Appium. The company itself is with
+22,000 employees way bigger than Suite.st. They have a network of more than 200 laboratories and
+offer complete testing solutions not only for HbbTV but also for other key technologies and standards
+such as DVB or DASH.
 
 \section{Test Automation\label{sec:testautomation}}
 
