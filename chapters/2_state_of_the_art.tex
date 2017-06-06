@@ -249,21 +249,66 @@ still delivered in the CE-HTML format. Per specification the doctype of the docu
 to be either XHTML 1.0 strict or has to have an HbbTV specific declaration which is
 
 \vspace{1cm}
-\begin{lstlisting}[caption=HbbTV Doctype Declaration,label=doctype]
+\begin{lstlisting}[caption=Beginning of an HbbTV document,label=doctype]
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//HbbTV//1.1.1//EN"
-  "http://www.hbbtv.org/dtd/HbbTV-1.1.1.dtd\"
+  "http://www.hbbtv.org/dtd/HbbTV-1.1.1.dtd"
 >
+<html xmlns="http://www.w3.org/1999/xhtml\">
+  <head>
+    <meta http-equiv="Content-Type"
+          content="application/vnd.hbbtv.xml+xhtml; utf-8"
+    />
 \end{lstlisting}
 \vspace{0.5cm}
 
-Also the html tag needs to have XML namespace and the page needs to be served with a
+Also the document needs to contain an XML decleration at the beginning of the document as well
+as a namespace definition in the html tag. This is required so that the device can properly
+interpret the document as CE-HTML. In addtition to that the page needs to be served with a
 \textit{''application/vnd.hbbtv.xml+xhtml''} content type otherwise the app is going to be
-ignored by the device. The browser window has a fixed size of 1280x720 pixel and therefor
-fits perfectly in full screen on a 16:9 device.
+ignored by the television. The browser window has a fixed size of 1280x720 pixel and therefor
+fits perfectly in full screen on a 16:9 device. With embedded objects the developer can access
+APIs that are defined by the Open IPTV Forum in the HbbTV spec to receive TV capabilities
+and configuration as well as access the application manager. It extracts information out of
+the AIT packages such as lifecycle of the app or the autostart flag. APIs are available for
+configuration and settings, download manager and content download as well as parental access
+control and scheduled recordings. However most HbbTV apps these days only need the following
+embedded objects:
 
-- How do engineer build HbbTV apps these days (show HbbTV app boilerplate)
-- What are typical app structures
-- What kind of tooling does already exist (HAT project)
+\vspace{1cm}
+\begin{lstlisting}[caption=Embedded Objects used to access HbbTV APIs,label=embeddedObjects]
+<object type="application/oipfApplicationManager" id="oipfAppMan" />
+<object type="application/oipfConfiguration" id="oipfConfig" />
+\end{lstlisting}
+\vspace{0.5cm}
+
+Using the DOM node id developers can query the element and access the API. This usally happens
+on the \textit{''onLoad''} event that gets triggered onced all DOM elements and JavaScript files
+are loaded. The event callback then executes some sort of initialization method that loads the
+applications and shows it on the screen.
+
+\vspace{1cm}
+\begin{lstlisting}[caption=HbbTV App initialization,label=loadApp]
+var oipf = document.getElementById(appMan);
+var app = oipf.getOwnerApplication(document);
+app.show();
+\end{lstlisting}
+\vspace{0.5cm}
+
+The only input device for HbbTV web apps is the remote control. Within the initialization process
+an event listener is registered on the window global object that gets triggered on keydown events.
+Depending on the event key code the app executes different actions and allows navigating through
+the app.\\
+Since uploading changes to a production server is inefficient and time consuming people have
+developed some tool to improve the development environments of HbbTV app developer. There is a
+Firefox plugin that emulates an CE-HTML like environment in the browser called FireHbbTV\footnote{\url{https://addons.mozilla.org/en-US/firefox/addon/firehbbtv/}}.
+It simulates the TV Remote control using the standard keyboard, displays the safe-area margin as well
+as supports most of the HbbTV specific APIs. Another popular tool is the Opera TV Emulator\footnote{\url{http://www.operasoftware.com/products/tv/tv-developer-tools}},
+a virtual machine that emulates an Opera SmartTV environment. With that you can have your app being
+served on your local machine and easily access it using these tools. However even though these are
+helpful tools \textit{''they don't offer the full capacities and facilities that a certified HbbTV
+device will provide.''} \cite{hbbtvenv}. Therefor many developers tend to build their apps directly
+on the TV with some sort of debug overlay that prints custom debug messages.
 
 \subsection{Available test solutions\label{sec:availabletestsolutions}}
 
