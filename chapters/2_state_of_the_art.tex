@@ -413,7 +413,7 @@ regressions were introduced. This can only accomplished with proper tooling. In 
 software from end to end a framework called Selenium has become the tool of choice for many
 developers.
 
-\subsection{Selenium in a Nutshell\label{sec:history}}
+\subsection{Selenium\label{sec:history}}
 
 Selenium is a set of tools and libraries to automated mainly web browsers. It can interact
 with them to simulate user actions like click or inputs and assert certain states of web
@@ -463,27 +463,27 @@ contains the tools that can be used to run tests with WebDriver. Every part that
 to automate the browser became obsolete after all browser vendors stepped up to implement the
 automation engine directly into the browser.
 
-\subsection{Webdriver Protocol\label{sec:webdriver}}
+\subsection{Appium\label{sec:appium}}
 
-- What is it
-- Where is it supported
-- How does it differ from previous JSONWireProtocol
-
-\subsection{Cloud Solutions\label{sec:cloud}}
-
-- How to do test automation in big scale
-- compare different types of cloud solutions
-
-\subsection{Tooling\label{sec:tooling}}
-
-- What tools to use to run test automation
-- What are their scope and restrictions
-
-\subsection{Analysis of Test Automation Demand for TVs\label{sec:testautomationontv}}
-
-- How do devices differ
-- only input remote control
-- what could the future bring to us?
+After the success of Selenium and the growing market of mobile devices and applications the
+demand for automating mobile phones increased more and more. Even though the big player in
+the market (Apple and Android) did provide tooling to create automated tests it still was
+time consuming and cumbersome as both platforms forced developers to use their own platform
+specific technologies. With that it not only took twice as long to build the app since they had
+to be written in Java for Android and Objective-C for iOS respectively, they also had to be
+tested with two different frameworks. Appium aims to solve this problem by providing a cross
+platform solution for native and hybrid apps. It allows developer to write automated e2e tests
+on both platforms using the WebDriver protocol. It extends that protocol to introduce mobile
+specific actions like swipe or touch gestures to the developer. Moreover Appium supports hybrid
+applications as well which are mobile web apps that are wrapped within a tiny native container
+so that you can write one single app and deploy it for both platforms. With that it can also
+run a random web page on a browser on the mobile device. Since it leverages the native test
+automation frameworks it doesn't matter if you run your test on an emulator or simulator on your
+computer or a real device that is setup in a test lab. As the WebDriver protocol is universal
+it doesn't require to write tests for Appium in a certain language. Similar to Selenium it is
+possible to write tests with any tool that supports the protocol. It also allows to connect
+to a Selenium grid to not only have a browser but also a mobile farm available to use for
+automated tests.
 
 \section{Chrome Remote Debugging Protocol}
 
