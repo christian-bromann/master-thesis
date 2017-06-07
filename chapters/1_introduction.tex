@@ -138,14 +138,14 @@ That being said, the actual technical work here is not to rebuild the Devtools a
 engineer the communication that happens between that app and the browser in order to enable information exchange
 and debugging commands. Due to the fact that the browser that renders an HbbTV app on the TV does not disclose
 these information we need to find a way to provide these by injecting a script that can send us all the details
-of the HbbTV app based on the \textit{''Chrome DevTools Protocol''} \cite{devtoolsprotocol}. Due to limitations
-in time, implementation and technical support of the browser that is running on the TV it won't be possible to
-support all features that the DevTools app provides. The work concentrates only on parts that are relevant to
-an HbbTV app developers interest and which are feasible with all the limitiations of the browser on the TV.
-To be more specific, the developer will be able to see the DOM structure of the app as well as its sources and
-network traffic. He will be able to change attributes of DOM nodes and remove them. In addition to that he will
-be able to use the console tab to run arbitrary JavaScript code getting executed on the TV in the same runtime
-environment as the app. With that the developer will be able to access the global scope of the runtime and therefor
+of the HbbTV app based on the Chrome DevTools Protocol. Due to limitations in time, implementation and
+technical support of the browser that is running on the TV it won't be possible to support all features
+that the DevTools app provides. The work concentrates only on parts that are relevant to an HbbTV app developers
+interest and which are feasible with all the limitiations of the browser on the TV. To be more specific,
+the developer will be able to see the DOM structure of the app as well as its sources and network traffic.
+He will be able to change attributes of DOM nodes and remove them. In addition to that he will be able to
+use the console tab to run arbitrary JavaScript code getting executed on the TV in the same runtime environment
+as the app. With that the developer will be able to access the global scope of the runtime and therefor
 also inspect certain states of the app. There will be two different ways provided to inject the script that
 enables the communication with the DevTools application.\\
 Based on this work the test automation platform will allow to run automated tests using the Webdriver protocol

@@ -325,7 +325,7 @@ on the TV with some sort of debug overlay that prints custom debug messages.
 
 Most of the standard static code analysis tools like JavaScript or CSS linter also apply for HbbTV app
 development. These tools ensure that the code can be parsed by the TV device. Specifically for
-HbbTV apps the \textit{''Institut für Rundfunktechnik GmbH''} authored a validator that checks
+HbbTV apps the \textit{''Institut für Rundfunktechnik GmbH''} authored a validator\footnote{\url{http://hbbtv-live.irt.de/validator}} that checks
 for common pitfalls. It not only warns you if you serve the app with a wrong content-type
 it also makes sure that other specifications are met like having the right doctype or required
 XML namespace attributes set. However these helper can only detect obvious issues that are relevant
@@ -367,6 +367,12 @@ it is also possible to write e2e tests via Selenium and Appium. The company itse
 22,000 employees way bigger than Suite.st. They have a network of more than 200 laboratories and
 offer complete testing solutions not only for HbbTV but also for other key technologies and standards
 such as DVB or DASH.
+
+\subsection{HbbTV and Web Platform Tests}
+
+- How HbbTV devices get tested
+- how other standards get tested
+- validator (http://hbbtv-live.irt.de/validator/, http://ligada-validator.com/)
 
 \section{Test Automation\label{sec:testautomation}}
 
@@ -487,6 +493,21 @@ automated tests.
 
 \section{Chrome Remote Debugging Protocol}
 
+As described in section \ref{fig:selenium} when Selenium merged with WebDriver they started
+to communicate with the browser directly in order to interact with the page. As the first
+automation driver for Google Chrome was released it used an internal protocol called Chrome
+DevTools protocol to instrument and debug the web page. It is mostly used by the Chrome
+DevTools which is a developer tool to inspect the wepage and profile the underlying rendering
+engine called Chromium. The protocol is divided into a number of domains where each
+\textit{''domain defines a number of commands it supports and events it generates''}
+\cite{devtoolsprotocol}. If the user activates a flag\footnote{\url{e.g. in Windows:
+chrome.exe --remote-debugging-port=9222}} when starting the browser a TCP server is initiated
+and the API can get accessed via a WebSocket connection. This allows arbitrary app developer
+to build automation integration for the Chrome browser. The protocol itself is comprehensive
+and allows besides receiving information about the DOM of the page a lot of debugging and
+profiling tools. For example the developer IDE can allow to set breakpoints within the editor
+and propagate these to the browser.
+
 - What is it
 - for what is it used for
 - what about other browser (remotedebug.org)
@@ -500,9 +521,3 @@ automated tests.
 
 - How does the devtools frontend gets all the data from the browser
 - why does it not affect the performance
-
-\section{HbbTV and Web Platform Tests}
-
-- How HbbTV devices get tested
-- how other standards get tested
-- validator (http://hbbtv-live.irt.de/validator/, http://ligada-validator.com/)
