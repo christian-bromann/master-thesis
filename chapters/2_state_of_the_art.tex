@@ -413,8 +413,55 @@ regressions were introduced. This can only accomplished with proper tooling. In 
 software from end to end a framework called Selenium has become the tool of choice for many
 developers.
 
-\subsection{History of Selenium and Webdriver\label{sec:history}}
+\subsection{Selenium in a Nutshell\label{sec:history}}
 
+Selenium is a set of tools and libraries to automated mainly web browsers. It can interact
+with them to simulate user actions like click or inputs and assert certain states of web
+applications. Those libraries are open source and available in almost any code language and
+are used to automate e2e tests. It is supported by all the major browser where each one
+provides some sort of automation driver that speaks the Selenium/Webdriver protocol. The
+communication is based on HTTP requests between an automation server and the client. Each
+test automation is coupled to a session id. Once a sessions is initiated you can communicate
+with the automation server via rest API. Such server can be either a Selenium server or directly
+a browser automation driver. A Selenium server is some sort of load balancer in order to run
+multiple tests on different browser at the same time. It manages all initiated sessions and
+reroutes them accordingly. A browser automation server can register itself to such a server
+to make itself available for others to use. It allows to speed up your tests by running them
+on multiple browser at the same time. You can even run these on different machines or VMs in
+your network by using a Selenium-Grid. This allows you to run tests concurrently on different
+operating systems and environments. By starting the Selenium server as hub you can connect other
+servers on different machines to it. These servers are referred to as nodes. The hub keeps
+track on all node configurations and ensures that all requests are load-balanced to them. It
+acts as a central access point to all browser in the network.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=15cm]{selenium.pdf}\\
+  \caption{Concept Flow of a Selenium Grid}\label{fig:selenium}
+\end{figure}
+
+It is important to point out difference between Selenium and WebDriver here. Selenium was
+developed in 2004 by Jason Huggins, an engineer at Thoughtworks\footnote{\url{https://www.thoughtworks.com}}
+who tried to build a tool to test web applications that require frequest testing. The tool
+was called \textit{JavaScript Test Runner}. It was able to interact with the web page in order
+to call certain actions on it. Due to the Same Origin Policy that was introduced by browser
+vendors to prevent JavaScript from accessing data of pages that are not within the same domain,
+Huggins and his team had to build a proxy server to overcome this. It injected a script to the
+webpage to talk to the proxy server and therefor enable the interaction with the webpage. This
+proxy server was released to public as Selenium Remote Control and is the first version of
+Selenium. In 2007 Simon Stewart who was also working at Thoughtworks build another tool to run
+browser tests which he called WebDriver. His tool was not a proxy. It communicated with the
+browser directly to use its own engine for automation. In 2011 both tools got merged into one
+project that was called Selenium WebDriver (or Selenium 2.0). Over years it became the number
+one choice of developers for browser automation so that originators and the community around
+the project decided to make the Selenium protocol (also called JsonWireProtocol) a W3C standard.
+In 2016 this standard was released by the consortium as candidate recommendation after it was
+fully implemented in two major browser (Firefox and IE). It was officially called WebDriver
+specification. Even though Selenium and WebDriver are referencing the same project and technology
+it still differs in some minor specification details. The Selenium project itself nowadays only
+contains the tools that can be used to run tests with WebDriver. Every part that was responsible
+to automate the browser became obsolete after all browser vendors stepped up to implement the
+automation engine directly into the browser.
 
 \subsection{Webdriver Protocol\label{sec:webdriver}}
 
