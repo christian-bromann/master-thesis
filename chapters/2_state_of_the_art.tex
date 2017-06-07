@@ -30,7 +30,8 @@ this app for each individual platform. This is a really time consuming and not s
 the way you build apps for such platforms was extremely different. After game consoles like Sony Playstation
 or Microsofts xBox became internet connected devices too there even was another way to transform
 the normal TV to a Smart TV. It made it even more difficult for content provider to deploy their services
-to all TV platforms.\\
+to all TV platforms.
+
 With the open ETSI standard called HbbTV a new way was build to create digital applications for
 broadcaster and content provider that runs on every TV supporting that standard. It \textit{''is
 a globally initiative technology mainly developed by industry leaders''} \cite{zte}. The standard
@@ -45,7 +46,8 @@ connected to any broadcast service and are downloaded and accessed via broadband
 broadcast-related applications that can be opened when a certain broadcast service is used. They
 can start automatically or explicitly upon user request. The advantage of HbbTV here is the independence
 to the used device. Content provider can build and deploy apps which can be used by any device if the
-standard is supported.\\
+standard is supported.
+
 If a consumer is equipped with an HbbTV supported Smart TV he will usually see a small image somewhere
 on the screen that asks him to press the red button on the remote control. Pressing it triggers an
 event within the app that opens the HbbTV application. Once the user switches the channel the same
@@ -83,7 +85,8 @@ be played without disrupting. Due to support issues not many HbbTV apps use DASH
 Most videos are still loaded in a progressiv way. The MPEG CENC on the other side helps with common
 encription for ISO base media format files and MPEG-2 transport streams. As content provider using this
 feature you only have to encrypt your video once. The user then has to decrypt it by getting the
-key from one of many DRM systems.\\
+key from one of many DRM systems.
+
 The HbbTV 1.5 standard is supported by the majority of devices these days however many CE manufactures
 already are about to support the latest HbbTV spec version 2 with their new devices on the market.
 It introduces a lot of new features and supports more web technology standards. While previous HbbTV
@@ -99,13 +102,15 @@ This works with multiple devices and also provides a lot of opportunities for e.
 where phones can be used as remote controls. In the video area the specifications will support
 new streaming formats like HEVC, also known as H.265 and MPEG-H Part 2, DASH for DVB or
 push-on-demand where users are able to download certain videos on a local storage to watch them
-if desired.\\
+if desired.
+
 It is worth mentioning that version 2 of the spec was never really released by ETSI. It got
 surpassed by version 2.0.1 which fixed unclear specifications and removed some errors. It also
 shipped some additional specifications that were required to adapt the standard in Italy and United
 Kingdom who have decided to move from a similar standard called MHP to HbbTV. These specifications
 define additional caching rules for HTTP/1.1, more details on higher display resolution and other
-technologies that were defined in MHP.\\
+technologies that were defined in MHP.
+
 An additional standard to HbbTV was released short after HbbTV version 2 was published by ETSI.
 This standard is called Application Discovery over Broadband and is not part of the actual
 HbbTV specification. However it adds an important addition to HbbTV when cable service provider block
@@ -123,7 +128,8 @@ Application Discovery over Broadband is a workaround to solve this problem.
 As described in Figure \ref{fig:application_discovery_over_broadband} the TV gets the AIT package
 from a dedicated server based on the program name. Each broadcaster usually has their own DNS
 root server and an own AIT server. However there is one main HbbTV DNS root server which routes the
-DNS request from the TV to the server of the broadcaster.\\
+DNS request from the TV to the server of the broadcaster.
+
 Pay, cable, IPTV or Sat-Platform operators as mentioned above sometimes provide instead of HbbTV
 their own service apps with own GUI. They usually require some sort of additional hardware which
 don't support HbbTV. Even though the TV is connected to the internet and supports the standard
@@ -136,7 +142,8 @@ HbbTV applications and operator app can run in the background at all times and c
 messages on the display as well as overwrite key functions like \textit{''P+''} or \textit{''P-''}.
 They open usually by pressing \textit{''EPG''} or \textit{''Menu''}. In the specification of
 operator apps which is part of HbbTV verson 2 the consortium emphasized that operator and HbbTV
-apps can live seamlessly together.\\
+apps can live seamlessly together.
+
 Looking back at the standard that was first specified 7 ago HbbTV has taken a very interesting
 development. From being able to show more than a digital and interactive teletext to supporting
 HTML5 and Second Screen it became quite comprehensive. This enables broadcasters to use this
@@ -167,7 +174,8 @@ the impact of the advertisment itself.
 This is also called Addressable TV advertising. It \textit{''enable[s] advertisers to selectively
 segment TV audiences and serve different ads or ad pods (groups of ads) within a common program or
 navigation screen. Segmentation can occur at geographic, demographic, behavioral and (in some cases)
-self-selected individual household levels [...]''}\cite{adrTV}.\\
+self-selected individual household levels [...]''}\cite{adrTV}.
+
 Another interesting use case outside of advertisment is content authoring of HbbTV applications.
 Usually an HbbTV application is a custom web app that is build to serve a specific content for
 a service or show. Once you want to promote a new service or show it requires to build a new
@@ -216,7 +224,8 @@ and push data to the Application Manager.
 In order to allow the HbbTV app to embed the running broadcast stream within the application the
 as a video the Media Player component is required which receives that data after the broadcast
 stream was processed. It can also receive A/V content from the broadband source in linear or non
-linear form.\\
+linear form.
+
 As described in section \ref{sec:hbbtv} once the HbbTV application is loaded via broadband stream
 it starts either directly by the end-user by pressing a dedicated button on the remote control, in
 response to an event stream or by an already running application, e.g. when the user wants to open
@@ -233,7 +242,8 @@ Some applications like digital teletext apps are not run with autostart enabled.
 to be specifically triggered by the user without, in this case using the teletext button on
 the remote. Triggered one time it starts the digital teletext which is an HbbTV based application.
 If triggered twice it closes this app and starts the standard old fashioned teletext. By pushing
-the button for the third time it closes also that.\\
+the button for the third time it closes also that.
+
 HbbTV apps are not only tied to a specific broadcaster. The so called broadcast-independent
 applications \textit{''can be electronic programme guides (EPGs) or “TV editions” of existing
 web services such as flickr, YouTube and very many more that may be provided by the big brands
@@ -298,7 +308,8 @@ app.show();
 The only input device for HbbTV web apps is the remote control. Within the initialization process
 an event listener is registered on the window global object that gets triggered on keydown events.
 Depending on the event key code the app executes different actions and allows navigating through
-the app.\\
+the app.
+
 Since uploading changes to a production server is inefficient and time consuming people have
 developed some tool to improve the development environments of HbbTV app developer. There is a
 Firefox plugin that emulates an CE-HTML like environment in the browser called FireHbbTV\footnote{\url{https://addons.mozilla.org/en-US/firefox/addon/firehbbtv/}}.
@@ -320,7 +331,8 @@ it also makes sure that other specifications are met like having the right docty
 XML namespace attributes set. However these helper can only detect obvious issues that are relevant
 to all HbbTV devices. Problems that only appear on TVs from certain manufactures can not be found
 with these kind of tools. It usually requires manual work which ends up being very tedious and
-expensive. There are some companies that tried to solve this problem.\\
+expensive. There are some companies that tried to solve this problem.
+
 A Czech company called Suite.st has developed a system to run e2e tests based on a web GUI on
 arbitrary devices either in a remote office or in a local environment. It allows to run these
 tests in parallel and provides a comprehensive report about the test result over time. The
@@ -341,7 +353,8 @@ To gain access to the device the company provides a setup box that comes with in
 in order to simulate remote control events. You can also inject a script into your HbbTV app
 to instrument either your browser or TV device to allow Suite.st to run your tests. In case
 you don't own a targeted device Suite.st provides a handful of devices from their own datacenter.
-It requires a paid plan though which start with 156\euro{} up to 899\euro{}.\\
+It requires a paid plan though which start with 156\euro{} up to 899\euro{}.
+
 Another company providing an e2e test solution for HbbTV apps on Smart TVs is \textit{Eurofins Digital Testing}\footnote{\url{http://www.eurofins-digitaltesting.com/}}.
 Next to HbbTV applications they also offer multiple device types such as Set-Top Boxes, standard
 web-apps or mobile apps on tablets and phones. Their TestWizard Manager\footnote{\url{http://www.eurofins-digitaltesting.com/testwizard/infrastructure/}}
@@ -364,22 +377,44 @@ that a specific performance metric is met these methods are used at different st
 development lifecycle. With test automation these testing methods can be executed with use of
 special software that controls the execution of tests and compares the actual outcome with a
 certain predicted outcome. This happens in an automated fashion so that the test itself is mostly
-triggered by a certain event (e.g. code changes) in a CI/CD like environment.\\
+triggered by a certain event (e.g. code changes) in a CI/CD like environment.
+
 From the agile world where coding and testing are one process a concept developed by Mike Cohn
 became popular that describes how \textit{''an effectitve test automation strategy calls for
 automating tests at three levels: unit, service an UI''} \cite{testautomation}. It explains
 that \textit{''unit testing should be the foundation of a solid test automation strategy and as
-such represents the largest part of the pyramid''} \cite{unittesting}.
+such represents the largest part of the pyramid''} \cite{unittesting}. On the other side
+user interface tests which are placed at the top of the pyramid should be as small as possible
+as they are brittle, error prone and time consuming. However they simulate real user scenarios
+and ensure that the functionality is working on all levels, from database over the backend
+to the user interface. According to Googles philosophie \textit{''focus on the user and all
+else will follow''} you could convince someone that writing only e2e tests is a good idea
+even though it would object the test automation pyramid. Many developers follow this bad
+practice of having to many e2e tests (inverted pyramid or ice cream cone pattern) or a lot
+of unit and e2e tests but almost not integration/service level tests (hourglass pattern). A good
+rule of thumb here is splitting tests into 70\% unit tests, 20\% integration tests and 10\%
+e2e tests. Especially when working as an HbbTV app developer the desire to test apps directly
+on multiple TVs is high due to the high fragmentation in the market.
+
+Testing software from end to end is a hard problem to solve. It either requires manual work
+which costs a lot of time or engineering effort to automated this process. Over the last
+years the tech industry shifted from manual QA to automated testing. Software development
+has become more agile with shorter release cycles and feedback loops. Especially due to the
+growing popularity of DevOps, development and operations teams are no longer soiled and
+engineering work take up the entire application lifecycle, from building the app to test and
+deployment. This allows not only to innovate for customers faster and adapt better to changes
+in market, it also forces you to increase the frequency and pace of releases in order to
+improve the product faster overall. Software these days is \textit{''an integral component
+of every part of the business''} \cite{devops}. One fundamental practice in DevOps is
+Continuous Integration and Delivery. It improves the software quality by running automated
+tests on regular bases after code changes were comitted. Once tests have passed developers
+can automatically push their code to production with a high level of confidence that no
+regressions were introduced. This can only accomplished with proper tooling. In order to test
+software from end to end a framework called Selenium has become the tool of choice for many
+developers.
 
 \subsection{History of Selenium and Webdriver\label{sec:history}}
 
-- How Selenium and Appium has evolved
-
-\subsection{How Test Automation Changed the Industry\label{sec:howitchanged}}
-
-- Study cases of how current top companies test their apps (not necessarry HbbTV)
-- demonstrate how similar apps get tested these days
-- outline the gap between both worlds
 
 \subsection{Webdriver Protocol\label{sec:webdriver}}
 
