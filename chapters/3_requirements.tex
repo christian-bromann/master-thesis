@@ -1,28 +1,56 @@
 \chapter{Requirements\label{cha:chapter3}}
 
-Chapter 3 analyzes the requirements for your component. This chapter will have 5-10 pages.
+The development of HbbTV applications these days is cumbersome and difficult to develop and test.
+Even though tools like FireHbbTV\footnote{\url{https://addons.mozilla.org/en-US/firefox/addon/firehbbtv/}}
+seems to have found developers interest and attraction the workflow is still not even close to
+current industry standards in web development. Tools like Selenium and Appium have prooven that
+there is an high demand for developers being able to do develop and test their software in a real
+life environment.
 
-This section determines the requirements necessary for X. This includes the functional
-aspects, namely Y and Z, and the non functional aspects such as A and B.
+With the shift to a more agile software development in the industry it also proofs the demand
+to run automated tests in an iterative and quick development cycle. This can only happen
+with proper tooling. Software development in browsers or on mobile devices already successful
+entered that space of rapid development and quality ensurance using CI/CD. A tool that
+tries to bring HbbTV app development to the same point has to build on this strategy. Since
+HbbTV apps are not much different to normal webapps in their core technology it would be confusing
+and unhelpful if continuous integration and continous delivery would be a different process here.
+Therefor the tool has to be based on existing standards around automated testing and development.
+It should not only support a seamless integration to already existing tools but also allow
+developers to keep their current common practices in building apps similar if not equal to other
+areas of web development.
 
-\section{Overview\label{sec:reqoverview}}
+The referred tool will be as outlined in section \ref{sec:scope} and more detailed descriped in
+the concept section of this thesis (section \ref{cha:concept}) a piece of software seperated
+into two components. Both have individually different requirements. The main goal of the first
+component called \textit{Devtools Backend} is to provide developers an integration to the
+Chrome Devtools so that they can inspect and debug their HbbTV applications. The other
+component called \textit{Appium HbbTV Driver} will based on that component and should enable
+to run automated tests based on the WebDriver protocol for arbitrary HbbTV applications on
+arbitrary SmartTVs. Both components should be easy to use and integrate into a common and
+familar development setup of web engineers.
 
-In this chapter you will describe the requirements for your component. Try to group the
-requirements into subsections such as 'technical requirements', 'functional requirements',
-'social requirements' or something like this. If your component consist of different
-partial components you can also group the requirements for the corresponding parts.
+% Functional requirements may be calculations, technical details, data manipulation and processing
+% and other specific functionality that define what a system is supposed to accomplish.
+\section{Functional Requirements\label{sec:reqsuba}}
 
-Explain the source of the requirements.
+\textbf{Devtools Backend}
+- able to integare into standard development tools like Chrome Devtools
+- work with arbitrary HbbTV apps
+- support any TV Device
+- should not break HbbTV pages
+- should keep HbbTV app within a black box as good as possible
 
-Example: The requirements for an X have been widely investigated by Organization Y.
-
-In his paper about Z, Mister X outlines the following requirements for a Component X.
+\textbf{Appium HbbTV Driver}
+- transform WebDriver commands into Remote Debugging protocol commands
+- has to integrate into existing automated testing tools
+  - be used by any Selenium/Appium client
+  - support for latets WebDriver specs
+  - adapt TV specific attributes (that are not within WebDriver)
+  - has to integrate with Selenium Grid to allow multiple TVs
 
 \section{Technical Requirements\label{sec:techreq}}
 
 The following subsection outlines the technical requirements to Component X.
-
-\subsection{Sub-component A\label{sec:reqsuba}}
 
 \textbf{Interoperability}
 \\
@@ -31,13 +59,11 @@ Lorem Ipsum...
 \\
 \textbf{Scalability}
 \\
-Lorem Ipsum...
-
-\subsection{Sub-component B\label{sec:reqsubb}}
-
-Lorem Ipsum...
 
 \section{Social Requirements\label{sec:socreq}}
+
+- e2e tests are hard, so this tool should be easy to use
+- similar test tools out there already  it should be better
 
 Component X must compete with Y. Hence, it is required to provide an excellent usability.
 This includes ...
