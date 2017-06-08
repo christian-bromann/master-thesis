@@ -368,11 +368,38 @@ it is also possible to write e2e tests via Selenium and Appium. The company itse
 offer complete testing solutions not only for HbbTV but also for other key technologies and standards
 such as DVB or DASH.
 
-\subsection{HbbTV and Web Platform Tests}
+\subsection{Web Platform Tests}
 
-- How HbbTV devices get tested
-- how other standards get tested
-- validator (http://hbbtv-live.irt.de/validator/, http://ligada-validator.com/)
+Within the last decade many organizations including the W3C tried to build standards around
+technologies that we use everyday. Even though these specifications were adapted by developers
+and companies there was still a lack of conformance, quality of implementation, performance
+and interoperability. In 2013 the W3C launched \textit{''an unprecedented effort to scale up
+its test offering''} \cite{w3ctesting} in which they tried to improve the test infrastructure
+and documentation around all web standards that are defined by them. By streamlining the
+contribution and reviewing processes they simplified the way how everyone can be involved in
+defining and testing a standard. They published their tests and made them accessible for everyone
+so that anybody was able to get a clear picture of which web features are supported in whatever
+application they are testing. With that every browser vendor was able to make sure that its
+browser is working according to the spec. They became the major contibutor for writing and
+maintaining these. However the W3C also encouraged every developer to be involved in this
+endeavour by starting a movement called \textit{''Test the Web Forward''}\footnote{\url{http://testthewebforward.org/}}.
+This was one of major reasons why standards like HTML5 and other technologies that are part
+of the HbbTV specification got relieable implemented in many browser and platforms.
+
+The HbbTV specification which was defined within the European Telecommunications Standards
+Institute did something similar to ensure that TV manufactures only sell devices that are
+complaint to the spec. This is important as \textit{''lean-back consumers have zero patience
+meaning any malfunction in the chain will significantly reduce engagement and impact and
+may even result in viewers switching to another service''} \cite{hbbtvtesting}. In case of
+and update in the standard the association has to make sure that older applications are
+interoperable with furthcomming receivers and can coexist with them especially since devices
+are not easily updated by the consumer. Therefor they defined a receiver specification and
+a device and application conformance that sets certain guidelines and restriction to manufactures
+and developers to fulfill the standard and enforce on a common sense. Similar to the W3C a
+test suite is provided to manufactures \textit{''to certify their own devices or have their
+devices certified by an HbbTV Registered Test Centre.''} \cite{hbbtvtesting}. Once they are
+certified they can use the official HbbTV logo for their device products as proof for compliance
+to the spec.
 
 \section{Test Automation\label{sec:testautomation}}
 
@@ -496,28 +523,17 @@ automated tests.
 As described in section \ref{fig:selenium} when Selenium merged with WebDriver they started
 to communicate with the browser directly in order to interact with the page. As the first
 automation driver for Google Chrome was released it used an internal protocol called Chrome
-DevTools protocol to instrument and debug the web page. It is mostly used by the Chrome
+DevTools Protocol to instrument and debug the web page. It is mostly used by the Chrome
 DevTools which is a developer tool to inspect the wepage and profile the underlying rendering
 engine called Chromium. The protocol is divided into a number of domains where each
 \textit{''domain defines a number of commands it supports and events it generates''}
 \cite{devtoolsprotocol}. If the user activates a flag\footnote{\url{e.g. in Windows:
 chrome.exe --remote-debugging-port=9222}} when starting the browser a TCP server is initiated
-and the API can get accessed via a WebSocket connection. This allows arbitrary app developer
-to build automation integration for the Chrome browser. The protocol itself is comprehensive
-and allows besides receiving information about the DOM of the page a lot of debugging and
-profiling tools. For example the developer IDE can allow to set breakpoints within the editor
-and propagate these to the browser.
-
-- What is it
-- for what is it used for
-- what about other browser (remotedebug.org)
-- somethine from https://github.com/ChromeDevTools/awesome-chrome-devtools
-
-\subsection{Functional Principles of modern Web Browser\label{sec:howbrowserwork}}
-
-- How browser work
-
-\subsection{Communication between Chrome DevTools Frontend and the Browser}
-
-- How does the devtools frontend gets all the data from the browser
-- why does it not affect the performance
+and the API can get accessed via a WebSocket connection. This allows to connect to the
+protocol via a WebSocket connection and control the browser in any way remotely. The protocol
+itself is comprehensive and allows besides receiving information about the state of the page
+a lot of debugging and profiling tools. Since it is part of WebKit which is the layout engine
+for many browsers - including Chrome (which uses a fork of WebKit called Blink), Safari or
+Opera - it allows to drive and debug many browsers. Due to the number of already existing
+integrations (including Chrome DevTools) it almost makes it an universal protocol for
+automating the browser.
