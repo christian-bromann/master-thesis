@@ -261,7 +261,8 @@ still delivered in the CE-HTML format. Per specification the doctype of the docu
 to be either XHTML 1.0 strict or has to have an HbbTV specific declaration which is
 
 \vspace{1cm}
-\begin{lstlisting}[caption=Beginning of an HbbTV document,label=doctype]
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{html}
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//HbbTV//1.1.1//EN"
   "http://www.hbbtv.org/dtd/HbbTV-1.1.1.dtd"
@@ -271,7 +272,10 @@ to be either XHTML 1.0 strict or has to have an HbbTV specific declaration which
     <meta http-equiv="Content-Type"
           content="application/vnd.hbbtv.xml+xhtml; utf-8"
     />
-\end{lstlisting}
+\end{minted}
+\caption{Beginning of an HbbTV document}
+\label{lst:doctype}
+\end{listing}
 \vspace{0.5cm}
 
 Also the document needs to contain an XML decleration at the beginning of the document as well
@@ -288,10 +292,14 @@ control and scheduled recordings. However most HbbTV apps these days only need t
 embedded objects:
 
 \vspace{1cm}
-\begin{lstlisting}[caption=Embedded Objects used to access HbbTV APIs,label=embeddedObjects]
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{html}
 <object type="application/oipfApplicationManager" id="oipfAppMan" />
 <object type="application/oipfConfiguration" id="oipfConfig" />
-\end{lstlisting}
+\end{minted}
+\caption{Embedded Objects used to access HbbTV APIs}
+\label{lst:embeddedObjects}
+\end{listing}
 \vspace{0.5cm}
 
 Using the DOM node id developers can query the element and access the API. This usally happens
@@ -300,11 +308,15 @@ are loaded. The event callback then executes some sort of initialization method 
 applications and shows it on the screen.
 
 \vspace{1cm}
-\begin{lstlisting}[caption=HbbTV App initialization,label=loadApp]
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{javascript}
 var oipf = document.getElementById(appMan);
 var app = oipf.getOwnerApplication(document);
 app.show();
-\end{lstlisting}
+\end{minted}
+\caption{HbbTV App initialization}
+\label{lst:loadApp}
+\end{listing}
 \vspace{0.5cm}
 
 The only input device for HbbTV web apps is the remote control. Within the initialization process
