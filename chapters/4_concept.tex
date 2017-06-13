@@ -68,20 +68,70 @@ team at Google and is well documented\footnote{\url{https://chromedevtools.githu
 In order to provide as much integration without any additional effort in only makes sense to rely on
 a well maintained protocol like this.
 
-- show diagram on communication (including proxy) and explain
-    - include different types of socket frameworks and why
-    - middleware
-- how to reverse engineer
-    - domains
-    - difference between page id and frame id
-    - events vs methods
-- launcher
-    - launcher use cases
-    - register process
-- document which methods are important
-    - register domain
-    - frame load
-- proxy
+When it comes to debugging an HbbTV application there will be always there parties involved. The
+instrumentation logic, the backend and the authoring tool. The instrumentation logic is what actually
+interacts with the target environment. It executes commands that it receives from the backend and
+returns desired information. Since the instrumentation script is not much more than any other script
+on the page it can't support all methods that are defined within the Remote Debugging Protocol.
+However the JavaScript API is pretty comprehensive and covers the essential requirements of that
+protocol like returning and modifying the state of certain properties like DOM nodes. Many things can
+be emulated which is sufficient for this use case. It is important to ensure that the instrumentation
+script doesn't affect in any way other scripts or the web application in general from bevaing
+differently. It has to keep its environment as pristine as possible. As a debugging tool it should
+help developers to find bugs and not to create them. Once an instrumentation script was injected
+into an environments it has to register itself to the backend. Script and backend establish their
+connection via WebSockets. Since events and methods will be exchanged randomly from both sides
+it is important to have a full duplex connection type so both ends can communicate with each other
+in an asynchronous fashion. To identify the target the instrumentation script has to identify
+itself with an unique id that can be either the host of the HbbTV app or a random chosen one. The
+backend will register the page based on that id and some other metadata and will manage any
+connections to it so that arbitrary clients can connect to the page with the backend as proxy. Due
+to some house keeping work the backend will never directly connect a client to the instrumented
+page. In fact it will manage the communication with two different WebSocket channels. Not all method
+requests from clients are directed to the page itself. All methods of the Remote Debugging Protocol
+that relate to network events or page lifecycles are handled by the backend. Figure \ref{fig:command_handling}
+shows the activity between all parties in more detail.
+
+\begin{figure}[htb]
+  \centering
+  \hspace*{-1.3cm}
+  \includegraphics[width=17cm]{command_handling.pdf}\\
+  \caption{Communication Activity between Instrumentation Script, Backend and Debugging Client}\label{fig:command_handling}
+\end{figure}
+
+In scenarios where a full page load happened the instrumentation script looses the connection with
+the backend. It manages to reconnect to the target, given that the page unique id is still the same,
+and makes sure it propagates the right lifecycle events to the connected clients. They won't recognise
+any connection abruption and instead properly handle the page load on their side. In some cases the
+response of the instrumentation script needs to be enhanced with data from the backend. This happens
+when network data is involved which is only stored on the backend side. A middleware handles this
+situation by enhancing the result object before returning it back to the client.
+
+There are two ways to inject the instrumentation script into the target environment. It can be either
+placed manually into the page by referencing the script via script tag or the Devtools Backend can be
+used as a proxy. In this case it captures all http packages on a certain port (usually port 80) and
+injects the script inline into the page automatically. The proxy registers the page to the backend
+based on the data it gets from the request. This has the advantage that the application doesn't have
+to get modified to instrument it. However running the target device (e.g. the Smart TV) through a
+proxy is not always possible. Therefor the component provides a launcher script that can connect to
+the backend to register the page before the instrumentiation script gets initited.
+
+Once the instrumentation script was initiated and a remote debugging client connects to the backend
+they both exchange JSON payload over the socket channels. The client usually listens to certain
+domain events (depending of the use case) and fires methods with an id, a method name containing
+the domain and the request (e.g. \textit{CSS.getMatchedStylesForNode}) as well as some parameters
+that get propagated to the method (e.g. a node id). Each domain has to get enabled by the debugging
+client so that the communication can be reduced to the minimum. If the client would enable all
+domains it would overflow the socket channels. This keeps the data amount manageable. The backend
+only propagates messages to the instrumentation script if the containing method was enabled by
+the client beforehand. Even though all methods and events of the protocol are documented in a
+comprehensive way\footnote{see \url{https://chromedevtools.github.io/devtools-protocol/}} the order
+of events and methods that have to get triggered on both sides is unknown. The only way to find
+out when certain events has to get thrown is by debugging the debugging tool. Since the Chrome
+Devtools is just a webapplication itself it is possible to debug it using the Chrome Devtools.
+Within the \textit{Timeline} tab it is possible to inspect the WebSocket connection to the browser
+in real time. This allows to reverse engineer the protocol and emulate a similar behavior like
+in the browser.
 
 \subsection{Appium-HbbTV-Driver\label{sec:appiumhbbtvdriver}}
 
