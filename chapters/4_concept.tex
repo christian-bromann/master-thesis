@@ -135,11 +135,66 @@ in the browser.
 
 \subsection{Appium-HbbTV-Driver\label{sec:appiumhbbtvdriver}}
 
-- How is Appium structured
-- base driver
-- mjwp
-- command lifecycle (uml diagram)
-- running emulator
+Based on the Devtools Backend component the Appium HbbTV Driver is now able to run its automated
+tests without having to take care about how to automate WebDriver commands on the TV. Since the
+Devtools Backend is applicable to all HbbTV supported devices the driver can therefor be used on
+arbitrary devices supporting that format. It is itself part of the Appium ecosystem which means
+that it uses the already existing framework utilities to provide all common functionalities that
+an automation driver requires. Appium already provides a variety of drivers that are mainly
+focused on mobile automation. However its vision is to create more drivers that support new devices
+and platforms. HbbTV is the perfect fit for that. With Appiums Basedriver module\footnote{\url{https://github.com/appium/appium-base-driver}}
+it provides not only a template to build the driver but also comes with all required features to
+run it on bigger scale e.g. within a Selenium Grid out of the box. An overview about all involved
+components is shown in figure \ref{fig:hbbtv-driver-components}.
+
+\vspace{1cm}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=15cm]{hbbtv-driver-components.png}\\
+  \caption{Appium HbbTV Driver components}\label{fig:hbbtv-driver-components}
+\end{figure}
+\vspace{0.5cm}
+
+Thanks to Appiums Basedriver a lot of important functionality can be inherited. The Basedriver
+builds the foundation of the driver. It takes care of session management and capability
+definition/validation (\textit{''basedriver''}), provides predefined WebDriver routings
+(\textit{''mjsonwp''}) which are served by a preconfigured HTTP server component
+(\textit{''express''}). With that it manages incomming HTTP requests and handles their responses
+by applying the correct response codes (\textit{''jsonwp-status''}). That also allows additional
+features like proxying these requests (\textit{''jsonwp-proxy''}). Since it is using the Appium
+framework on one side and the Devtools Backend on the other the only task of this driver is to
+translate the WebDriver commands into the Remote Debugging Protocol. WebDriver commands are send
+as normal HTTP requests. The driver acts as a restful HTTP server and can receive these request.
+Depending on the endpoint it triggers a different action on the target device. Every automated
+tests starts by initating a WebDriver session. Figure 4.2 demonstrates this process in detail.
+
+\vspace{1cm}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=15cm]{appium-driver-diagram.png}\\
+  \caption{Creating A WebDriver Session}\label{fig:appium-driver-diagram}
+\end{figure}
+\vspace{0.5cm}
+
+A session can only be successful initiated if the DevTools backend component is able to successfully
+connect to the target device. In case the TV is turned off or never got instrumented by the DevTools
+Backend it requires one manual step to finish the initiation process. By pressing the Exit button
+on the remote the HbbTV app gets reloaded and the DevTools Backend can inject the script if used as
+a proxy. If the instrumentation script is injected manually the test script can connect to it by
+providing the page ID within its capabilities. Once a connection to the target device was established
+the initial initialisation request can be resolved. The response includes a session ID next to other
+information of the assigned device. The session ID is important as it is part of almost all WebDriver
+endpoints to identify the user and execute the session to the right device.
+
+Depending on the test framework of the developer the session ID gets automatically stored within the
+test context. The developer can now run any WebDriver command. After the driver has received a new
+command it transforms it into a Chrome DevTools Protocol method and forwards it to the DevTools
+Backend component. Since the Dev- Tools Backend is using an asynchronous socket connection the driver
+has to wait until either the result of the method was returned or a certain event was triggered in
+order to resolve the WebDriver HTTP request. Certain commands can trigger a page load in the target
+environment that will break the connection between the DevTools Backend component and the target.
+In these cases the driver has to wait until a reconnection happened in order to resolve the command,
+otherwise the test script would not be able to send the next one.
 
 \subsection{Raspberry Pi\label{sec:pi}}
 
