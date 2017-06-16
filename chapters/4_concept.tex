@@ -184,7 +184,7 @@ a proxy. If the instrumentation script is injected manually the test script can 
 providing the page ID within its capabilities. Once a connection to the target device was established
 the initial initialisation request can be resolved. The response includes a session ID next to other
 information of the assigned device. The session ID is important as it is part of almost all WebDriver
-endpoints to identify the user and execute the session to the right device.
+endpoints to identify the user and execute the session on the right device.
 
 Depending on the test framework of the developer the session ID gets automatically stored within the
 test context. The developer can now run any WebDriver command. After the driver has received a new
@@ -194,19 +194,91 @@ has to wait until either the result of the method was returned or a certain even
 order to resolve the WebDriver HTTP request. Certain commands can trigger a page load in the target
 environment that will break the connection between the DevTools Backend component and the target.
 In these cases the driver has to wait until a reconnection happened in order to resolve the command,
-otherwise the test script would not be able to send the next one.
+otherwise the test script would not be able to send the next one. If the connection can't be
+re-establised a timeout will be hit and causes to return with an error.
 
 \subsection{Raspberry Pi\label{sec:pi}}
 
-- Why is it used
-- Advantages/Disadvantages
-- how to be configured
-- network graph
+To ensure that such connection lost never happens a man in the middle component between network and
+Smart TV can be used. A peripheral like a Raspberry Pi\footnote{https://www.raspberrypi.org/} is
+an ideal utility to manage a TVs network traffic and instrument any HbbTV app on the fly. A
+Raspberry Pi is a \textit{''fully customizable and programmable small computer board''}\ref{raspberrypi}
+with a size of a credit card. It has a 1.2GHz 64-bit quad-core ARMv8 processor with 1 GB RAM,
+4 USB and 1 Ethernet port. It is known as the mainstay in the world of makers and electronics but
+also as an educational device that brings people the joy of electronics and computer programming.
+With 38\euro it is super cheap and yet powerful. People who are familar with Linux have no problems
+to start building tools and applications with it. With a prebuild Raspbian operating system the
+provisioning of a TV to test HbbTV apps can be reduced to a simple plug\&play step.
+
+The idea is that the all network traffic of the Smart TV runs through the Raspberry Pi. Running
+the DevTools Backend component is acts as a Proxy between TV and network. This has the advantage
+that every HbbTV app will be instrumented on the fly. There is no need to manually inject the
+instrumentation script. The DevTools Backend proxy modifies every HTTP packages that has an HbbTV
+mime type before it sends it back to the TV. In addition to that it tracks all application assets
+so that the developer can inspect all files that have been downloaded by the HbbTV app including
+information like request and response headers. This setup allows to not only do that with own
+applications but also with any HbbTV app of any broadcaster that can be received by the Smart TV.
+Having said that it allows to monitor all communications between HbbTV app and server and helps
+to understand how certain application track your behavior while using the app.
+
+In order to make this it requires an additional ethernet cable as well as an USB to Ethernet adapter.
+The Raspberry Pi has to maintain two network interfaces. One is for the data transfer between TV
+and Pi and the other for the one between Pi and network. Therefor you could also use the Wifi module
+to connect to your network instead of using the USB adapter. With the correct network setup it should
+connect automatically. Once it is connected to the power supply the operating system boots up and
+starts the Appium HbbTV Driver. To identify the Raspberry Pi we change the hostname settings to be
+the model name of the TV it is connected to. After the Pi has established a connection between TV
+and our network we can immediatelly address this host as our automation server and run tests on it.
+
+\vspace{1cm}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=15cm]{pisetup.pdf}\\
+  \caption{Setup of SmartTV with Raspberry Pi}\label{fig:pisetup}
+\end{figure}
+\vspace{0.5cm}
+
+To seperate the network traffic we have to run both interfaces on different subnets. This can be
+customised depending on the given network. Most local networks will have an IP range of
+\textit{192.168.1.1/24} which is why this setup would make the most sense as default. However since
+once a proper network is found it possible to copy the images to other Raspberry Pis. This will
+allow us to provision an already existing TV lab in a simple way and deploy our components to run
+automated WebDriver tests using the Appium HbbTV Driver and DevTools Backend.
 
 \subsection{Selenium Grid\label{sec:grid}}
 
-- What is the Selenium Grid
-- Explain role and responsibilities
+To run our automated tests on multiple TVs with different HbbTV support at the same time we need
+a Selenium Grid to orchastrate the WebDriver requests. The Appium HbbTV Driver component allows us
+to register to such a Grid using an internal settings page that the user can open in the browser.
+The only information that is required is the IP address of the Selenium Grid server. That server
+has to be accessible in the network the TV and the Raspberry Pi are located in. The driver will send
+a request to the Selenium Grid server containing the capabilities of the TV. It is important that
+the DevTools Backend was able to connect at least once with an HbbTV app to identify the TV. It
+could also just use the provided API of the TV. However this is different depending on the manufacture
+and the TV model. To cover this within this thesis would be out of scope of but an interesting
+feature for the future. If the registration to the Grid server was successful it will automatically
+ping the Raspberry Pi every once in a while to check its connectivity.
+
+\vspace{1cm}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=15cm]{network.pdf}\\
+  \caption{Network Setup of TV Lab with Raspberry Pi}\label{fig:network}
+\end{figure}
+\vspace{0.5cm}
+
+The Selenium Grid will be the access point for all developers to run their automated tests on. It
+manages its capabilities and only creates a session if the desired device is available and not used
+by someone else. If a device is blocked due to another test it will queue up the request and waits
+until it becomes available again. Each Smart TV is registered with the supported HbbTV version, the
+name of the manufacture and its model name. Each test can therefor specify on what kind of devices
+it should get run. The Selenium Grid tries to find the best suiteable device if available. If for
+example the developer wants to run a test on a Smart TV with supported HbbTV 1.5 the Grid server
+randomly selects a Smart TV that runs that HbbTV version. The same for the other capabilities. All
+data about registered Smart TVs and their availability can also be consumed as JSON blob using
+the Rest API of the Grid server. This allows to create custom dashboards that are more aligned to
+the TV theme. Instead of just model names it could display the TV model as image with the manufacture
+logo.
 
 \section{Continuos Integration and Delivery\label{sec:cicd}}
 
