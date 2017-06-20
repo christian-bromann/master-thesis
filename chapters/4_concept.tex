@@ -245,7 +245,7 @@ once a proper network is found it possible to copy the images to other Raspberry
 allow us to provision an already existing TV lab in a simple way and deploy our components to run
 automated WebDriver tests using the Appium HbbTV Driver and DevTools Backend.
 
-\subsection{Selenium Grid\label{sec:grid}}
+\section{Selenium Grid\label{sec:grid}}
 
 To run our automated tests on multiple TVs with different HbbTV support at the same time we need
 a Selenium Grid to orchastrate the WebDriver requests. The Appium HbbTV Driver component allows us
@@ -282,6 +282,16 @@ logo.
 
 \section{Continuos Integration and Delivery\label{sec:cicd}}
 
-- What is CI/CD
-- Role of CI/CD in software development
-- jenkins setup (how to create a job)
+The last step to have a fully automated continuous integration and delivery pipeline is to setup
+an automation server that runs our tests as soon as any code changes were introduced to the project.
+There are mutliple ways to setup such pipeline. CI/CD became a major part in the software delivery
+process over the last years so that many tools have been developed since then. One of the most
+popular open source solutions is Jenkins\footnote{\url{https://jenkins.io/}}. It is \textit{''deployed
+at large scale in many organizations''}\cite{jenkins} and \textit{''has no licensing costs''}\cite{jenkins}.
+In combination with a source control tool like Git\footnote{\url{https://git-scm.com/}} we can
+trigger our automated tests regularly so that defects are detected at early stage before it is
+deployed to production. Depending on the project and its requirements you can deploy different
+strategries on how code gets tested and pushed to a production environment. This can be fully automated
+so that no human interaction is necessary anymore.
+
+% ToDo: explain CI/CD process of HbbTV app
