@@ -252,10 +252,57 @@ and executes it if so. It then either returns the result of the function call ba
 debugging client or does nothing if no result was returned. This approach allows us to enhance the domain
 logic without having to register new listeners to the socket connection.
 
+To reference DOM nodes back and forth between instrumentation script and debugging client every node on
+the page is getting referenced with a node id. As soon as the instrumentation script gets initiated and
+the DOM tree is rendered it runs through the whole tree and sets an internal flag (\textit{\_nodeId} on
+every node. In addition to that is saves a reference to that node internally so it can find it based
+on the node id at all times. If a client fetches the document using \textit{DOM.getDocument}\footnote{\url{https://chromedevtools.github.io/devtools-protocol/tot/DOM/\#method-getDocument}}
+the instrumentation script returns instead of the actual node object a representation of it based on
+the Node\footnote{see lib/frontend/models/Node.js} class. This representation contains the assigned node
+id which allows the client to interact (e.g. change attributes or the content) with that node. In addition
+to that every instance registers a mutation observer\footnote{\url{https://dom.spec.whatwg.org/\#mutation-observers}}
+on itself. This allows to listen to DOM and attributes changes on DOM nodes and helps debugging clients
+to update DOM tree representations in their applications (e.g. DevTools Elements panel). Other composite
+objects like promises, generators or maps are handled similarly. With the PropertyObject\footnote{see lib/frontend/models/PropertyObject.js}
+class the instrumentation script converts each object into a different representation of itself to allow
+data exchange over the HTTP protocol. Instead of the actual object it returns an object id that is stored
+in an ObjectStore\footnote{see lib/frontend/models/ObjectStore.js} on the page. Since these objects can't
+be serialized they remain there and can be referenced using the object id. Similar to how DOM nodes are
+stored every object in the object store is held in memory. Since every object is passed by reference this
+won't have any affect on the performance of the page.
+
 \subsection{Launcher\label{sec:launcher}}
 
-- What purpose has the launcher
-- diagram how it registered itself to the page
+The Launcher script is what's used to manually inject the instrumentation logic on arbitrary platforms
+without setting up a proxy. It contains next to the Socket.io client library an initialization part and
+the actual instrumentation script. The initialization part is important as the script needs to register
+itself as a page to the DevTools Backend component. If a proxy is used this happens usually on the server
+side. To inject the launcher a script tag has to be placed at the top of the \textit{$<head>$} block so
+that it gets executed first. The actual code can be received from the DevTools Backend server.
+
+\vspace{0.3cm}
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{html}
+<html>
+<head>
+    <title>My Target Page</title>
+    <script src="http://<devtools-backend>:9222/scripts/launcher.js"
+            data-origin="debugger">
+    </script>
+    <!-- ... -->
+\end{minted}
+\caption{Inject Launcher Script}
+\label{lst:launcher}
+\end{listing}
+
+Once the script is downloaded by the browser it sends an XHR request to the server with some page metadata
+(e.g. uuid, url, title, user agent, etc) asking to register this page to the backend. After that it
+initates the instrumentation scripts and starts the communication to the backend via Socket.io. The uuid
+can be defined manually by adding a \textit{data-uuid} attribute to the script tag. If this attribute
+can't be found it uses the hostname as unique id. The \textit{data-origin} attribute is used to hide this
+DOM node from the debugging client. If a client requests DOM nodes from the instrumentation script these
+node will be ignored so that they don't show up in any DOM representation as they actually are not part
+of the web application.
 
 \subsection{Proxy\label{sec:proxy}}
 
