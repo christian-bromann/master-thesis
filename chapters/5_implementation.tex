@@ -1,16 +1,256 @@
-\chapter{Implementation\label{cha:chapter5}}
+% Chapter 5 describes the implementation part of your work. Don't explain every code detail but emphasize
+% important aspects of your implementation. This chapter will have a volume of 15-20 percent of your thesis.
+%
+% This chapter describes the implementation of component X. Three systems were chosen as
+% reference implementations: a desktop version for Windows and Linux PCs, a Windows Mobile
+% version for Pocket PCs and a mobile version based on Android.
 
-Chapter 5 describes the implementation part of your work. Don't explain every code detail but emphasize
-important aspects of your implementation. This chapter will have a volume of 15-20 percent of your thesis.
+\chapter{Implementation\label{cha:implementation}}
 
-This chapter describes the implementation of component X. Three systems were chosen as
-reference implementations: a desktop version for Windows and Linux PCs, a Windows Mobile
-version for Pocket PCs and a mobile version based on Android.
+Since we are working in a web environment it only made sense to build all software components with a
+popular web technology too: JavaScript. Both the DevTools Backend and Appium HbbTV Driver component
+are written in NodeJS using a Babel\footnote{\url{https://babeljs.io/}} compiler to use the latest
+EcmaScript features today. They both use Eslint\footnote{\url{http://eslint.org/}} for static code
+analysis and have a Dockerfile so they can get seamlessly deployed on any system that has Docker\footnote{\url{https://www.docker.com/}}
+installed.
 
 \section{Devtools Backend\label{sec:implDevtoolsBackend}}
 
-- Frontend vs Backend scripts
-- message passing
+The DevTools Backend has a simple NodeJS project structur with a \textit{package.json} that contains
+a handful of CLI commands to operate and build the project. It is stored on the Fraunhofer GitLab
+server and can be cloned with git if permissions are granted. Once it was cloned you can simply install
+the dependencies and build it using the NPM commands. The project requires to run a NodeJS version
+of v7.4.0 as defined in \textit{.nvmrc}.
+
+\vspace{1cm}
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{shell}
+# clone project
+$ git clone git@gitlab.fokus.fraunhofer.de:christian.bromann/devtools-backend
+# install dependencies
+$ cd devtools-backend
+$ npm install
+# build project
+$ npm run build
+# run server
+$ npm run start
+\end{minted}
+\caption{Setup DevTools Backend component locally}
+\label{lst:setupdevtools}
+\end{listing}
+\vspace{0.5cm}
+
+With Docker this procedure is simplified down to these commands:
+
+\vspace{1cm}
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{shell}
+# clone project
+$ git clone git@gitlab.fokus.fraunhofer.de:christian.bromann/devtools-backend
+# install dependencies
+$ cd devtools-backend
+$ npm run docker:build
+# run container
+$ docker run -p 9222:9222 devtools-backend
+\end{minted}
+\caption{Setup DevTools Backend component with Docker}
+\label{lst:setupdevtools}
+\end{listing}
+\vspace{0.5cm}
+
+The build process not only compiles all server side files down to ES5 using Babel, it also compiles
+all frontend related files, the instrumentation code, to one JavaScript file which gets injected
+into the HbbTV app. This has the advantage that the structure and the way these files are written
+don't differ from each other. Thanks to WebPack\footnote{\url{https://webpack.js.org/}} all frontend
+files are bundled together so that they can get executed in the browser. This makes it super easy
+to structure and share code on server and frontend side. The main server is build on top of Express\footnote{\url{https://expressjs.com/}},
+a minimal and flexible web framework to build web applications in NodeJS. It allows to define API
+endpoints provides useful utility features to work with Cookies and caching. All application code
+can be found within the \textit{lib} directory. Next to the main server and proxy logic most of the
+code is split up in backend and frontend. The backend part is responsible to route all WebSocket
+communication between the remote debugging client (e.g. the DevTools application) and the frontend
+automation code that gets executed on the Smart TV. It also tracks all network traffic that comes
+through the proxy and returns the data to the client if desired. All backend related information
+like registered pages, resource content or metadata are being held there to save the request to the
+frontend.
+
+As \textit{''page''} we define a debugging target that can be either an HbbTV app on a SmartTV or
+any other web page where the instrumentation code is injected and connected to the backend. The
+server can be used to debug multiple pages at the same time. Each page has an unique identifier
+that allows to connect a client on the desired page. The communication between the debugging target
+and the server gets initiated via Socket.io\footnote{\url{https://socket.io/}}. Socket.io is a
+sophisticated NodeJS module that enables real-time bidirectional event-based communication between
+server and client. It is not only super fast and efficient it also works relieable on many web
+platforms. Especially on Smart TVs where not all devices have support for WebSockets Socket.io
+ensures that a connection can be established by using fallback strategies like XHR polling. From
+the server to the debugging client a standard WebSocket server architecture was chosen since
+there are no such fallback requirements to be fulfilled. In addition to that a Socket.io server
+can only connect to clients that are using Socket.io as well which is undesired because it should
+be accessible by arbitrary clients. Everytime the proxy injects an instrumentation script or the
+launcher registers itself to the backend a new page instance is created and two new Socket channels
+are opened.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+export default class Page extends EventEmitter {
+    constructor (io, uuid, hostname, url, title, description, metadata) {
+        super()
+        // ...
+
+        this.io = io.of(`/page/${this.uuid}`)
+        this.io.on('connection', ::this.connect)
+
+        this.wss = new WebSocket.Server({
+            perMessageDeflate: false,
+            noServer: true
+        })
+    }
+    // ...
+}
+\end{minted}
+\caption{Socket Channels initiated in Page class}
+\label{lst:socket}
+\end{listing}
+
+It is worth mentioning that the backend doesn't create a WebSocket server every time a page instance
+gets initiated. It instead attaches itself to the Express server and creates a fake server instance
+(see \textit{''noServer: true''} in \ref{lst:socket}). When a client asks for a WebSocket connection
+an \textit{''upgrade''} event is emitted when the opening handshake takes place. It \textit{''upgrades
+the connection from HTTP to the WebSocket protocol''}\cite{socket}.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+// lib/index.js
+export default class DevtoolsBackend {
+    constructor (host = DEFAULT_HOST, port = DEFAULT_PORT) {
+        this.app = express()
+        this.server = this.app.listen(port)
+        this.server.on('upgrade', ::this.backend.upgradeWssSocket)
+        // ...
+    }
+    //...
+}
+\end{minted}
+\caption{Server Initiation with ExpressJS}
+\label{lst:socket}
+\end{listing}
+
+The backend module keeps a list of all registered pages and can upgrade the connection properly if
+the event was fired by the server. Depending on the unique page id (uuid) the backend connects the
+debugging client to the desired page and enables the communication between client and instrumentation
+code.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+// lib/backend/index.js
+upgradeWssSocket (req, socket, head) {
+    const pathname = url.parse(req.url).pathname
+    for (const page of this.pages) {
+        if (pathname === `/devtools/page/${page.uuid}`) {
+            return page.wss.handleUpgrade(
+              req, socket, head, ::page.connectWebSocket
+            )
+        }
+    }
+    socket.destroy()
+}
+\end{minted}
+\caption{Multiple Socket Channels Registered on one Server}
+\label{lst:socket}
+\end{listing}
+
+Once the connection was established the debugging client can send commands and receive events from
+the instrumentation code. In most cases the backend only propagates these messages from Socket.io
+to the WebSocket connection and vice versa.
+
+\subsection{Instrumentation Script}
+
+The frontend part of the DevTools Backend component is the instrumentation script. It gets executed
+in the target environment, e.g. the HbbTV browser on the Smart TV. It connects to the backend via
+Socket.io and is used to propagate page events to the debugging client as well as execute commands
+to transform elments or get information about the page state. The instrumentation script should be
+placed at the top of the \textit{$<head>$} block to ensure that it gets executed before everything
+else. This is important because it has to capture as much events as possible. In case the HbbTV app
+fails to load due to a JavaScript error it only can propagate that error to the debugging client if
+it has registered an error handler before the HbbTV code is running. It also overwrites certain API
+like the console object to intercept messages and events. All methods for a certain Chrome DevTools
+Protocol domain are stored in one file. Listing \ref{lst:navigate} shows an example of an implemented
+method\footnote{\url{https://chromedevtools.github.io/devtools-protocol/tot/Page/\#method-navigate}}
+for the page domain. As mentioned above it is written using the latest EcmaScript language features
+like the destructuring assignment syntax\footnote{\url{https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment}}
+or the export statement\footnote{\url{https://developer.mozilla.org/en/docs/web/javascript/reference/statements/export}}.
+Even though these features aren't supported in current browsers (and especially not in proprietary
+HbbTV browsers of old TV models) they can still be used since the code gets compiled down to a legacy
+JavaScript version. This ensures that the code is fully compatible on the target device. However this
+doesn't replace missing JavaScript APIs. Therefor any APIs that have not been defined within the
+EcmaScript 3 specification, which is the supported version for HbbTV 1.0, is either avoided or used
+in a way that it fails silently if not available.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+/**
+ * Navigates current page to the given URL.
+ *
+ * @param  {String} url  URL to navigate the page to.
+ */
+export function navigate ({ url }) {
+    if (typeof url !== 'string') {
+        return
+    }
+    window.location.assign(url)
+    return {}
+}
+\end{minted}
+\caption{"navigate" Method of Page Domain}
+\label{lst:navigate}
+\end{listing}
+
+All domain logic is then imported into a single module to export it as central API. This pattern is called
+\textit{''Barrel''} and has its origin from the TypeScript world. \textit{''A barrel is a way to rollup
+exports from several modules into a single convenient module. The barrel itself is a module file that
+re-exports selected exports of other modules''}\cite{barrel}.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+import * as CSS from './css'
+import * as DOM from './dom'
+import * as Debugger from './debugger'
+import * as Input from './input'
+import * as Network from './network'
+import * as Overlay from './overlay'
+import * as Page from './page'
+import * as Runtime from './runtime'
+import * as Target from './target'
+import * as Webdriver from './webdriver'
+export default {
+    CSS, DOM, Debugger, Input, Network, Overlay,
+    Page, Runtime, Target, Webdriver
+}
+\end{minted}
+\caption{Barrel Module Containing All Domain Logic}
+\label{lst:barrel}
+\end{listing}
+
+This allows us to import one file containing an interface to access the whole domain logic. With only a
+couple of lines we can then register an listener to the Socket.io channel for each domain and execute
+a method based on the message parameters.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+import domains from './domains'
+for (let [name, domain] of Object.entries(domains)) {
+    this.domains[name] = domain
+    this.socket.on(name, (args) => this.dispatchEvent(domain, args))
+}
+\end{minted}
+\caption{Register Listeners to Socket Connection}
+\label{lst:barrel}
+\end{listing}
+
+The \textit{dispatchEvent} method checks if the action that is defined within the arguments is implemented
+and executes it if so. It then either returns the result of the function call back to the backend and
+debugging client or does nothing if no result was returned. This approach allows us to enhance the domain
+logic without having to register new listeners to the socket connection.
 
 \subsection{Launcher\label{sec:launcher}}
 
