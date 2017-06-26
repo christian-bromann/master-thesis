@@ -306,8 +306,61 @@ of the web application.
 
 \subsection{Proxy\label{sec:proxy}}
 
-- What usage has the proxy
-- explain implementation details and problems during development
+To automate the script injection the DevTools Backend component provides a proxy that modifies the content
+of certain HTTP packages. It injects the Socket.io client library and the instrumentation script inline so
+that it can establish a socket connection with the backend even before the document has fully loaded.
+Since all network traffic will go through the proxy it is able to track all packages that have been
+requested by the app. With that information we can provide a full network report for each page load
+including timeline information and data on when the first package was loaded and when loading was finished.
+Since you can inspect every network package it allows you to see how certain HbbTV applications load data
+from the backend as well as how it tracks your behavior on the page.
+
+Since we only want to modify packages that contain HTML code and pass on the other packages, e.g. images
+or scripts, we have to make sure that we filter every request depending on its type. This can be done in
+multiple way. Just by extracting the file ending you can already identify most of the packages by its
+type. Additional some requests have an \textit{Accept} header that contains the expected mime type that
+is about to be returned by the server. However these information do not fully ensure that the file that
+is being requested should be modified or not. Given the fact that modifying a wrong file can break the
+whole app we need to have a better way to detect file types. Therefor the proxy has another middleware
+registered that makes an \textit{options}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS}}
+request to actually decide whether to pass it forward or to load its content in order to inject the
+instrumentation script. The HTTP options method can be used to not only detect available HTTP methods
+it also returns the content type of the requested resource. Since the response doesn't contain any body
+payload it is really lightweight.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+class Proxy {
+    // ...
+    proxyFilter (req, proxyRes, next) {
+        req.target = getFullUrl(req)
+        request.head(req.target).then((headers) => {
+            /**
+             * only proxy resource if content type is an HbbTV application
+             * Note: to act as normal proxy (for other apps than hbbtv) it
+             * should also allow normal html content-type
+             */
+            const contentType = headers['content-type']
+            if (contentType && (contentType.match(/hbbtv/g) ||
+                contentType.match(/text\/html;/g))
+            ) {
+                return next()
+            }
+            // ...
+            // if not HbbTV application pipe request directly into response
+            const requestCall = request(opts)
+            return requestCall.pipe(proxyRes)
+        }, (err) => /* ... */)
+    }
+    // ...
+}
+\end{minted}
+\caption{Filter Proxy Request based on Response Content Type}
+\label{lst:proxyFilter}
+\end{listing}
+
+By calling the \textit{next} method we pass on the request to the next middleware which actually handles
+script injection. This happens only if the content type contains HbbTV or text/html though.
 
 \section{HbbTV-Appium-Driver\label{sec:driver}}
 
