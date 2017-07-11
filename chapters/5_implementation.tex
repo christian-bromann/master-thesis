@@ -359,13 +359,100 @@ class Proxy {
 \label{lst:proxyFilter}
 \end{listing}
 
-By calling the \textit{next} method we pass on the request to the next middleware which actually handles
-script injection. This happens only if the content type contains HbbTV or text/html though.
+By calling the \textit{next()} method we pass on the request to the next middleware which actually handles
+script injection. This happens only if the content type contains HbbTV or text/html though. All other
+requests are getting logged and directly piped to the response. This only works because both are read/writeable
+streams.
 
-\section{HbbTV-Appium-Driver\label{sec:driver}}
+The proxy not only ensures that the target page gets instrumented it also allows custom modifications to the
+browser behavior. It is often the case that you want to demo a certain HbbTV application without having to
+setup a broadcast stream that sends an AIT package with the correct address to that app. The DevTools Backend
+component provides for that scenario a setup page\footnote{Available at \url{http://<ip-of-raspberrypi>:9222/settings}}
+that allows to set up an autostart application. When the Smart TV then asks for an HbbTV app it automatically
+redirects the request to the given URL. For the sake of simplicity the autostart url is stored on the filesystem
+in a json file and can be access by a helper function.
 
-- how does an Appium driver consist of
-- How does it fit into the Ecosystem later on
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+/**
+ * check autoload settings
+ */
+const { autoload, whitelist } = readConfig().data
+const cues = typeof whitelist === 'string'
+    ? whitelist.split(',').map((f) => f.trim())
+    : []
+
+if (autoload && !cues.find(cue => req.get('host').indexOf(cue) > -1)) {
+    this.log.info(`Autoload URL found, redirecting to ${autoload}`)
+    return proxyRes.redirect(307, autoload)
+}
+\end{minted}
+\caption{Redirect option to demo arbitrary HbbTV applications}
+\label{lst:hbbtvRedirect}
+\end{listing}
+
+As shown in Listing \ref{lst:hbbtvRedirect} the redirect only takes place when a comma seperated list
+of keywords is not part of the actual request host. Given that a lot of HbbTV applications contain subpages
+and sub applications the developer has to define some keywords that have to be whitelisted. Otherwise
+you always entering the given autoload page when trying to access a subpage.
+
+\section{Appium HbbTV Driver\label{sec:driver}}
+
+Similar to the DevTools Backend component the Appium HbbTV Driver is a Node.JS project that is similar
+structured as the DevTools Backend component. The setup as described in Listing \ref{lst:setupdevtools}
+is identical. The driver itself doesn't contain a lot of code. Most of the logic is hidden within its
+dependencies. As described in section \ref{sec:appiumhbbtvdriver} the Appium HbbTV Driver is using the
+DevTools Backend component to run its automation. It is run on a Raspberry Pi so that it uses the proxy
+feature of the DevTools Backend component to inject the script on any HbbTV app automatically. In this
+case it will automatically connect to the page that was modified by the proxy. However you can also run
+your Selenium tests on any arbitrary web page that was instrumented by the DevTools Backend instrumentation
+script. By having a \textit{pageId} defined there that matches to the uuid of a registered page in the
+backend it can establish a connection to that page to send the DevTools protocol commands. In case the
+Smart TV has no connection to the DevTools Backend the developer has to manually restart the app so the
+proxy can instrument the HbbTV application. If this doesn't happen the WebDriver session fails.
+
+Once a connection was established the HbbTV driver connects to the WebSocket server of the page (e.g.
+the target HbbTV application). Similar to the Chrome DevTools application it will receive a lot of
+app information that are propagated from the DevTools Backend component. With that it is able to send
+commands to the actual HbbTV page on the Smart TV as well as receive page data. At this point the
+WebDriver session could be established successfully and the developer can start to run his first automated
+commands. The command handling itself depends on whether or not the request triggers a page load or not.
+If it does the driver has to ensure that the DevTools Backend component was able to successfully reconnect
+to the page. This only happens if we are able to receive certain events from the component.
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+commands.setUrl = async function (url) {
+    this.request('Page.navigate', { url }, false)
+    await waitForEvent(this.emitter, 'DOM.documentUpdated', TIMEOUT)
+
+    /**
+     * implicit pause for page to render
+     */
+    await new Promise((resolve) => setTimeout(resolve, 500))
+}
+\end{minted}
+\caption{Implementation example of the setUrl WebDriver command}
+\label{lst:setUrl}
+\end{listing}
+
+The example in listing \ref{lst:setUrl} shows how a WebDriver command\footnote{As defined in the protocol
+\url{https://www.w3.org/TR/webdriver/\#go}} is translated to the DevTools Backend component. The request
+command is an internal helper method that mainly sends a command to the component. From there it gets propagated
+to the actual HbbTV app where the instrumentation script handles the action (e.g. navigate to a page given
+by the url in the payload). The third parameter of that function indicates how the driver has to be behave
+after the command is triggered. A truthy value would make the driver wait for the exact response. This is used
+mainly for commands that actually return a value (like a CSS property\footnote{when calling the getCssProperty
+command \url{https://www.w3.org/TR/webdriver/\#get-element-css-value}}). In this case however continuing after
+the command would be problematic since the page is about to open a new HbbTV application. By passing in a falsy
+value it therefor indicates that the command handles the waiting by itself and we expect no response for that
+command whatsoever. By calling \textit{waitForEvent} in the next line we now wait until a custom event is
+propagated by the application. In this case we wait for the \textit{DOM.documentUpdated} event which is triggered
+\textit{''when Document has been totally updated [and] Node ids are no longer valid''}\cite{devtoolsprotocolDOM}.
+The command resolves once this event was received. At the end of the command we implicitely wait for a half of
+a second in order to give the browser time to render the page. Smart TVs tend to be slow in many situations and
+the HbbTV browser especially is not always quick in rendering the app. This small timeout stabilizes the
+execution flow and prevents the driver from running into arbitrary race conditions.
 
 \subsection{Implementation\label{sec:implDriver}}
 
