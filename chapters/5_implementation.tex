@@ -454,13 +454,106 @@ a second in order to give the browser time to render the page. Smart TVs tend to
 the HbbTV browser especially is not always quick in rendering the app. This small timeout stabilizes the
 execution flow and prevents the driver from running into arbitrary race conditions.
 
-\subsection{Implementation\label{sec:implDriver}}
+\subsection{Driver Architecture\label{sec:implDriver}}
 
-- How is it implemented
+Thanks to Appiums ecosystem building a driver is fairly simple. The basic architecture is provided by Appium itself.
+The device automation is the only part that has to be implemented and differs between all drivers. When the driver
+gets initiated it imports two important modules from the \textit{appium-base-driver} project which is the main
+dependency of the driver. It requires a \textit{server} module which is an custom express server that handles
+all WebDriver requests according to the protocol. This module provides a function that is responsible for registering
+all WebDriver endpoints as defined in the protocol. The \textit{routeConfiguringFunction} method which is also
+imported from the \textit{appium-base-driver} then simply maps\footnote{The mapping is defined in the appium-base-driver
+project as well: \url{https://github.com/appium/appium-base-driver/blob/master/lib/mjsonwp/routes.js}} all endpoints
+to a certain instance function defined in the Appium HbbTV Driver. With that all requests to e.g. \textit{'/wd/hub/session'}
+to initialize a WebDriver session are automatically mapped to a function called \textit{createSession} which then
+intializies the automation as described in the previous section. The base server not only maps the endpoints to
+certain functions it also checks if the payload is correct and valid according to the protocol.
+
+In addition to the protocol endpoints the Appium HbbTV Driver also registers additional views\footnote{see settings
+view at \url{http://<ip-of-raspberrypi>:4723/settings}} for the developer to e.g. register the driver to a
+Selenium Hub via a simple form. As described in section \ref{sec:history} a Selenium Hub is a central server that
+collects multiple driver in order to have a single access point to all automation server. This allows us to register
+many Appium HbbTV Driver connected to different Smart TVs to a central point and access all TVs at the same time
+through it. It simplifies adding more Smart TVs to a sophisticated TV infrastructure. In order to register a driver
+manually to a remote hub the Appium HbbTV Driver also has a custom view\footnote{Available at
+\url{http://<ip-of-raspberrypi>:4723/nodeconfig.json}} to receive the node config that is required to register to the
+hub. Based on the capabilities defined in that config and in the payload of the WebDriver request the Hub will select
+the driver registered with that config.
 
 \subsection{Grid Setup and Scaling\label{sec:setupscaling}}
 
-- How to connect driver to Grid
+The described implementation allows to seamlessly setup and scale a Selenium Grid with multiple TVs from different
+manufactures. All you need is a:
+
+\begin{itemize}
+  \item Smart TVs connected to a HbbTV Play Out
+  \item Raspberry Pi, including:
+    \begin{itemize}
+      \item 4GB SD card provisioned with our predefined image
+      \item USB to Ethernet adapter
+      \item Ethernet cable
+    \end{itemize}
+  \item Virtual Machine or another Raspberry Pi running a Selenium Hub
+  \item Router that is connected to the internet and all TVs in a single network
+\end{itemize}
+
+The Ethernet port of the Smart TV has to be wired with the USB to Ethernet adapter of the Raspberry Pi that belongs
+to the TV. The embedded Ethernet port of the Raspberry is then connected to the router. The image on the Pi is
+preconfigured so it starts all components automatically. It runs a DHCP server that should assign an IP address to the
+SmartTV automatically\footnote{If this is not the case the Raspberry Pi has to be rebooted}. The Pi itself will then
+get an IP address assigned by the router. The TV should be then connected to the internet via the Raspberry Pi. The
+last manual step is to open a broadcast stream with a HbbTV signal so that the proxy on the Pi can instrument the page.
+From that point we can control the HbbTV browser via any WebDriver client. It makes sense to set the hostname of the Pi
+to the TV model it is assigned to in order to easier access the right device. You can change the hostname by accessing
+the Pi via SSH and open the internal configuration menu\footnote{via "\$ sudo raspi-config"}. If you access the DevTools
+Backend component on the Pi via opening a browser at e.g. \url{http://ue46f8090sl.local:9222} you should then see the
+list of inspectable pages which at that point should be the HbbTV app you just opened. Note that the DevTools Backend
+component is per default registered on port 9222 (standard remote debugging port) and the Appium HbbTV Driver on port
+4723 (standard Appium port). Another static server is registered on port 8080 and gives you a list of logs that are
+captured from both components.
+
+The image for the Raspberry Pi is preconfigured and has all necessary components installed. You can download it under
+the following Owncloud link: \url{https://tubcloud.tu-berlin.de/s/DU6R40CoHvHgVk3}. Using tools like Etcher\footnote{\url{https://etcher.io/}}
+you can flash it on a 4GB SD card. As mentioned above make sure to SSH into the PI to configure the hostname. The
+default hostname is \textit{appium-hbbtv-driver} so you can log into the Pi via "$\$\ ssh\ pi@appium-hbbtv-driver.local$".
+The password is the default raspberry password ("raspberry").
+
+Once you have connected the Pi as described to the Smart TV you can start running automated WebDriver tests on them.
+There are hundrets of WebDriver client libraries publicly available\footnote{A curated list of can be found at
+\url{https://github.com/christian-bromann/awesome-selenium\#tools}}. If you want to run your test on a specific TV
+you can just point the client to the Raspberry Pi in the network. Using a popular WebDriver client in JavaScript called
+WebdriverIO\footnote{\url{http://webdriver.io}} a simple automation script would look like:
+
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+import WebdriverIO from 'webdriverio'
+
+const browser = WebdriverIO.remote({
+    host: 'ue46f8090sl.local', // or IP of grid server
+    port: 4723, // or 4444 if grid server
+    desiredCapabilities: {}
+})
+
+browser
+    .init()
+    .url('http://itv.ard.de/ardstart/index.html')
+    /**
+     * execute JS on the target device returning the user agent
+     */
+    .execute(() => navigator.userAgent)
+    /**
+     * outputs: "HbbTV/1.1.1 (;Samsung;SmartTV2013;T-FXPDEUC-1102.2;;) WebKit"
+     */
+    .then((result) => console.log(result.value))
+    .end()
+\end{minted}
+\caption{Simple automation script with WebdriverIO to print out the user agent}
+\label{lst:wdioExample}
+\end{listing}
+
+As shown in the example you don't need to define any capabilities since the automation driver is accessed directly.
+Based on that you can build more sophisticated test suites for any kind of HbbTV applications. An example of such
+test suite can be found in the demo directory in the Appium HbbTV Driver repository\footnote{\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/appium-hbbtv-driver/tree/master/demo}}
 
 \section{Setup Evaluation\label{sec:setupevaluation}}
 
@@ -468,23 +561,23 @@ execution flow and prevents the driver from running into arbitrary race conditio
 - advantages vs disadvantages
 - when to use what
 
-\section{TestBed Setup\label{sec:testbed}}
-
-- How we integrated it in Fame TestBed
-- Show off grid
-- Demonstrate use cases
-- How to run a Selenium test
-
-\subsection{Deployment\label{sec:deployment}}
-
-- How to add another TV
-- How are they connected
-
-\subsection{Continues Delivery of HbbTV Apps\label{sec:cicdhbbtvapps}}
-
-- How to setup an HbbTV project with CI/CD running tests on TestBed
-
-\subsection{Reporting of Test results\label{sec:reporting}}
-
-- How to leverage universal usage thanks to common protocols
-- demonstrate Allure reporting
+% \section{TestBed Setup\label{sec:testbed}}
+%
+% - How we integrated it in Fame TestBed
+% - Show off grid
+% - Demonstrate use cases
+% - How to run a Selenium test
+%
+% \subsection{Deployment\label{sec:deployment}}
+%
+% - How to add another TV
+% - How are they connected
+%
+% \subsection{Continues Delivery of HbbTV Apps\label{sec:cicdhbbtvapps}}
+%
+% - How to setup an HbbTV project with CI/CD running tests on TestBed
+%
+% \subsection{Reporting of Test results\label{sec:reporting}}
+%
+% - How to leverage universal usage thanks to common protocols
+% - demonstrate Allure reporting
