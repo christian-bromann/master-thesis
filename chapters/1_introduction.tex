@@ -157,17 +157,17 @@ as the app. With that the developer will be able to access the global scope of t
 also inspect certain states of the app. There will be two different ways provided to inject the script that
 enables the communication with the DevTools application.
 
-Based on this work the test automation platform will allow to run automated tests using the Webdriver protocol
+Based on this work the test automation platform will allow to run automated tests using the WebDriver protocol
 \footnote{\url{https://www.w3.org/TR/webdriver/}} on real TV devices in the lab. As foundation I will build the
 test automation driver based on Appium's base driver. Appium is a framework for mobile test automation and home
 for a lot of drivers that allow us to run automated tests on iOS, Android, Mac OS and even Windows applications.
 Using a Raspberry Pi as automation proxy I will equip TVs in the lab to run that automation driver and connect
 it to a Selenium Grid server in order to run Selenium tests in any programming language and with any framework
-that supports the latest Webdriver protocol. Using continuous integration and delivery (short CI/CD) tools like
+that supports the latest WebDriver protocol. Using continuous integration and delivery (short CI/CD) tools like
 Jenkins\footnote{\url{https://jenkins.io/}} we will hook up an actual HbbTV app that will be tested on different
 TVs everytime someone changes the code in the repository. With the help of various test reporters we will be then
 able to indentify issues that come up during testing to spot bugs that had been introduced by the developer
-imitately. Since the Webdriver protocol is specialised for browser automation some of its specifications won't
+imitately. Since the WebDriver protocol is specialised for browser automation some of its specifications won't
 apply for TV devices. As the only input device for televisions so far is the remote control the test driver won't
 cover the whole protocol. User prompts, element interactions like click and keyboard actions are not designed
 to work on a TV. Also due to time limitations I will not cover screen capturing or frame switching as they are
@@ -197,7 +197,7 @@ CI/CD workflow to run automated tests on a real HbbTV app.
 
 Before we jump into the details of how all this will be implemented we will first look at some fundamentals
 of technology that will be used. Next to the HbbTV standard, its market support and destribution as well
-as how developers build HbbTV apps these days, there will be a section on the Webdriver protocol and how
+as how developers build HbbTV apps these days, there will be a section on the WebDriver protocol and how
 automated testing changed the industry from moving from waterfall to an agile methodology thanks to
 continuous integration and delivery. In the next chapter we define the requirements and find out what is
 needed to solve the issues that are mentioned in the motiviation section. Once we have that we can define

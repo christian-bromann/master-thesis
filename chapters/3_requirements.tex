@@ -87,20 +87,20 @@ a way that it doesn't interfer with any other scripts that are used on the page.
 Black Box model it should not have any expectations or dependencies on the environment it is
 running in. The instrumentation script has to get all instructions from the DevTools Backend and
 returns the output back to it. All changes to the environment like DOM nodes or page properties
-has to be either instructed by the Chrome DevTools application or invisible to that it doesn't
+has to be either instructed by the Chrome DevTools application or invisible so that it doesn't
 break any functionality of 3rd party scripts. It cases where a certain JavaScript API is not
 supported it should fail silently so that it doesn't affect other parts of the instrumentation
 functionalities.
 
 Since this component is used to automate the HbbTV app using the Appium HbbTV Driver it has to
-introduce additional functionality to cover the requirements of the Webdriver protocol. That
+introduce additional functionality to cover the requirements of the WebDriver protocol. That
 includes the serialization of DOM nodes so that they can be referenced via WebDriver.
 
 \subsection{Appium HbbTV Driver}
 
 The Appium HbbTV Driver will provide an API interface to run automated tests for HbbTV
-applications. The interface should be based on the latest WebDriver protocol (candidate
-recommendation) published at the 8th of June 2017. Since this protocol is actually targeted
+applications. The interface should be based on the latest WebDriver protocol\footnote{\url{https://www.w3.org/TR/webdriver/}} (candidate
+recommendation) published at the 30th of March 2017. Since this protocol is actually targeted
 for web applications within the browser there are numerous parts that don't apply for the
 TV environment. With that the driver doesn't need to have support for proxy capabilities,
 command contextes and iframes as these are barely used within HbbTV applications. In addition
