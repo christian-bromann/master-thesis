@@ -13,7 +13,30 @@
 
 \chapter{Evaluation\label{cha:chapter6}}
 
+Looking back to chapter \ref{cha:chapter3} describing the requirements of the final product we will
+evaluate the result and the usability of it in this chapter. The goal was to create a development
+and testing environment for HbbTV applications that is comparable with the state of the art of
+modern web development. Building web applications for the big screen turned out to be very cumbersome
+since there are no tools that help the developer to understand what is going on on the TV. Common
+workarounds are self build logging overlays on the developed application which might give information
+about certain variable states but don't disclose the insides of the app at all. The DevTools Backend
+component is the first tool that allows HbbTV developer to actually inspect a wide variety of aspects
+of an HbbTV application.
 
+\begin{figure}[htb]
+  \centering
+  \hspace*{-0.7cm}
+  \includegraphics[width=16cm]{elementsPanel.png}\\
+  \caption{Debugging the DOM tree of an HbbTV Application using the DevTools application}\label{fig:elementsPanel}
+\end{figure}
+
+It not only allows to look into the DOM tree of the app but also modify elements and their CSS
+properties. Developer have now the opportunity to build the app directly on the TV instead of
+having to implement it on a browser first to then test it on a real Smart TV. Instead building
+a custom logging mechanism it automatically captures all logs from the page as well as JavaScript
+errors being thrown. In addition to that the \textit{Console} tab of the DevTools application
+allows to execute any random JavaScript code within the context of the HbbTV page. With that it
+can inspect variables of your application during runtime.
 
 \section{Business model\label{sec:businessmodel}}
 
@@ -33,3 +56,6 @@
 
 - Compare Inpute devices
 - JS and environement feature set
+
+
+- Therefor the tool has to be based on existing standards around automated testing and development
