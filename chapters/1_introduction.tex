@@ -138,11 +138,11 @@ the biggest market share world wide.} clearly show that Google Chrome is not onl
 market but also the most prefered browser for web development. The main reason is its built in Chrome Developer
 Tools\footnote{\url{https://developer.chrome.com/devtools}} that \textit{''give[s] developers access to the internal
 workings of the web browser and web apps''} \cite{devtools}. Since it is so popular and well known to developers
-I will find and implement a way to use Chrome's Devtools application to debug HbbTV apps directly on a smart TV.
-The Devtools app itself is nothing more than a usual web app that can be used by the Chrome browser. It is
+I will find and implement a way to use Chrome's DevTools application to debug HbbTV apps directly on a smart TV.
+The DevTools app itself is nothing more than a usual web app that can be used by the Chrome browser. It is
 publicly available on GitHub\footnote{\url{https://github.com/ChromeDevTools/devtools-frontend}} and can be used
 with respect of Googles license agreement\footnote{\url{https://github.com/ChromeDevTools/devtools-frontend/blob/master/LICENSE}}.
-That being said, the actual technical work here is not to rebuild the Devtools application but to reverse
+That being said, the actual technical work here is not to rebuild the DevTools application but to reverse
 engineer the communication that happens between that app and the browser in order to enable information exchange
 and debugging commands. Due to the fact that the browser that renders an HbbTV app on the TV does not disclose
 these information we need to find a way to provide these by injecting a script that can send us all the details
