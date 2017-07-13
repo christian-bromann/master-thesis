@@ -72,6 +72,20 @@ shown in Annex section listing \ref{sniffing}}. After the page has fully loaded 
 page that the main page took about 7 seconds to fully and it downloaded 735 KB in 30 requests. This can be used
 to leverage interesting metrics of the performance of the HbbTV application.
 
+Not only on the debugging side fulfills this tool all requirements that were stated before also its testing
+features raise above everything that has been done in the HbbTV industry before. Until now \textit{''most TV
+device browsers don’t support WebDriver''}\cite{sengo}\footnote{The tool that is statet as HbbTV testing solution
+that supports Selenium doesn't exist anymore. There are no references on the internet other than this presentation.}
+but with the Appium HbbTV Driver developer can for the first time setup a grid of Smart TVs to run WebDriver
+tests on them. Since it is based on the WebDriver protocol which is the industry standard for automated desktop
+and mobile testing there are already hundreds of libraries available that can be used to write these automated tests.
+These libraries are available in all programming languages and flavors and already known by many developers that
+have experience with automated tests. As shown in listing \ref{wdioExample} an automation script can be written
+in couple lines of code. These tests are fairly simple to write even for non developers. There are solutions like
+Cucumber\footnote{\url{https://cucumber.io/}} that allow to abstract away the coding part of these tests by writing
+feature files with acceptence sentences which are translated in actual code. This makes writing e2e tests accessible
+for everyone.
+
 \section{Comparison To Other Testing Solutions\label{sec:businessmodel}}
 
 
