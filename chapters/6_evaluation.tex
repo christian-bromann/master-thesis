@@ -88,7 +88,39 @@ for everyone.
 
 \section{Comparison To Other Testing Solutions\label{sec:businessmodel}}
 
-
+As of now there aren't any compatible testing solutions for HbbTV applications. The majority of developer still have
+to manually deploy their HbbTV applications on a server and setup a play out to access it on a real Smart TV device.
+However there is one company called Suitest that tries to simplify HbbTV testing with a click and play approach.
+It provides a service where developer can register their devices using a special hardware called Candy Box. The box
+is a \textit{''control unit which Suitest uses to operate TVs, Set-Top-Boxes and other devices through their infrared
+port''}\cite{candybox}. In combination with a paid subscription this box can be used to connect arbitrary devices
+with the Suitest cloud. The company allows then to signup on their website to create tests and manage accounts.
+As described in section \ref{sec:availabletestsolutions} the tests are being clicked together by a custom web interface
+where the developer can choose from a variety of action and assertion options. These tests can contain itself other
+tests which allows to split up multiple small tests to a big complex test suite.
+When signup as a user at Suitest the first major difference immediatelly surfaces. The company provides their software
+as a service which means that it can only be used at higher scale by paying a monthly subscription. The test solution
+outlined in this thesis only requires hardware that costs once-only around 50\euro. The cheapest subscription plan
+at Suitest starts with 159\euro. There is also a free plan available to test the service. However this does not allow
+to run tests on a real Smart TV. In order to do that a Candy Box has to be purchased for 499\euro. Given that this
+box could instrument 40 devices the plan still doesn't allow leverage this. Only with a paid subscription this box
+can be used properly.
+The Candy Box itself is a useful piece of hardware that allows to instrument arbitrary TVs. Since it uses its infrared
+port it acts as remote control has almost every ability to control the television as a human. Connected to the internet
+and to the Suitest cloud every developer can control the TV in anyway using that box without having to be in the same
+location. The Raspberry on the contrary has certain limitations when it comes to controlling the TV. The instrumentation
+script of the DevTools Backend only works within a web environment. This means that the TV has to show an HbbTV app
+to allow the instrumentation script to work. This means that in order to run a test on the TV you need to turn on the
+TV and open an HbbTV application manually. Everything outside of the HbbTV context is not accessible. It is for instance
+not possible to open any internal menus or test a native application. These are indeed disadvantages against a box
+that uses an infrared connection to the TV. However looking at the scope of this thesis these limitations are acceptable.
+In addition to that the Raspberry Pi doesn't yet use any of the APIs that are provided by the manufacturer. Almost every
+TV can be accessed via an HTTP interface to gain control over certain features. These interfaces are used to allow
+mobile apps to work as e.g. a second remote control. Because of the fact that the Pi is directly connected to the
+Smart TV it has automatically access to these interfaces as well\footnote{As part of the research for this thesis
+a small Node.JS library (\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/samsungtv}) was developed that can
+find and control newer Samsung Smart TV in the network by using its API interface.}. That being said, the way how the
+Candy Box can access the Smart TV can also be achieved using this approach.
 
 \section{Features and Offerings\label{sec:features}}
 
