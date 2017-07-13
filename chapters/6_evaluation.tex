@@ -27,7 +27,7 @@ of an HbbTV application.
   \centering
   \hspace*{-0.7cm}
   \includegraphics[width=16cm]{elementsPanel.png}\\
-  \caption{Debugging the DOM tree of an HbbTV Application using the DevTools application}\label{fig:elementsPanel}
+  \caption{Inspecting the DOM tree of an HbbTV Application using the DevTools application}\label{fig:elementsPanel}
 \end{figure}
 
 It not only allows to look into the DOM tree of the app but also modify elements and their CSS
@@ -36,12 +36,45 @@ having to implement it on a browser first to then test it on a real Smart TV. In
 a custom logging mechanism it automatically captures all logs from the page as well as JavaScript
 errors being thrown. In addition to that the \textit{Console} tab of the DevTools application
 allows to execute any random JavaScript code within the context of the HbbTV page. With that it
-can inspect variables of your application during runtime.
+can inspect variables of your application during runtime. It can be used by the developer to see
+which JavaScript APIs are available in the browser environment of a specific target device.
 
-\section{Business model\label{sec:businessmodel}}
+\begin{figure}[htb]
+  \centering
+  \hspace*{-0.7cm}
+  \includegraphics[width=16cm]{consolePanel.png}\\
+  \caption{Debugging the ZDF HbbTV application with the Console tab}\label{fig:consolePanel}
+\end{figure}
 
-- What do they try to solve
-- Patent
+In addition to that since the TV is running all its network traffic through the proxy on the Raspberry Pi
+it automatically collects all network data in a way that it can be displayed in the DevTools application as well.
+It enables developers using this tool to not only see if all network requests have been resolved successfully
+on their own app but also on any arbitrary HbbTV applications that are published. This gives developers and
+researchers the chance to look into the loading behavior of an app to reveal information on when certain data
+is loaded and if the app is tracking the viewer behavior in any way. Like in the browser the DevTools application
+as seen in figure \ref{fig:networkPanel} it shows not only a list of all network requests that have been made by the
+app but also their content.
+
+\begin{figure}[htb]
+  \centering
+  \hspace*{-0.7cm}
+  \includegraphics[width=16cm]{networkPanel.png}\\
+  \caption{Network requests being made by the Pro7 HbbTV application}\label{fig:networkPanel}
+\end{figure}
+
+Sniffing through the requests shows that many small data packages that are covered as 1px gif images are
+sending user information to services like INFOnline\footnote{See request details in Annex section under
+listing \ref{ioam}} or a New Relic aggregator\footnote{See Annex section under listing \ref{newrelic}} containing
+data on the viewer origin, his device, its model name and other device metrics. Another interestung artifact
+of data that can be observed when switching aroung pages on the Pro7 HbbTV app. Everytime a new page is
+opened a request is send to \url{hbbtv-track.redbutton.de} that tracks the movement of the viewer\footnote{Also
+shown in Annex section listing \ref{sniffing}}. After the page has fully loaded you can see at the bottom of the
+page that the main page took about 7 seconds to fully and it downloaded 735 KB in 30 requests. This can be used
+to leverage interesting metrics of the performance of the HbbTV application.
+
+\section{Comparison To Other Testing Solutions\label{sec:businessmodel}}
+
+
 
 \section{Features and Offerings\label{sec:features}}
 
