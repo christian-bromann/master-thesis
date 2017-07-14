@@ -106,21 +106,43 @@ to run tests on a real Smart TV. In order to do that a Candy Box has to be purch
 box could instrument 40 devices the plan still doesn't allow leverage this. Only with a paid subscription this box
 can be used properly.
 The Candy Box itself is a useful piece of hardware that allows to instrument arbitrary TVs. Since it uses its infrared
-port it acts as remote control has almost every ability to control the television as a human. Connected to the internet
-and to the Suitest cloud every developer can control the TV in anyway using that box without having to be in the same
-location. The Raspberry on the contrary has certain limitations when it comes to controlling the TV. The instrumentation
-script of the DevTools Backend only works within a web environment. This means that the TV has to show an HbbTV app
-to allow the instrumentation script to work. This means that in order to run a test on the TV you need to turn on the
-TV and open an HbbTV application manually. Everything outside of the HbbTV context is not accessible. It is for instance
-not possible to open any internal menus or test a native application. These are indeed disadvantages against a box
-that uses an infrared connection to the TV. However looking at the scope of this thesis these limitations are acceptable.
-In addition to that the Raspberry Pi doesn't yet use any of the APIs that are provided by the manufacturer. Almost every
-TV can be accessed via an HTTP interface to gain control over certain features. These interfaces are used to allow
-mobile apps to work as e.g. a second remote control. Because of the fact that the Pi is directly connected to the
-Smart TV it has automatically access to these interfaces as well\footnote{As part of the research for this thesis
-a small Node.JS library (\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/samsungtv}) was developed that can
-find and control newer Samsung Smart TV in the network by using its API interface.}. That being said, the way how the
-Candy Box can access the Smart TV can also be achieved using this approach.
+port it acts as remote control and has almost every ability to control the television like a human person. Connected
+to the internet and to the Suitest cloud every developer can control the TV in anyway using that box without having
+to be in the same location. The Raspberry on the contrary has certain limitations when it comes to controlling the TV.
+The instrumentation script of the DevTools Backend only works within a web environment. This means that the TV has to
+show an HbbTV app to allow the instrumentation script to work. This means that in order to run a test on the TV you
+need to turn it on and open an HbbTV application manually. Everything outside of the HbbTV context is not accessible.
+It is for instance not possible to open any internal menus or test a native application. These are indeed disadvantages
+against a box that uses an infrared connection to the TV. However looking at the scope of this thesis these limitations
+are acceptable. In addition to that the Raspberry Pi doesn't yet use any of the APIs that are provided by the
+manufacturer. Almost every TV can be accessed via an HTTP interface to gain control over certain features. These
+interfaces are used to allow mobile apps to work as e.g. a second remote control. Because of the fact that the Pi is
+directly connected to the Smart TV it has automatically access to these interfaces as well\footnote{As part of the
+research for this thesis a small Node.JS library (\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/samsungtv})
+was developed that can find and control newer Samsung Smart TV in the network by using its API interface.}. That being
+said, the way how the Candy Box can access the Smart TV can also be achieved using this approach.\\
+Writing tests with the Suitest UI is fairly simple. As shown in figure \ref{fig:suitest} the UI provides an editor
+that allows to click together a chain of actions and assertions that can be read as a normal english sentences. In
+order to choose elements from the app the developer can open up a utility menu that maps the mouse movements of the
+user to the app on the target device. Once the mouse hovers over an element it gets highlighted and can be choosen.
+In addition to that certain assertions like the ''has property'' check automatically fetches all available attributes
+the developer might be interested in. The editor in general feel slick and covers a variety of actions and assertion
+that can ensure that expected state of the HbbTV application. Additional features like tagging or adding notes to
+certain steps are making tests not only easy to find but also to reason about. It doesn't require any technical
+experience to write, execute and maintain them. It is directed to not only app developer but also to project manager
+that want to make sure that certain requirements are met and features are implemented and stable. The test environment
+developed with this thesis follows a completely different goal. It is based on already established industry standards
+like WebDriver and targets developer directly. Tests are not clicked together using a GUI. They have to be written in
+a programming language and are usually created and maintained by the same developers that also build the HbbTV
+application. To interact with an element the selector has to be known. Since usually developer are familiar with the
+elements on the page it is more difficult for other people in or outside of the team to write tests. However the
+DevTools Backend can give insights about the DOM structure of the application and allows to find these selectors.
+Still this approach requires some technical skills.\\
+The approach in general is non oppinionated and allows to create custom devlivery pipelines that is suited for any
+requirements a development team can have. While test on the Suitest platform can only be scheduled in certain time
+intervals or on exact times, using the Appium HbbTV Driver it is possible to run tests at any desired point in time,
+e.g. when a certain release is being made or if new code is proposed and about to be merged into the code base. This
+allows to create gatekeepers that prevent bad code that causes regression to be introduced.
 
 \section{Features and Offerings\label{sec:features}}
 
