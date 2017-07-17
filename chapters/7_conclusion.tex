@@ -1,26 +1,113 @@
 \chapter{Conclusion\label{cha:chapter7}}
 
-Chapter 7 summarizes the thesis, describes the problems that occurred and gives an outlook about future
-work. Should have about 4-6 pages.
+% Chapter 7 summarizes the thesis, describes the problems that occurred and gives an outlook about future
+% work. Should have about 4-6 pages.
+%
+% The final chapter summarizes the thesis. The first subsection outlines the main ideas
+% behind Component X and recapitulates the work steps. Issues that remained unsolved are
+% then described. Finally the potential of the proposed solution and future work is
+% surveyed in an outlook.
 
-The final chapter summarizes the thesis. The first subsection outlines the main ideas
-behind Component X and recapitulates the work steps. Issues that remained unsolved are
-then described. Finally the potential of the proposed solution and future work is
-surveyed in an outlook.
+More and more digital devices are getting connected to the internet and run applications that are build with web
+technologies. The HbbTV protocol was the foundation of bringing the web on the big screen. This fairly new standard
+now encounters the same issues of debuggability and testability as other device and software markets before, e.g.
+mobile application development. Til today there is no solution that really addresses these issues. As the HbbTV
+standard evolves and the device fragmentation increases the demand for qualitative tools for software assurance
+rises too. This thesis solves these issues by connecting established technologies and protocols together to create
+a testing and debugging solution that can be integrated in modern software development pipelines.
 
 \section{Summary\label{sec:summary}}
 
-Explain what you did during the last 6 month on 1 or 2 pages!
+% Explain what you did during the last 6 month on 1 or 2 pages!
+
+The work on this thesis started with an in depth research phase on the HbbTV standard and current testing technologies.
+Unfortunately there were no existing solutions found at this point. Some companies like BBC provided some ressources
+of their own homegrown solutions\footnote{See BBC Hive Open Source Test Tools (\url{http://bbc.github.io/hive-ci/})}
+that are suited for their requirements. However the goal of this work was to find way to make testing and debugging
+of arbitrary HbbTV applications accessible to everyone. Therefor it has to be non oppinionated and should not prescribe
+a certain way of how to do things. To evaluate the technical opportunities one of the first steps was to discover
+the accessibility of a modern Smart TV. Using tools like WireShark a variety of interfaces could be discovered that
+allowed mobile applications to e.g. remote control the TV and enable second screen technology. These interfaces also
+gave insights on the device capabilities as well as their underlaying software. Given that there were multiple
+manufactures with different Smart TV platforms that even have different interfaces based on their models this approach
+of controlling a TV device turned out to not be very promising.
+
+Another interesting view point were virtual machines that emulated an HbbTV environment on your operating system.
+With the Opera TV Developer tools\footnote{\url{http://www.operasoftware.com/products/tv/tv-developer-tools}} the
+company that made the Opera browser provided set of tools and software that even allowed developer to remote debug
+HbbTV applications from the browser. With the Opera TV Emulator it was not only possible to debug the app using
+the Chrome DevTools\footnote{\url{https://wiki.operatv.tv/display/OTV/Debugging}} it also allowed to run automated
+WebDriver tests by attaching the ChromeDriver to the Chrome DevTools Session that was run by the WebKit engine inside
+the emulator\footnote{\url{https://wiki.operatv.tv/display/OTV/Selenium+testing}}. The idea of being able use the
+Chrome DevTools which is the most powerful tool these days to inspect modern applications and test HbbTV applications
+using the WebDriver protocol which drives millions of automated tests on mobile and desktop every day seem to be
+really compelling as a developer. However being restricted to an emulated environment is suboptimal and would at the
+end not solve the problem of quality assurance in a market of high device fragmentation like in the TV market.
+
+The requirements of todays software delivery processes have been clearly influenced by the principles of agile software
+development. The demand to ship qualitive software faster also applies for TV market where advertisment campaigns
+and broadcast content is getting rolled out constantly. To build a pipeline that provides such quick delivery cycles
+it requires \textit{''an automated set of tools from code to delivery''}\cite{Lehtonen2015DefiningMF}. The tools
+within the delivery process have to be highly interoperable to allow to build a pipeline that fits the developers
+needs since every software is different. Therefor the debugging and testing platform for HbbTV has to be interoperable
+too which it only can be if it relies on open standards and protocols. Selenium, which is now standardised under
+W3C\footnote{\url{https://www.w3.org/}} as WebDriver, is such an open standard. It was developed as open source
+software since 2004. As industry leader for automated testing it runs millions of tests every day in desktop and mobile
+environments. To build a testing tool for HbbTV that is future proofed and aligns with todays software development
+standards it only makes sense to build on top of this technology. The WebDriver protocol itself only defines an
+interface of methods and properties to automate a browser. However it doesn't specify how the automation is being
+implemented. Therfore there are dedicated driver softwares for each individual browser. These drivers use different
+approaches to execute a certain WebDriver command on the application. Interestingly the driver for the Chrome browser
+uses a protocol that also drives one of the most powerful tools to develop and debug modern applications in Chrome.
+This protocol is called Chrome DevTools Protocol\footnote{\url{https://chromedevtools.github.io/devtools-protocol/}}
+which describes an interface to interact with the browser on multiple different domains like DOM, CSS or Network. It
+is build into WebKit which is a browser engine that drives a lot of other browser including Opera and Safari. The
+browser that render HbbTV applications on Smart TVs are also mainly driver by WebKit. Unfortunately it can't be accessed
+programmatically. The protocol still provides the ideal baseline for implementing a development and testing platform
+since it can be integrated in tools like Chrome DevTools.
+
+That being said the major programming effort for this thesis was to re-implement all interfaces that are described in
+the DevTools protocol as a standalone script. The use case model was the Chrome DevTools application. The goal was to
+create a script that once injected into a web environment can be used to connect to a Chrome DevTools application. To
+provide support for the Network domain a proxy was developed that captures network packages requested by the
+application. Obviously it is not possible to support all methods described in the protocol using just the JavaScript
+API. In fact the protocol is very comprehensive, implementing all methods would be impossible time-wise. Therefor the
+scope was limited to support the most important tools, e.g. the Element, Console and Network tab. By inspecting the
+DevTools applications using the DevTools application itself and reverse engineer the communication between the
+application and a normal website it was possible to adopt the sequence of events and commands to a standalone script.
+This allowed an interesting in depth view of how modern HbbTV applications from private broadcaster like Pro7 or
+public broadcaster like ARD/ZDF were build. It showed that many channels are using the same application framework
+and only differ in design and content based on the brand.
+
+The last part of the thesis was to build an automation driver to run WebDriver tests on Smart TVs running HbbTV
+applications. Appium already established a framework for building automation drivers based on the WebDriver
+protocol since they already provide drivers for different platforms like iOS, Android, Windows and Mac. Similar
+to how ChromeDriver and SafariDriver automates their browser the HbbTV driver uses the implemented standalone
+script to execute WebDriver commands on the application.
 
 \section{Dissemination\label{sec:dissemination}}
 
-Who uses your component or who will use it? Industry projects, EU projects,
-open source...? Is it integrated into a larger environment? Did you publish any papers?
+% Who uses your component or who will use it? Industry projects, EU projects,
+% open source...? Is it integrated into a larger environment? Did you publish any papers?
+
+The Fraunhofer Institute for Open Communication Systems will use this tool in near future to build and test their
+HbbTV applications on daily basis. Their TV laboratory will be equipped with a handful Raspberry Pis running the
+Appium HbbTV Driver and DevTools Backend components to debug and run tests on different TV models. This will be the
+foundation of a larger Selenium Grid that will allow to run tests on multiple devices at the same time. The code
+itself will be documented and open sourced so that it can be improved by people that are interested in this software.
+
+In addition to that a talk with the title \textit{''Appium for Couch Potatoes: an HbbTV Driver''} was proposed and
+accepted at the Selenium Conference 2017 in Berlin\footnote{http://seleniumconf.de/}. It will introduce the Appium
+HbbTV Driver component and will show off how to run automated tests on Smart TVs. Being able to test connected
+devices using Appium fits perfectly into the vision of that open source software. Therefor the thesis was already
+mentioned in 2016 at the Selenium Conference in London in a talk by Jonathan Lipps with the title \textit{''StarDriver
+Enterprise Appium to the Future''}\footnote{Video available on YouTube: \url{https://youtu.be/e61OhZzbsEI?t=16m42s}}.
+Other abstracts and talk proposals had been sent out but haven't got accepted til submission.
 
 \section{Problems Encountered\label{sec:problems}}
 
-Summarize the main problems. How did you solve them? Why didn't you solve them?
+% Summarize the main problems. How did you solve them? Why didn't you solve them?
 
 \section{Outlook\label{sec:outlook}}
 
-Future work will enhance Component X with new services and features that can be used ...
+% Future work will enhance Component X with new services and features that can be used ...
