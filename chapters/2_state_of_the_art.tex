@@ -13,8 +13,8 @@
 There are literally two main standards/protocols that are used in this thesis and will be described in
 depth in this chapter: the HbbTV standard and the WebDriver protocol. Both are fairly new standards that
 have been defined within the last 5 years. Another important protocol for this work is the Chrome Remote
-Debugging protocol which is used by the automation driver to drive the WebDriver tests get data out of
-the HbbTV app. This thesis tries to connect the standards to allow interoperability between them to
+Debugging protocol which is used by the automation driver to drive the WebDriver tests and to get data out of
+the HbbTV app. This thesis tries to connect these standards to allow interoperability between them to
 increase the level of integration to a wide variety of tools that has not been possible before.
 
 \section{HbbTV\label{sec:hbbtv}}
@@ -24,7 +24,7 @@ increase the level of integration to a wide variety of tools that has not been p
 
 Television devices started to become connected to the internet already before HbbTV was invented. With
 the so called Set Top Boxes or Smart TV Sticks customers were able to connect the TV to an internet
-capable device that provided a content stream. Big companies like Google, Amazon or Apple provided such
+capable device that provided a content stream. Big companies like Google, Amazon or Apple offered such
 devices. The problem with this approach was that if a developer wanted to build an app he had to create
 this app for each individual platform. This is a really time consuming and not scaleable process as
 the way you build apps for such platforms was extremely different. After game consoles like Sony Playstation
@@ -49,7 +49,7 @@ to the used device. Content provider can build and deploy apps which can be used
 standard is supported.
 
 If a consumer is equipped with an HbbTV supported Smart TV he will usually see a small image somewhere
-on the screen that asks him to press the red button on the remote control. Pressing it triggers an
+on the screen that offers to press the red button on the remote control. Pressing it triggers an
 event within the app that opens the HbbTV application. Once the user switches the channel the same
 happens again with a different app. Depending on the broadcaster each broadcast signal contains
 a small AIT package that contains main information like application ID, version, autostart state and
@@ -66,12 +66,12 @@ Depending on the autostart information within the AIT package the app either sta
 as soon as the broadcast stream starts or only when the user pushes the red button. Most HbbTV
 applications these days use the autostart feature to display a small indicaticator image to
 show that an HbbTV app is available to use. Once the app opens it either takes up only some part
-of the screen fulfills the whole display. In general though the broadcast stream is never
-getting disrupted as the application only acts as an additional service to the broadcast stream.
+of the screen or fulfills the whole display. In general though the broadcast stream is never
+getting disrupted as the application only acts as an additional service to it.
 
 After the first specification was released in 2010 by the \textit{''HbbTV forum and published by ETSI
 in the specification TS 102 796''} \cite{evolution} initiators reached out to CE manufactures to get
-it implemented in the next generation of TVs. Since then the number of Smart TVs with HbbTV support
+it implemented in the next generation of TVs. Since then the number of Smart TVs with HbbTV support has
 increased drastically with more than 43 million devices sold and over 300 apps deployed in 25
 countries\footnote{Source: \url{https://www.hbbtv.org/news-events/hbbtv-ibc-2016-services-and-devices/}}
 \footnote{A complete list of all countries can be found in Listing \ref{hbbtvdeployed} in the annex section}.
@@ -127,7 +127,7 @@ Application Discovery over Broadband is a workaround to solve this problem.
   \caption{App delivery workflow of HbbTV applications over broadband discovery}\label{fig:application_discovery_over_broadband}
 \end{figure}
 
-As described in Figure \ref{fig:application_discovery_over_broadband} the TV gets the AIT package
+As described in figure \ref{fig:application_discovery_over_broadband} the TV gets the AIT package
 from a dedicated server based on the program name. Each broadcaster usually has their own DNS
 root server and an own AIT server. However there is one main HbbTV DNS root server which routes the
 DNS request from the TV to the server of the broadcaster.
@@ -140,7 +140,7 @@ consortium around the standard invented the so called Operator Apps which allow 
 operator and HbbTV applications on one Smart TV. The idea is that the user can switch between
 both worlds as a functionality within the TV. An operator can become anyone who has a contract
 with the TV manufacture. Each operator app has to authenticate to the TV to avoid abuse. Unlike
-HbbTV applications and operator app can run in the background at all times and can display
+HbbTV applications an operator app can run in the background at all times and can display
 messages on the display as well as overwrite key functions like \textit{''P+''} or \textit{''P-''}.
 They open usually by pressing \textit{''EPG''} or \textit{''Menu''}. In the specification of
 operator apps which is part of HbbTV verson 2 the consortium emphasized that operator and HbbTV
@@ -154,11 +154,11 @@ service in a variety of ways.
 \subsection{Example Applications And Use Cases}
 
 All these features allow broadcasters to implement not only an additional content outlet but also
-to create tailored advertisment strategies to a specified audience. With methods like geotargeting
+to create tailored advertisment strategies to a specified audience with methods like geotargeting
 or targeted advertisment. Geotargeting can be used in HbbTV applications by leveraging a users
 IP address in order show regional products or services. Combined with a broadcast stream it
 enables interesting opportunities. In an advertisment campaign launched by Germans private
-broadcaster RTL they promoted a pharmaceutical with help of an HbbTV app. The pharmaceutical
+broadcaster RTL they promoted a pharmaceutical product with help of an HbbTV app. The pharmaceutical
 \textit{''Wick Medinait''} was advertised along with a banner that showed the regional weather
 forecast. It had the effect that the HbbTV app banner supported the TV spot so that it increased
 the impact of the advertisment itself.
@@ -173,7 +173,7 @@ the impact of the advertisment itself.
   \label{fig:geotargeting}
 \end{figure}
 
-This is also called Addressable TV advertising. It \textit{''enable[s] advertisers to selectively
+This is also called as Addressable TV advertising. It \textit{''enable[s] advertisers to selectively
 segment TV audiences and serve different ads or ad pods (groups of ads) within a common program or
 navigation screen. Segmentation can occur at geographic, demographic, behavioral and (in some cases)
 self-selected individual household levels [...]''}\cite{adrTV}.
@@ -199,7 +199,7 @@ a project that was funded by the European Union and developed and led by Fraunho
 It uses Wordpress as CMS to enable authors to modify content, look or functionality of an HbbTV
 app. Thanks to its plug\&play functionality the tool can easily add new features like Chat and Video or
 Image Galleries without requiring someone to implement it. With that it reduces the risk of unexpected
-behavior as this plugins are already tested against common Smart TV devices.
+behavior as these plugins are already tested against common Smart TV devices.
 
 \subsection{HbbTV Runtime Environment\label{sec:hbbtvruntimeenvironment}}
 
@@ -211,7 +211,7 @@ stream the AIT package, an A/V signal as well as application data and stream eve
 stream is processed like a standard non-hybrid DVB stream it still can provide some information like
 channel list or tuning functions to the Runtime Environment. Furthermore receives the environment
 the application data and event streams from the object carousel using a DSM-CC client which is a
-toolkit defined in the MPEG-2 stanard that provides a control channel to access the broadcast stream
+toolkit defined in the MPEG-2 standard that provides a control channel to access the broadcast stream
 and push data to the Application Manager.
 
 \begin{figure}[htb]
@@ -223,12 +223,12 @@ and push data to the Application Manager.
   \label{fig:app_env}
 \end{figure}
 
-In order to allow the HbbTV app to embed the running broadcast stream within the application the
-as a video the Media Player component is required which receives that data after the broadcast
+In order to allow the HbbTV app to embed the running broadcast stream within the application
+as a video, the Media Player component is required which receives that data after the broadcast
 stream was processed. It can also receive A/V content from the broadband source in linear or non
 linear form.
 
-As described in section \ref{sec:hbbtv} once the HbbTV application is loaded via broadband stream
+As described in section \ref{sec:hbbtv} once the HbbTV application is loaded via broadband stream,
 it starts either directly by the end-user by pressing a dedicated button on the remote control, in
 response to an event stream or by an already running application, e.g. when the user wants to open
 an application within the application. With HbbTV version 2 it became also possible to start the
