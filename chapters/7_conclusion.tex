@@ -12,7 +12,7 @@ More and more digital devices are getting connected to the internet and run appl
 technologies. The HbbTV protocol was the foundation of bringing the web on the big screen. This fairly new standard
 now encounters the same issues of debuggability and testability as other device and software markets before, e.g.
 mobile application development. Til today there is no solution that really addresses these issues. As the HbbTV
-standard evolves and the device fragmentation increases the demand for qualitative tools for software assurance
+standard evolves and the device fragmentation increases the demand for qualitative tools for qualtity assurance
 rises too. This thesis solves these issues by connecting established technologies and protocols together to create
 a testing and debugging solution that can be integrated in modern software development pipelines.
 
@@ -102,11 +102,39 @@ HbbTV Driver component and will show off how to run automated tests on Smart TVs
 devices using Appium fits perfectly into the vision of that open source software. Therefor the thesis was already
 mentioned in 2016 at the Selenium Conference in London in a talk by Jonathan Lipps with the title \textit{''StarDriver
 Enterprise Appium to the Future''}\footnote{Video available on YouTube: \url{https://youtu.be/e61OhZzbsEI?t=16m42s}}.
-Other abstracts and talk proposals had been sent out but haven't got accepted til submission.
+Other abstracts and talk proposals had been sent out but haven't got accepted til due date.
 
 \section{Problems Encountered\label{sec:problems}}
 
 % Summarize the main problems. How did you solve them? Why didn't you solve them?
+
+During the implementation of the DevTools Backend component most of the problems were encountered due to the limitation
+of the HbbTV browser and the restriction of not being able to debug code that is running on a Smart TV. Until today
+the functionality of the tool is limited for older TV generations that don't support the JavaScript APIs that have
+been used in the instrumentation script. These issues couldn't be solved due to the lack of time. Running a Selenium
+Grid without manual interaction is also currently still an issue. The Appium HbbTV Driver can only interact with a
+device when the instrumentation script was injected into a HbbTV app. In order to run tests each device has to be
+initially setup which includes starting the TV and open a HbbTV app. This has to be automated. Using the ethernet
+connection from the Raspberry this can be achieved with standards like Wake on LAN to boot up the TV or the rest
+interfaces provided by the Smart TV itself to simulate remote control events. Due to time limitation this was also
+skipped.
+
+In addition to that some other interesting issues came up while developing the proxy server. The first version of it
+intercepted all packages which was a lot of overhead since the component was only interested in HbbTV documents in
+order to inject the script. All assets only had to be tracked but not modified. In order to achieve that there has
+to be a filter that checks incomming requestes to be forwarded or intercepted. The problem with that is that the
+request object itself, including its headers, doesn't always reveal information about the content type of the requested
+source. Also the filename can't be used to certainly determine the response. The solution for this problem was to make
+a HEAD request in advance. The response of this request contained the response headers which can be relieable used
+to determine the response type. Another issue that made some HbbTV applications fail to load was hostname changes.
+Some apps, e.g. the HbbTV app of RTL2, change the hostname between request and response. In this example the AIT
+package is referencing the HbbTV app at \textit{\url{www.rtl2.de/hbbtv}}. Due to internal redirectes the response
+contains a different host (\textit{\url{http://hbbtv.rtl2.de}}). This affects some assets that don't contain a hostname
+in the URL. A JavaScript file referenced with \textit{/js/app.js} now gets loaded from \textit{\url{www.rtl2.de/js/app.js}}
+instead of \textit{\url{http://hbbtv.rtl2.de/js/app.js}}. As result the HbbTV application can't be loaded because
+some important assets were missing. To workaround this issue the proxy filter was enhanced and now checks if such
+host change happened and in case a request fails it retries with a different request url. This works fairly well
+but is definitely not the ultimiate solution for this problem.
 
 \section{Outlook\label{sec:outlook}}
 
