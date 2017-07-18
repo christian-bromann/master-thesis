@@ -139,3 +139,25 @@ but is definitely not the ultimiate solution for this problem.
 \section{Outlook\label{sec:outlook}}
 
 % Future work will enhance Component X with new services and features that can be used ...
+
+The current developed prototype is more or less just a proof of concept of how modern debugging and testing solution
+can be applied to the TV screen. There are numerous enhancements that can be made. So far debugging and testing is
+limted to the HbbTV space only. However there are also native applications that need do be tested. A tighter integration
+into the developing frameworks of each TV platform would allow to provide some sort of test automation also for native
+applications\footnote{For example the TV platform Tizen OS which is deployed on Samsung devices has an interface for
+native applications that is also based on Chromes DevTools Protocol (\url{http://developer.samsung.com/tv/develop/getting-started/using-sdk/web-inspector/}).}.
+These integrations are mainly hidden behind the rest API interface of the Smart TV. Unfortunately they are not well
+documented and have to be discovered for each individual platform.
+
+Another really interesting opportunity would be to offer this software as a service and allow anyone access to Smart TV
+devices. Similar to the SaaS model of other cloud testing companies like SauceLabs\footnote{\url{http://saucelabs.com/}}
+or Perfecto Mobile\footnote{\url{https://www.perfectomobile.com/}} this service would allow customers to signup and
+access real Smart TV devices based on their subscription plan from anywhere in the world. Broadcast companies would
+not need to setup their own TV device lab anymore but instead just use this service. Next to remote debugging and
+automated testing features it could offer some sort of manual testing where the customers can choose a TV in the device
+lab and connect to it via a dedicated AV channel. This can be achieved by mirroring the AV stream of the TV to a
+server that can transform this into a video stream. A simpler option would be to just record the screen with a normal
+camera. Given that the number of countries that support HbbTV is growing and more broadcast companies are going to be
+interested in this a company that would offer such service is very likely to be successful. Especially since the
+HbbTV technology is new and many new features haven't been implemented in TVs yet the device fragmentation will be
+growing and increasing the demand for automated testing.
