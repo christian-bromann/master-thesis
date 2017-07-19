@@ -65,7 +65,7 @@ process.
 Depending on the autostart information within the AIT package the app either starts automatically
 as soon as the broadcast stream starts or only when the user pushes the red button. Most HbbTV
 applications these days use the autostart feature to display a small indicaticator image to
-show that an HbbTV app is available to use. Once the app opens it either takes up only some part
+show that an HbbTV app is available to use. Once the app opens, it either takes up only some part
 of the screen or fulfills the whole display. In general though the broadcast stream is never
 getting disrupted as the application only acts as an additional service to it.
 
@@ -82,10 +82,10 @@ Almost two years later a new specification was released (HbbTV 1.5) that added s
 and MPEG CENC. MPEG DASH is an ISO standard for adaptive streaming of IP videos. Depending on the
 users bandwith and CPU processing power it ensures continuous playback and helps improving the stream
 experience in general by monitoring the CPU utilization and/or buffer status. If e.g. for any reason
-the user looses bandwidth the video is able to lower the quality of the video so that it still can
-be played without disrupting. Due to support issues not many HbbTV apps use DASH these days.
+the user looses bandwidth the player is able to lower the quality of the video so that it still can
+be played without disruption. Due to support issues not many HbbTV apps use DASH these days.
 Most videos are still loaded in a progressiv way. The MPEG CENC on the other side helps with common
-encription for ISO base media format files and MPEG-2 transport streams. As content provider using this
+encription for ISO based media format files and MPEG-2 transport streams. As content provider using this
 feature you only have to encrypt your video once. The user then has to decrypt it by getting the
 key from one of many DRM systems.
 
@@ -96,7 +96,7 @@ apps only work with a version of CE-HTML which is an XHTML-based standard specif
 electronic devices on UPnP networks, the latest specification supports HTML5, CSS3 and Web Sockets.
 Another new feature is the ability for synchronisation of audio, video and data streams that enables
 the consumer to watch a certain broadcast stream while listening on the audio via broadband. This
-opens a wide variety of use cases like service for simultan translations to videos. It can be
+opens a wide variety of use cases like services for simultan translations to videos. It can be
 combined with the new introduced Second Screen Integration for Smart Phones and Tablets which
 allows to start broadcast streams from your personal handheld on the TV. Due to its duplex
 communication ability it allows to also start videos from your HbbTV app on your mobile device.
@@ -104,7 +104,7 @@ This works with multiple devices and also provides a lot of opportunities for e.
 where phones can be used as remote controls. In the video area the specifications will support
 new streaming formats like HEVC, also known as H.265 and MPEG-H Part 2, DASH for DVB or
 push-on-demand where users are able to download certain videos on a local storage to watch them
-if desired.
+later if desired.
 
 It is worth mentioning that version 2 of the spec was never really released by ETSI. It got
 surpassed by version 2.0.1 which fixed unclear specifications and removed some errors. It also
@@ -113,10 +113,10 @@ Kingdom who have decided to move from a similar standard called MHP to HbbTV. Th
 define additional caching rules for HTTP/1.1, more details on higher display resolution and other
 technologies that were defined in MHP.
 
-An additional standard to HbbTV was released short after HbbTV version 2 was published by ETSI.
-This standard is called Application Discovery over Broadband and is not part of the actual
-HbbTV specification. However it adds an important addition to HbbTV when cable service provider block
-the AIT of the broadcast stream. These provide have a different idea of interactive TV services
+An additional standard to HbbTV was released by ETSI short after HbbTV version 2. This standard is
+called Application Discovery over Broadband and is not part of the actual HbbTV specification.
+However it adds an important addition to HbbTV that is used if cable service provider block
+the AIT of the broadcast stream. These provider have a different idea of interactive TV services
 and usually want to promote their own platform. Once the AIT package is blocked the HbbTV application
 can't be loaded by the TV anymore since information about application ID and URL are missing.
 Application Discovery over Broadband is a workaround to solve this problem.
@@ -133,7 +133,7 @@ root server and an own AIT server. However there is one main HbbTV DNS root serv
 DNS request from the TV to the server of the broadcaster.
 
 Pay, cable, IPTV or Sat-Platform operators as mentioned above sometimes provide instead of HbbTV
-their own service apps with own GUI. They usually require some sort of additional hardware which
+their own service apps with a custom GUI. They usually require to use some sort of additional hardware which
 don't support HbbTV. Even though the TV is connected to the internet and supports the standard
 it is still not possible to open up an HbbTV application. As solution for this problem the
 consortium around the standard invented the so called Operator Apps which allow to connect
@@ -181,8 +181,8 @@ self-selected individual household levels [...]''}\cite{adrTV}.
 Another interesting use case outside of advertisment is content authoring of HbbTV applications.
 Usually an HbbTV application is a custom web app that is build to serve a specific content for
 a service or show. Once you want to promote a new service or show it requires to build a new
-app with new content. This takes time and cost money. A solution to this problem was adapted from
-the web. By using a Content Management System (CMS) like Wordpress\footnote{\url{https://wordpress.org/}}
+app with new content. This takes time and costs money. A solution to this problem was adapted from
+the web. By using a Content Management System (CMS), like Wordpress\footnote{\url{https://wordpress.org/}},
 broadcaster can create or modify the content of their apps using a simple web interface.
 
 \begin{figure}[htb]
@@ -205,11 +205,11 @@ behavior as these plugins are already tested against common Smart TV devices.
 
 The Runtime Environment of an HbbTV application is formed by the browser and an Application Manager who
 \textit{''evaluates the AIT to control the lifecycle for an interactive application''}\cite{hbbtv15}.
-The browser on the other side which is in many cases a clone of an already existing web browser with
-a subset of supported features is responsible to render the HbbTV app. The TV receives from the broadcast
-stream the AIT package, an A/V signal as well as application data and stream events. While the A/V
+The browser on the other side, which is in many cases a clone of an already existing web browser with
+a subset of supported features, is responsible to render the HbbTV app. The TV receives an AIT package,
+an A/V signal as well as application data and stream events from the broadcast stream. While the A/V
 stream is processed like a standard non-hybrid DVB stream it still can provide some information like
-channel list or tuning functions to the Runtime Environment. Furthermore receives the environment
+channel list or tuning functions to the Runtime Environment. Furthermore receives the runtime environment
 the application data and event streams from the object carousel using a DSM-CC client which is a
 toolkit defined in the MPEG-2 standard that provides a control channel to access the broadcast stream
 and push data to the Application Manager.
@@ -241,10 +241,10 @@ undesired overlays and to allow a uniform experience for the application start. 
 is taken by the user this indicator disappears again. Since radio services don't have this
 indicator, because they don't use the video channel, the full user interface will be displayed.
 Some applications like digital teletext apps are not run with autostart enabled. They have
-to be specifically triggered by the user without, in this case using the teletext button on
-the remote. Triggered one time it starts the digital teletext which is an HbbTV based application.
-If triggered twice it closes this app and starts the standard old fashioned teletext. By pushing
-the button for the third time it closes also that.
+to be specifically triggered by the user without notification, in this case using the teletext
+button on the remote. Triggered one time it starts the digital teletext which is an HbbTV based
+application. If triggered twice it closes this app and starts the standard old fashioned teletext.
+By pushing the button for the third time it closes also that.
 
 HbbTV apps are not only tied to a specific broadcaster. The so called broadcast-independent
 applications \textit{''can be electronic programme guides (EPGs) or “TV editions” of existing
@@ -256,8 +256,8 @@ as well as on a regional level or even by individuals.''}\cite{biapps}
 As mentioned in \ref{sec:hbbtv} HbbTV applications are written in CE-HTML which is an XHTML
 based standard to build webpages for consumer electronics like televisions. With the release
 of HbbTV version 2 support for HTML5 was added which allows developer to use the latest
-web technologies in their apps. Until the majority of devices have support for that apps will
-still delivered in the CE-HTML format. Per specification the doctype of the document needs
+web technologies in their apps. Until the majority of devices have support for that, apps will
+be still delivered in a CE-HTML format. Per specification the doctype of the document needs
 to be either XHTML 1.0 strict or has to have an HbbTV specific declaration which is
 
 \vspace{1cm}
@@ -267,7 +267,7 @@ to be either XHTML 1.0 strict or has to have an HbbTV specific declaration which
 <!DOCTYPE html PUBLIC "-//HbbTV//1.1.1//EN"
   "http://www.hbbtv.org/dtd/HbbTV-1.1.1.dtd"
 >
-<html xmlns="http://www.w3.org/1999/xhtml\">
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type"
           content="application/vnd.hbbtv.xml+xhtml; utf-8"
@@ -325,7 +325,7 @@ Depending on the event key code the app executes different actions and allows na
 the app.
 
 Since uploading changes to a production server is inefficient and time consuming people have
-developed some tool to improve the development environments of HbbTV app developer. There is a
+developed some tools to improve the development environments of HbbTV app developer. There is a
 Firefox plugin that emulates an CE-HTML like environment in the browser called FireHbbTV\footnote{\url{https://addons.mozilla.org/en-US/firefox/addon/firehbbtv/}}.
 It simulates the TV Remote control using the standard keyboard, displays the safe-area margin as well
 as supports most of the HbbTV specific APIs. Another popular tool is the Opera TV Emulator\footnote{\url{http://www.operasoftware.com/products/tv/tv-developer-tools}},
@@ -351,7 +351,7 @@ A Czech company called Suitest has developed a system to run e2e tests based on 
 arbitrary devices either in a remote office or in a local environment. It allows to run these
 tests in parallel and provides a comprehensive report about the test result over time. The
 GUI allows their user to simply click together one or multiple test scenarios where common
-actions are open the app via URL, press a button on the remote and assert that a certain element
+actions are: open the app via URL, press a button on the remote and assert that a certain element
 contains a certain property. Every aspect of your test can be seperated into sub steps and
 reused in other tests. The main idea is that you don't need any coding skills to put together
 a test. Figure \ref{fig:suitest} shows how simple the GUI looks like and how tests are being put
@@ -372,7 +372,7 @@ It requires a paid plan though which start with 156\euro{} up to 899\euro{}.
 Another company providing an e2e test solution for HbbTV apps on Smart TVs is \textit{Eurofins Digital Testing}\footnote{\url{http://www.eurofins-digitaltesting.com/}}.
 Next to HbbTV applications they also offer multiple device types such as Set-Top Boxes, standard
 web-apps or mobile apps on tablets and phones. Their TestWizard Manager\footnote{\url{http://www.eurofins-digitaltesting.com/testwizard/infrastructure/}}
-controls a set of set of TestWizard Robots that contain a different variety of devices depending
+controls a set of TestWizard Robots that contain a different variety of devices depending
 on the requirements of the application. Unlike Suitest the company offers a development tool
 called \textit{ScriptStudio} that allows customer to also write automated tests \textit{''without
 requirement for extensive knowledge of scripting languages''} \cite{scriptstudio}. Since other
@@ -395,7 +395,7 @@ defining and testing a standard. They published their tests and made them access
 so that anybody was able to get a clear picture of which web features are supported in whatever
 application they are testing. With that every browser vendor was able to make sure that its
 browser is working according to the spec. They became the major contibutor for writing and
-maintaining these. However the W3C also encouraged every developer to be involved in this
+maintaining the tests. However the W3C also encouraged every developer to be involved in this
 endeavour by starting a movement called \textit{''Test the Web Forward''}\footnote{\url{http://testthewebforward.org/}}.
 This was one of major reasons why standards like HTML5 and other technologies that are part
 of the HbbTV specification got relieable implemented in many browser and platforms.
@@ -405,7 +405,7 @@ Institute did something similar to ensure that TV manufactures only sell devices
 complaint to the spec. This is important as \textit{''lean-back consumers have zero patience
 meaning any malfunction in the chain will significantly reduce engagement and impact and
 may even result in viewers switching to another service''} \cite{hbbtvtesting}. In case of
-and update in the standard the association has to make sure that older applications are
+an update in the standard the association has to make sure that older applications are
 interoperable with furthcomming receivers and can coexist with them especially since devices
 are not easily updated by the consumer. Therefor they defined a receiver specification and
 a device and application conformance that sets certain guidelines and restriction to manufactures
@@ -418,11 +418,11 @@ to the spec.
 \section{Test Automation\label{sec:testautomation}}
 
 There is a lot of different ways on how to test software. Depending on its type and the scope of
-the tested functionality there are multiple testing methods that can be applied. From unit testing
-that only covers individual software components and code segments to load testing which makes sure
-that a specific performance metric is met these methods are used at different stages of the
+the tested functionality there are multiple testing methods that can be applied. From unit testing,
+that only covers individual software components and code segments, to load testing, which makes sure
+that a specific performance metric is met, these methods are used at different stages of the
 development lifecycle. With test automation these testing methods can be executed with use of
-special software that controls the execution of tests and compares the actual outcome with a
+special software that controls the execution of tests and compares the actual state with a
 certain predicted outcome. This happens in an automated fashion so that the test itself is mostly
 triggered by a certain event (e.g. code changes) in a CI/CD like environment.
 
@@ -441,14 +441,14 @@ practice of having to many e2e tests (inverted pyramid or ice cream cone pattern
 of unit and e2e tests but almost not integration/service level tests (hourglass pattern). A good
 rule of thumb here is splitting tests into 70\% unit tests, 20\% integration tests and 10\%
 e2e tests. Especially when working as an HbbTV app developer the desire to test apps directly
-on multiple TVs is high due to the high fragmentation in the market.
+on multiple TVs is high due to the high device fragmentation in the market.
 
 Testing software from end to end is a hard problem to solve. It either requires manual work
 which costs a lot of time or engineering effort to automated this process. Over the last
 years the tech industry shifted from manual QA to automated testing. Software development
 has become more agile with shorter release cycles and feedback loops. Especially due to the
 growing popularity of DevOps, development and operations teams are no longer soiled and
-engineering work take up the entire application lifecycle, from building the app to test and
+engineering work takes up the entire application lifecycle, from building the app to test and
 deployment. This allows not only to innovate for customers faster and adapt better to changes
 in market, it also forces you to increase the frequency and pace of releases in order to
 improve the product faster overall. Software these days is \textit{''an integral component
@@ -462,24 +462,20 @@ developers.
 
 \subsection{Selenium\label{sec:history}}
 
-Selenium is a set of tools and libraries to automated mainly web browsers. It can interact
-with them to simulate user actions like click or inputs and assert certain states of web
-applications. Those libraries are open source and available in almost any code language and
-are used to automate e2e tests. It is supported by all the major browser where each one
-provides some sort of automation driver that speaks the Selenium/WebDriver protocol. The
+Selenium is a set of tools and libraries to automated mainly web browsers and mobile devices.
+It can interact with them to simulate user actions like click or inputs and assert certain
+states of web applications. These libraries are open source, available in almost any code
+language and are used to run e2e tests. It is supported by all the major browser where each
+one provides some sort of automation driver that speaks the Selenium/WebDriver protocol. The
 communication is based on HTTP requests between an automation server and the client. Each
-test automation is coupled to a session id. Once a sessions is initiated you can communicate
-with the automation server via rest API. Such server can be either a Selenium server or directly
-a browser automation driver. A Selenium server is some sort of load balancer in order to run
-multiple tests on different browser at the same time. It manages all initiated sessions and
-reroutes them accordingly. A browser automation server can register itself to such a server
-to make itself available for others to use. It allows to speed up your tests by running them
-on multiple browser at the same time. You can even run these on different machines or VMs in
-your network by using a Selenium-Grid. This allows you to run tests concurrently on different
-operating systems and environments. By starting the Selenium server as hub you can connect other
-servers on different machines to it. These servers are referred to as nodes. The hub keeps
-track on all node configurations and ensures that all requests are load-balanced to them. It
-acts as a central access point to all browser in the network.
+test automation is coupled to a session id. Once a session is initiated you can communicate
+with the automation server via rest API. Such a server can be either a Selenium server or directly
+a browser automation driver. A Selenium server can be used to setup a grid of automation driver
+to load balance requests based on its capabilities to a specific browser in the network. These
+browser can be installed on different operating systems with different environments. It manages
+all initiated sessions and reroutes them accordingly. A browser automation driver can register
+itselfas a single node to this hub server to make itself available for others to use. It allows
+to speed up the execution time by running tests on multiple browser at the same time.
 
 \begin{figure}[htb]
   \centering
@@ -487,12 +483,12 @@ acts as a central access point to all browser in the network.
   \caption{Concept Flow of a Selenium Grid}\label{fig:selenium}
 \end{figure}
 
-It is important to point out difference between Selenium and WebDriver here. Selenium was
+It is important to point out the difference between Selenium and WebDriver here. Selenium was
 developed in 2004 by Jason Huggins, an engineer at Thoughtworks\footnote{\url{https://www.thoughtworks.com}}
 who tried to build a tool to test web applications that require frequest testing. The tool
 was called \textit{JavaScript Test Runner}. It was able to interact with the web page in order
 to call certain actions on it. Due to the Same Origin Policy that was introduced by browser
-vendors to prevent JavaScript from accessing data of pages that are not within the same domain,
+vendors to prevent JavaScript from accessing data from pages that are not within the same domain,
 Huggins and his team had to build a proxy server to overcome this. It injected a script to the
 webpage to talk to the proxy server and therefor enable the interaction with the webpage. This
 proxy server was released to public as Selenium Remote Control and is the first version of
@@ -526,28 +522,27 @@ applications as well which are mobile web apps that are wrapped within a tiny na
 so that you can write one single app and deploy it for both platforms. With that it can also
 run a random web page on a browser on the mobile device. Since it leverages the native test
 automation frameworks it doesn't matter if you run your test on an emulator or simulator on your
-computer or a real device that is setup in a test lab. As the WebDriver protocol is universal
+computer or a real device that is setup in a test lab. Since the WebDriver protocol is universal
 it doesn't require to write tests for Appium in a certain language. Similar to Selenium it is
 possible to write tests with any tool that supports the protocol. It also allows to connect
-to a Selenium grid to not only have a browser but also a mobile farm available to use for
+to a Selenium Grid to not only have a browser but also a mobile grid available to use for
 automated tests.
 
 \section{Chrome Remote Debugging Protocol\label{sec:remotedebuggingprotocol}}
 
 As described in section \ref{fig:selenium} when Selenium merged with WebDriver they started
-to communicate with the browser directly in order to interact with the page. As the first
-automation driver for Google Chrome was released it used an internal protocol called Chrome
-DevTools Protocol to instrument and debug the web page. It is mostly used by the Chrome
-DevTools which is a developer tool to inspect the wepage and profile the underlying rendering
-engine called Chromium. The protocol is divided into a number of domains where each
-\textit{''domain defines a number of commands it supports and events it generates''}
-\cite{devtoolsprotocol}. If the user activates a flag\footnote{\url{e.g. in Windows:
-chrome.exe --remote-debugging-port=9222}} when starting the browser a TCP server is initiated
-and the API can get accessed via a WebSocket connection. This allows to connect to the
-protocol via a WebSocket connection and control the browser in any way remotely. The protocol
-itself is comprehensive and allows besides receiving information about the state of the page
-a lot of debugging and profiling tools. Since it is part of WebKit which is the layout engine
-for many browsers - including Chrome (which uses a fork of WebKit called Blink), Safari or
-Opera - it allows to drive and debug many browsers. Due to the number of already existing
-integrations (including Chrome DevTools) it almost makes it an universal protocol for
-automating the browser.
+to communicate with the browser directly in order to interact with the page. When the first
+automation driver for Google Chrome was released, it used an internal protocol called Chrome
+DevTools Protocol to instrument and debug the web page. By that time this protocol was mostly
+utilised to run the Chrome DevTools which is a developer tool to inspect the wepage and profile
+the underlying rendering engine called Chromium. The protocol is divided into a number of
+domains where each \textit{''domain defines a number of commands it supports and events it
+generates''} \cite{devtoolsprotocol}. If the user activates a flag\footnote{e.g. in Windows:
+chrome.exe $--$remote-debugging-port=9222} when starting the browser a TCP server is initiated
+and the API can get accessed via a WebSocket connection. This allows to remotely control the
+browser in almost any possible way. The protocol itself is comprehensive and allows besides
+receiving information about the state of the page a lot of debugging and profiling tools. Since
+it is part of WebKit which is the layout engine for many browsers - including Chrome (which
+uses a fork of WebKit called Blink), Safari or Opera - it allows to drive and debug many
+browsers. Due to the number of already existing integrations (including Chrome DevTools) it
+almost makes it an universal protocol for automating a browser.

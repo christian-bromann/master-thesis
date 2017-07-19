@@ -30,7 +30,7 @@ of an HbbTV application.
   \caption{Inspecting the DOM tree of an HbbTV Application using the DevTools application}\label{fig:elementsPanel}
 \end{figure}
 
-It not only allows to look into the DOM tree of the app but also modify elements and their CSS
+It not only allows to look into the DOM tree of the app but also to modify elements and their CSS
 properties. Developer have now the opportunity to build the app directly on the TV instead of
 having to implement it on a browser first to then test it on a real Smart TV. Instead building
 a custom logging mechanism it automatically captures all logs from the page as well as JavaScript
@@ -52,7 +52,7 @@ It enables developers using this tool to not only see if all network requests ha
 on their own app but also on any arbitrary HbbTV applications that are published. This gives developers and
 researchers the chance to look into the loading behavior of an app to reveal information on when certain data
 is loaded and if the app is tracking the viewer behavior in any way. Like in the browser the DevTools application
-as seen in figure \ref{fig:networkPanel} it shows not only a list of all network requests that have been made by the
+as seen in figure \ref{fig:networkPanel} shows not only a list of all network requests that have been made by the
 app but also their content.
 
 \begin{figure}[htb]
@@ -64,15 +64,16 @@ app but also their content.
 
 Sniffing through the requests shows that many small data packages that are covered as 1px gif images are
 sending user information to services like INFOnline\footnote{See request details in Annex section under
-listing \ref{ioam}} or a New Relic aggregator\footnote{See Annex section under listing \ref{newrelic}} containing
-data on the viewer origin, his device, its model name and other device metrics. Another interestung artifact
-of data that can be observed when switching aroung pages on the Pro7 HbbTV app. Everytime a new page is
-opened a request is send to \url{hbbtv-track.redbutton.de} that tracks the movement of the viewer\footnote{Also
-shown in Annex section listing \ref{sniffing}}. After the page has fully loaded you can see at the bottom of the
-page that the main page took about 7 seconds to fully and it downloaded 735 KB in 30 requests. This can be used
-to leverage interesting metrics of the performance of the HbbTV application.
+listing \ref{ioam}} or a New Relic aggregator\footnote{See Annex section under listing \ref{newrelic}}
+containing data on the viewer origin, his TV, its model name and other device metrics. Another
+interesting artifact of data can be observed when switching around pages on the Pro7 HbbTV app. Everytime
+a new page is opened a request is send to \url{hbbtv-track.redbutton.de} that tracks the movement of the
+viewer\footnote{Also shown in Annex section listing \ref{sniffing}}. After the application has fully loaded
+you can see at the bottom of the page that the main page took about 7 seconds to fully load and it
+downloaded 735 KB in 30 requests. This can be used to leverage interesting metrics of the performance of
+the HbbTV application.
 
-Not only on the debugging side fulfills this tool all requirements that were stated before also its testing
+Not only on the debugging side fulfills this tool all requirements that were stated before. Also its testing
 features raise above everything that has been done in the HbbTV industry before. Until now \textit{''most TV
 device browsers don’t support WebDriver''}\cite{sengo}\footnote{The tool that is statet as HbbTV testing solution
 that supports Selenium doesn't exist anymore. There are no references on the internet other than this presentation.}
@@ -80,10 +81,10 @@ but with the Appium HbbTV Driver developer can for the first time setup a grid o
 tests on them. Since it is based on the WebDriver protocol which is the industry standard for automated desktop
 and mobile testing there are already hundreds of libraries available that can be used to write these automated tests.
 These libraries are available in all programming languages and flavors and already known by many developers that
-have experience with automated tests. As shown in listing \ref{wdioExample} an automation script can be written
-in couple lines of code. These tests are fairly simple to write even for non developers. There are solutions like
+have experience with automated tests. As shown in listing \ref{lst:wdioExample} an automation script can be written
+within a couple lines of code. These tests are fairly simple to write even for non developers. There are solutions like
 Cucumber\footnote{\url{https://cucumber.io/}} that allow to abstract away the coding part of these tests by writing
-feature files with acceptence sentences which are translated in actual code. This makes writing e2e tests accessible
+feature files with acceptence sentences which are translated into actual code. This makes writing e2e tests accessible
 for everyone.
 
 \section{Comparison To Other Testing Solutions\label{sec:businessmodel}}
@@ -95,17 +96,17 @@ It provides a service where developer can register their devices using a special
 is a \textit{''control unit which Suitest uses to operate TVs, Set-Top-Boxes and other devices through their infrared
 port''}\cite{candybox}. In combination with a paid subscription this box can be used to connect arbitrary devices
 with the Suitest cloud. The company allows then to signup on their website to create tests and manage accounts.
-As described in section \ref{sec:availabletestsolutions} the tests are being clicked together by a custom web interface
-where the developer can choose from a variety of action and assertion options. These tests can contain itself other
-tests which allows to split up multiple small tests to a big complex test suite.
+As described in section \ref{sec:availabletestsolutions} the tests are being "clicked together" by a custom web interface
+where the developer can choose from a variety of action and assertion options. These tests can contain other tests
+which allows to split up multiple small tests to a big complex test suite.
 
 When signing up as a user at Suitest the first major difference immediately surfaces. The company provides their software
 as a service which means that it can only be used at higher scale by paying a monthly subscription. The test solution
 outlined in this thesis only requires hardware that costs once-only around 50\euro. The cheapest subscription plan
 at Suitest starts with 159\euro. There is also a free plan available to test the service. However this does not allow
 to run tests on a real Smart TV. In order to do that a Candy Box has to be purchased for 499\euro. Given that this
-box could instrument 40 devices the plan still doesn't allow to leverage this. Only with a paid subscription this box
-can be used properly.
+box could instrument 40 devices the plan still doesn't allow to leverage the full potential of the Candy Box. Only
+with a paid subscription this box can be used properly.
 
 The Candy Box itself is a useful piece of hardware that allows to instrument arbitrary TVs. Since it uses its infrared
 port it acts as remote control and has almost every ability to control the television like a human person. Connected
@@ -126,20 +127,21 @@ said, the way how the Candy Box can access the Smart TV can also be achieved usi
 
 Writing tests with the Suitest UI is fairly simple. As shown in figure \ref{fig:suitest} the UI provides an editor
 that allows to click together a chain of actions and assertions that can be read as a normal english sentences. In
-order to choose elements from the app the developer can open up a utility menu that maps the mouse movements of the
-user to the app on the target device. Once the mouse hovers over an element it gets highlighted and can be choosen.
+order to choose elements from the app the developer can open up a utility menu that maps the mouse movements from the
+user to the app on the target device. Once the mouse hovers over an element it gets highlighted and can be chosen.
 In addition to that certain assertions, like the ''has property'' check, automatically fetches all available attributes
-the developer might be interested in. The editor in general feel slick and covers a variety of actions and assertion
-that can ensure the expected state of the HbbTV application. Additional features like tagging or adding notes to
-certain steps are making tests not only easy to find but also easy to reason about. It doesn't require any technical
-experience to write, execute and maintain them. It is directed to not only app developer but also to project manager
-that want to make sure that certain requirements are met and features are implemented and stable. The test environment
-developed with this thesis follows a completely different goal. It is based on already established industry standards
-like WebDriver and targets developer directly. Tests are not clicked together using a GUI. They have to be written in
-a programming language and are usually created and maintained by the same developers that also build the HbbTV
-application. To interact with an element the selector has to be known. Since usually developer are familiar with the
-elements on the page it is more difficult for other people in or outside of the team to write tests. However the
-DevTools Backend can give insights about the DOM structure of the application and allows to find these selectors.
+the developer might be interested in. The editor in general feels slick and covers a variety of use cases that can
+ensure the expected state of the HbbTV application. Additional features like tagging or adding notes to certain steps
+are making tests not only easy to find but also easy to reason about. It doesn't require any technical experience
+to write, execute and maintain them. It is directed to not only app developer but also to project manager that want
+to make sure that certain requirements are met and features are implemented and stable.
+
+The test environment developed with this thesis follows a completely different goal. It is based on already established
+industry standards like WebDriver and targets developer directly. Tests are not "clicked together" using a GUI. They have
+to be written in a programming language and are usually created and maintained by the same developers that also build
+the HbbTV application. To interact with an element the selector has to be known. Since usually developer are familiar
+with the elements on the page it is more difficult for other people in or outside of the team to write tests. However
+the DevTools Backend can give insights about the DOM structure of the application and allows to find these selectors.
 Still this approach requires some technical skills. The approach in general is non oppinionated and allows to create
 custom devlivery pipelines that is suited for any requirements a development team can have. While test on the Suitest
 platform can only be scheduled in certain time intervals or on exact times, using the Appium HbbTV Driver it is

@@ -3,9 +3,9 @@
 The development of HbbTV applications these days is cumbersome and difficult to develop and test.
 Even though tools like FireHbbTV\footnote{\url{https://addons.mozilla.org/en-US/firefox/addon/firehbbtv/}}
 seems to have found developers interest and attraction the workflow is still not even close to
-current industry standards in web development. Tools like Selenium and Appium have prooven that
+current industry standards in web development. Tools like Selenium and Appium have proven that
 there is an high demand for developers being able to do develop and test their software in a real
-life environment.
+life environments.
 
 With the shift to a more agile software development in the industry it also proofs the demand
 to run automated tests in an iterative and quick development cycle. This can only happen
@@ -19,15 +19,14 @@ It should not only support a seamless integration to already existing tools but 
 developers to keep their current common practices in building apps similar if not equal to other
 areas of web development.
 
-The referred tool will be as outlined in section \ref{sec:scope} and more detailed descriped in
-the concept section of this thesis (section \ref{cha:concept}) a piece of software seperated
-into two components. Both have individually different requirements. The main goal of the first
-component called \textit{DevTools Backend} is to provide developers an integration to the
-Chrome DevTools so that they can inspect and debug their HbbTV applications. The other
-component called \textit{Appium HbbTV Driver} will based on that component and should enable
-to run automated tests based on the WebDriver protocol for arbitrary HbbTV applications on
-arbitrary SmartTVs. Both components should be easy to use and integrate into a common and
-familar development setup of web engineers.
+The referred tool of this thesis, as outlined in chapter \ref{sec:scope} and more detailed descriped
+in the concept section, will be a piece of software seperated into two components.
+Both have individually different requirements. The main goal of the first component called
+\textit{DevTools Backend} is to provide developers an integration to the Chrome DevTools so that
+they can inspect and debug their HbbTV applications. The other component called \textit{Appium
+HbbTV Driver} will based on that component and should enable to run automated tests based on
+the WebDriver protocol for arbitrary HbbTV applications on arbitrary SmartTVs. Both components
+should be easy to use and integrate into a common and familar development setup of web engineers.
 
 % Functional requirements may be calculations, technical details, data manipulation and processing
 % and other specific functionality that define what a system is supposed to accomplish.
@@ -75,8 +74,8 @@ by the developer to unlock the same functionality without the network aspect. Th
 script has to be able to register to the DevTools Backend and instrument the page the same way
 as it would have been included by the proxy.
 
-Since the script can't keep up the connection between page load the DevTools backend needs to
-be able to seamlessly reconnect to the HbbTV application in way that the DevTools frontend
+Since the script can't keep up the connection when switching pages the DevTools backend needs to
+be able to seamlessly reconnect to the HbbTV application in a way that the DevTools frontend
 application doesn't alert the user that the connection broke. In fact it should automatically
 update the \textit{Elements} tab with the DOM tree of the new page as well as change the context
 of the script execution to the new runtime environment.
@@ -103,20 +102,19 @@ applications. The interface should be based on the latest WebDriver protocol\foo
 recommendation) published at the 30th of March 2017. Since this protocol is actually targeted
 for web applications within the browser there are numerous parts that don't apply for the
 TV environment. With that the driver doesn't need to have support for proxy capabilities,
-command contextes and iframes as these are barely used within HbbTV applications. In addition
+command contexts and iframes as these are not applicable for HbbTV environments. In addition
 to that a support for some parts of the specified element interaction are obsolete too. So
 should the driver be able to simulate key events within the app to allow navigation, it
 however is not necessary to support click events or to be able to clear input fields. The
 only input device for HbbTVs is the remote control which only has keys. Even companion screens
 won't provide that functionality which is why there is no reason to support it. Same goes
 for Actions which defines the emulation of pointer devices in web applications. This will
-be due to lack of compatibility ignored as well. The same goes for user prompts which as
-concept does not exist within the HbbTV environment. Capturing screenshots however could
-be supported but will be also ignored due to lack time.
+be due to lack of compatibility ignored as well. The same goes for user prompts. Capturing
+screenshots however could be supported but will be also ignored due to lack of time.
 
 Like all other Appium drivers the HbbTV driver should seamlessly integrate into the already
-existing Appium ecosystem. That means it has to be able to integrate into an existing
-Selenium grid so that multiple TV devices can be instrumented at the same time. To simplify
+existing Selenium ecosystem. That means it has to be able to integrate into an existing
+Selenium Grid so that multiple TV devices can be instrumented at the same time. To simplify
 that process the driver should provide a settings page where the user can input host and port
 of the grid within the network. That allows an automatic registration to the grid. Furthermore
 this process has to consider the properties of the TV so that it is possible to define the
@@ -159,7 +157,7 @@ At the end both components need to be delivered with proper documentation of its
 functionalities as well as decent test coverage. Developers at the Fraunhofer Fokus should
 be able to install, build and develop the components based on documentation within the
 repositories. Step by step instruction shall allow everyone to set up an additional TV
-to the existing Grid or setup a complete new grid in a TV lab.
+to the existing grid or setup a complete new grid in a TV lab.
 
 \section{Technical Requirements\label{sec:techreq}}
 
@@ -168,7 +166,7 @@ compatible. The device itself should not be turned off at any time as it is not 
 to turn them on again. The DevTools Backend is suppose to run as proxy on a Raspberry Pi 3
 model B that runs the latest Raspbian\footnote{\url{https://www.raspberrypi.org/downloads/raspbian/}}
 operating system. The Chrome DevTools is due its nature only supported on Chrome browser.
-Even though you can instrument any webpage running in any web environment the DevTools
+Even though you can instrument any webpage running in any kind of web environment the DevTools
 application will be only accessible with Google Chrome\footnote{\url{https://www.google.com/chrome/index.html}}.
 The Raspberry Pi requires an ethernet to USB adapter in order to manage two connections.
 One from the TV to the Raspberry Pi itself and the other from the Raspberry Pi to the network.
