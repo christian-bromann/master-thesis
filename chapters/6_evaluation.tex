@@ -66,7 +66,7 @@ Sniffing through the requests shows that many small data packages that are cover
 sending user information to services like INFOnline\footnote{See request details in Annex section under
 listing \ref{ioam}} or a New Relic aggregator\footnote{See Annex section under listing \ref{newrelic}}
 containing data on the viewer origin, his TV, its model name and other device metrics. Another
-interesting artifact of data can be observed when switching around pages on the Pro7 HbbTV app. Everytime
+interesting artifact of data can be observed when switching around pages on the Pro7 HbbTV app. Every time
 a new page is opened a request is send to \url{hbbtv-track.redbutton.de} that tracks the movement of the
 viewer\footnote{Also shown in Annex section listing \ref{sniffing}}. After the application has fully loaded
 you can see at the bottom of the page that the main page took about 7 seconds to fully load and it
@@ -84,7 +84,7 @@ These libraries are available in all programming languages and flavors and alrea
 have experience with automated tests. As shown in listing \ref{lst:wdioExample} an automation script can be written
 within a couple lines of code. These tests are fairly simple to write even for non developers. There are solutions like
 Cucumber\footnote{\url{https://cucumber.io/}} that allow to abstract away the coding part of these tests by writing
-feature files with acceptence sentences which are translated into actual code. This makes writing e2e tests accessible
+feature files with acceptance sentences which are translated into actual code. This makes writing e2e tests accessible
 for everyone.
 
 \section{Comparison To Other Testing Solutions\label{sec:businessmodel}}
@@ -119,14 +119,14 @@ It is for instance not possible to open any internal menus or test a native appl
 against a box that uses an infrared connection to the TV. However looking at the scope of this thesis these limitations
 are acceptable. In addition to that the Raspberry Pi doesn't yet use any of the APIs that are provided by the
 manufacturer. Almost every TV can be accessed via an HTTP interface to gain control over certain features. These
-interfaces are used to allow mobile apps to work as e.g. a second remote control. Because of the fact that the Pi is
-directly connected to the Smart TV it has automatically access to these interfaces as well\footnote{As part of the
+interfaces are used to allow mobile apps to work as e.g. a second remote control. Because the Pi is
+directly connected to the Smart TV, it has automatically access to these interfaces as well\footnote{As part of the
 research for this thesis a small Node.JS library (\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/samsungtv})
 was developed that can find and control newer Samsung Smart TV in the network by using its API interface.}. That being
 said, the way how the Candy Box can access the Smart TV can also be achieved using this approach.
 
 Writing tests with the Suitest UI is fairly simple. As shown in figure \ref{fig:suitest} the UI provides an editor
-that allows to click together a chain of actions and assertions that can be read as a normal english sentences. In
+that allows to click together a chain of actions and assertions that can be read as a normal English sentences. In
 order to choose elements from the app the developer can open up a utility menu that maps the mouse movements from the
 user to the app on the target device. Once the mouse hovers over an element it gets highlighted and can be chosen.
 In addition to that certain assertions, like the ''has property'' check, automatically fetches all available attributes
@@ -142,14 +142,14 @@ to be written in a programming language and are usually created and maintained b
 the HbbTV application. To interact with an element the selector has to be known. Since usually developer are familiar
 with the elements on the page it is more difficult for other people in or outside of the team to write tests. However
 the DevTools Backend can give insights about the DOM structure of the application and allows to find these selectors.
-Still this approach requires some technical skills. The approach in general is non oppinionated and allows to create
-custom devlivery pipelines that is suited for any requirements a development team can have. While test on the Suitest
+Still this approach requires some technical skills. The approach in general is non opinionated and allows to create
+custom delivery pipelines that is suited for any requirements a development team can have. While test on the Suitest
 platform can only be scheduled in certain time intervals or on exact times, using the Appium HbbTV Driver it is
 possible to run tests at any desired point in time, e.g. when a certain release is being made or if new code is
-proposed and about to be merged into the code base. This allows to create gatekeepers that prevent bad code that
+proposed and about to be merged into the code base. This allows creating gatekeepers that prevent bad code that
 causes regression to be introduced.
 
-To summarize these points, the Suitest solution is a legitimised approach for quality assurance of HbbTV applications.
+To summarize these points, the Suitest solution is a legitimized approach for quality assurance of HbbTV applications.
 The SaaS company sells a prescribed solution that is quite expensive though for a developer without much budget. The
 solution provided in this theses is build on top of established industry standards with proven success in other
 software markets. It is much more affordable and easier to integrate in common software pipelines. In long term has this

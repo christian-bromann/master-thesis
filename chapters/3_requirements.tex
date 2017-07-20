@@ -13,20 +13,20 @@ with proper tooling. Software development in browsers or on mobile devices alrea
 entered that space of rapid development and quality assurance using CI/CD. A tool that
 tries to bring HbbTV app development to the same point has to build on this strategy. Since
 HbbTV apps are not much different to normal webapps in their core technology it would be confusing
-and unhelpful if continuous integration and continous delivery would be a different process here.
+and unhelpful if continuous integration and continuous delivery would be a different process here.
 Therefor the tool has to be based on existing standards around automated testing and development.
 It should not only support a seamless integration to already existing tools but also allow
 developers to keep their current common practices in building apps similar if not equal to other
 areas of web development.
 
-The referred tool of this thesis, as outlined in chapter \ref{sec:scope} and more detailed descriped
-in the concept section, will be a piece of software seperated into two components.
+The referred tool of this thesis, as outlined in chapter \ref{sec:scope} and more detailed described
+in the concept section, will be a piece of software separated into two components.
 Both have individually different requirements. The main goal of the first component called
 \textit{DevTools Backend} is to provide developers an integration to the Chrome DevTools so that
 they can inspect and debug their HbbTV applications. The other component called \textit{Appium
-HbbTV Driver} will based on that component and should enable to run automated tests based on
+HbbTV Driver} will base on that component and should enable to run automated tests based on
 the WebDriver protocol for arbitrary HbbTV applications on arbitrary SmartTVs. Both components
-should be easy to use and integrate into a common and familar development setup of web engineers.
+should be easy to use and integrate into a common and familiar development setup of web engineers.
 
 % Functional requirements may be calculations, technical details, data manipulation and processing
 % and other specific functionality that define what a system is supposed to accomplish.
@@ -41,7 +41,7 @@ This means that it serves that app on a specific port including an overview page
 all inspectable apps as well as an API endpoint to consume that information as JSON for
 3rd party tools. To allow seamless updates the app should be a direct dependency to the actual
 on NPM\footnote{https://www.npmjs.com} released \textit{chrome-devtools-frontend}\footnote{\url{https://www.npmjs.com/package/chrome-devtools-frontend}}
-package. It is seperated into two subcomponents. An instrumentation script that has to be
+package. It is separated into two subcomponents. An instrumentation script that has to be
 placed within the target environment as well as a backend server that connects to the
 instrumentation script to integrate with 3rd party clients like the Chrome DevTools application.
 
@@ -82,7 +82,7 @@ of the script execution to the new runtime environment.
 
 The page instrumentation should work for all web platforms including but not limited to Smart TV
 devices with support for HbbTV version 1.0 upwards. It has to run as a standalone script in
-a way that it doesn't interfer with any other scripts that are used on the page. Similar to the
+a way that it doesn't interfere with any other scripts that are used on the page. Similar to the
 Black Box model it should not have any expectations or dependencies on the environment it is
 running in. The instrumentation script has to get all instructions from the DevTools Backend and
 returns the output back to it. All changes to the environment like DOM nodes or page properties
@@ -125,7 +125,7 @@ connected to such Smart TVs.
 
 Similar to other mobile drivers like the iOS\footnote{\url{https://github.com/appium/appium-xcuitest-driver}}
 or Android\footnote{\url{https://github.com/appium/appium-android-driver}} driver it should
-be possible to define the URL of the HbbTV app that is suppose to get tested within the
+be possible to define the URL of the HbbTV app that is supposed to get tested within the
 capabilities of the Appium session. The test execution is with that independent from the
 channel that the TV is currently running on. Because of time limitations the driver doesn't
 have to be able to emulate native remote instructions that might be accessible via specific
@@ -133,10 +133,9 @@ REST interfaces of the TV.
 
 Current deployed HbbTV applications mostly run on an unsecured HTTP connection on port 80.
 Even though it should be possible to also support apps on different ports with secured SSL
-connections it is not considered to support that out of the box as this is not considered
-as a requirement of the DevTools Backend. However since this component allows to inject a
-script it should be possible to use this driver to run tests on pages that are manually
-instrumented via the launcher script.
+connections it is not considered supporting that out of the box. However since this component
+allows to inject a script it should be possible to use this driver to run tests on pages that
+are manually instrumented via the launcher script.
 
 \section{Nonfunctional Requirements\label{sec:techreq}}
 
@@ -163,10 +162,10 @@ to the existing grid or setup a complete new grid in a TV lab.
 
 To run a grid with instrumented TV devices it is required that these devices are HbbTV
 compatible. The device itself should not be turned off at any time as it is not possible
-to turn them on again. The DevTools Backend is suppose to run as proxy on a Raspberry Pi 3
+to turn them on again. The DevTools Backend is supposed to run as proxy on a Raspberry Pi 3
 model B that runs the latest Raspbian\footnote{\url{https://www.raspberrypi.org/downloads/raspbian/}}
 operating system. The Chrome DevTools is due its nature only supported on Chrome browser.
-Even though you can instrument any webpage running in any kind of web environment the DevTools
+Even though you can instrument any web page running in any kind of web environment the DevTools
 application will be only accessible with Google Chrome\footnote{\url{https://www.google.com/chrome/index.html}}.
 The Raspberry Pi requires an ethernet to USB adapter in order to manage two connections.
 One from the TV to the Raspberry Pi itself and the other from the Raspberry Pi to the network.

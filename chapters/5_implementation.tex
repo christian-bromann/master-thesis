@@ -16,7 +16,7 @@ installed.
 
 \section{DevTools Backend\label{sec:implDevtoolsBackend}}
 
-The DevTools Backend has a simple NodeJS project structur with a \textit{package.json} that contains
+The DevTools Backend has a simple NodeJS project structure with a \textit{package.json} that contains
 a handful of CLI commands to operate and build the project. It is stored on the Fraunhofer GitLab
 server and can be cloned with git if permissions are granted. Once it was cloned you can simply install
 the dependencies and build it using the NPM commands. The project requires to run a NodeJS version
@@ -80,13 +80,13 @@ server can be used to debug multiple pages at the same time. Each page has an un
 that allows to connect a client on the desired page. The communication between the debugging target
 and the server gets initiated via Socket.io\footnote{\url{https://socket.io/}}. Socket.io is a
 sophisticated NodeJS module that enables real-time bidirectional event-based communication between
-server and client. It is not only super fast and efficient it also works relieable on many web
+server and client. It is not only super fast and efficient it also works reliable on many web
 platforms. Especially on Smart TVs where not all devices have support for WebSockets, Socket.io
 ensures that a connection can be established by using fallback strategies like XHR polling. From
 the server to the debugging client a standard WebSocket server architecture was chosen since
 there are no such fallback requirements to be fulfilled. In addition to that a Socket.io server
 can only connect to clients that are using Socket.io as well which is undesired because it should
-be accessible by arbitrary clients. Everytime the proxy injects an instrumentation script or the
+be accessible by arbitrary clients. Every time the proxy injects an instrumentation script or the
 launcher registers itself to the backend a new page instance is created and two new Socket channels
 are opened.
 
@@ -168,7 +168,7 @@ to the WebSocket connection and vice versa.
 The frontend part of the DevTools Backend component is the instrumentation script. It gets executed
 in the target environment, e.g. the HbbTV browser on the Smart TV. It connects to the backend via
 Socket.io and is used to propagate page events to the debugging client as well as execute commands
-to transform elments or get information about the page state. The instrumentation script should be
+to transform elements or get information about the page state. The instrumentation script should be
 placed at the top of the \texttt{<head>} block to ensure that it gets executed before everything
 else. This is important because it has to capture as much events as possible. In case the HbbTV app
 fails to load due to a JavaScript error it only can propagate that error to the debugging client if
@@ -276,7 +276,7 @@ won't have any affect on the performance of the page.
 The Launcher script is what's used to manually inject the instrumentation logic on arbitrary platforms
 without setting up a proxy. It contains next to the Socket.io client library an initialization part and
 the actual instrumentation script. The initialization part is important as the script needs to register
-itself as a page to the DevTools Backend component. If a proxy is used this happens usually on the server
+itself as a page to the DevTools Backend component. If a proxy is used this usually happens on the server
 side. To inject the launcher a script tag has to be placed at the top of the \texttt{<head>} block so
 that it gets executed first. The actual code can be received from the DevTools Backend server.
 
@@ -319,7 +319,7 @@ Since we only want to modify packages that contain HTML code and pass on the oth
 or scripts, we have to make sure that we filter every request depending on its type. This can be done in
 multiple ways. Just by extracting the file ending you can already identify most of the packages by its
 type. Additional some requests have an \texttt{Accept} header that contains the expected mime type that
-is about to be returned by the server. However these information do not fully ensure that the file that
+is about to be returned by the server. However these informations do not fully ensure that the file that
 is being requested should be modified or not. Given the fact that modifying a wrong file can break the
 whole app we need to have a better way to detect file types. Therefor the proxy has another middleware
 registered that makes an \texttt{OPTIONS}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS}}
@@ -451,7 +451,7 @@ value it therefor indicates that the command handles the waiting by itself and w
 command whatsoever. By calling \texttt{waitForEvent} in the next line we now wait until a custom event is
 propagated by the application. In this case we wait for the \texttt{DOM.documentUpdated} event which is triggered
 \textit{''when [the] Document has been totally updated [and] Node ids are no longer valid''}\cite{devtoolsprotocolDOM}.
-The command resolves once this event was received. At the end of the command we implicitely wait for a half of
+The command resolves once this event was received. At the end of the command we implicitly wait for a half of
 a second in order to give the browser time to render the page. Smart TVs tend to be slow in many situations and
 the HbbTV browser especially is not always quick in rendering the app. This small timeout stabilizes the
 execution flow and prevents the driver from running into arbitrary race conditions.
@@ -468,7 +468,7 @@ imported from the \texttt{appium-base-driver} then simply maps\footnote{The mapp
 project as well: \url{https://github.com/appium/appium-base-driver/blob/master/lib/mjsonwp/routes.js}} all endpoints
 to a certain instance function defined in the Appium HbbTV Driver. With that all requests to e.g. "\texttt{/wd/hub/session}"
 to initialize a WebDriver session are automatically mapped to a function called \texttt{createSession} which then
-intializies the automation as described in the previous section. The base server not only maps the endpoints to
+initializies the automation as described in the previous section. The base server not only maps the endpoints to
 certain functions it also checks if the payload is correct and valid according to the protocol.
 
 In addition to the protocol endpoints the Appium HbbTV Driver also registers additional views\footnote{see settings

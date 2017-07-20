@@ -12,7 +12,7 @@ More and more digital devices are getting connected to the internet and run appl
 technologies. The HbbTV protocol was the foundation of bringing the web on the big screen. This fairly new standard
 now encounters the same issues of debuggability and testability as other device and software markets before, e.g.
 mobile application development. Til today there is no solution that really addresses these issues. As the HbbTV
-standard evolves and the device fragmentation increases the demand for sophisticated tools for qualtity assurance
+standard evolves and the device fragmentation increases the demand for sophisticated tools for quality assurance
 rises too. This thesis solves these issues by connecting established technologies and protocols together to create
 a testing and debugging solution that can be integrated in modern software development pipelines.
 
@@ -21,16 +21,16 @@ a testing and debugging solution that can be integrated in modern software devel
 % Explain what you did during the last 6 month on 1 or 2 pages!
 
 The work on this thesis started with an in depth research phase on the HbbTV standard and current testing technologies.
-Unfortunately there were no existing solutions found at this point. Some companies like BBC provided some ressources
+Unfortunately there were no existing solutions found at this point. Some companies like BBC provided some resources
 of their own homegrown solutions\footnote{See BBC Hive Open Source Test Tools (\url{http://bbc.github.io/hive-ci/})}
 that are suited for their requirements. However the goal of this work was to find way to make testing and debugging
-of arbitrary HbbTV applications accessible to everyone. Therefor it has to be non oppinionated and should not prescribe
+of arbitrary HbbTV applications accessible to everyone. Therefor it has to be non opinionated and should not prescribe
 a certain way of how to do things. To evaluate the technical opportunities, one of the first steps was to discover
 the accessibility of a modern Smart TV. Using tools like WireShark a variety of interfaces could be discovered that
 allowed mobile applications to e.g. remote control the TV and enable second screen technology. These interfaces also
-gave insights on the device capabilities as well as their underlaying software. Given that there were multiple
-manufactures with different Smart TV platforms that even have different interfaces based on their models this approach
-of controlling a TV device turned out to not be very promising.
+gave insights on the device capabilities as well as their underlying software. Given that there were multiple
+manufactures with different Smart TV platforms that even have different interfaces based on their models, this approach
+of controlling a TV device turned out to not be a very promising strategy.
 
 Another interesting view point were virtual machines that emulated an HbbTV environment on your operating system.
 With the Opera TV Developer tools\footnote{\url{http://www.operasoftware.com/products/tv/tv-developer-tools}} the
@@ -44,16 +44,16 @@ using the WebDriver protocol, which drives millions of automated tests on mobile
 really compelling as a developer. However being restricted to an emulated environment is suboptimal and would at the
 end not solve the problem of quality assurance in a market of high device fragmentation like in the TV market.
 
-The requirements of todays software delivery processes have been clearly influenced by the principles of agile software
-development. The demand to ship qualitive software faster also applies for TV market where advertisment campaigns
+The requirements of today's software delivery processes have been clearly influenced by the principles of agile software
+development. The demand to ship qualitative software faster also applies for TV market where advertisement campaigns
 and broadcast content is getting rolled out constantly. To build a pipeline that provides such quick delivery cycles
 it requires \textit{''an automated set of tools from code to delivery''}\cite{Lehtonen2015DefiningMF}. The tools
 within the delivery process have to be highly interoperable to allow to build a pipeline that fits the developers
 needs since every software is different. Therefor the debugging and testing platform for HbbTV has to be interoperable
-too, which it only can be if it relies on open standards and protocols. Selenium, which is now standardised under
+too, which it only can be if it relies on open standards and protocols. Selenium, which is now standardized under
 W3C\footnote{\url{https://www.w3.org/}} as WebDriver, is such an open standard. It was developed as open source
 software since 2004. As industry leader for automated testing it runs millions of tests every day in desktop and mobile
-environments. To build a testing tool for HbbTV that is future proofed and aligns with todays software development
+environments. To build a testing tool for HbbTV that is future proofed and aligns with today's software development
 standards it only makes sense to build on top of this technology. The WebDriver protocol itself only defines an
 interface of methods and properties to automate a browser. However it doesn't specify how the automation is being
 implemented. Therfore there are dedicated driver softwares for each individual browser. These drivers use different
@@ -125,16 +125,16 @@ order to inject the instrumentation script. All assets only had to be tracked bu
 to be a filter that checks incomming requests to be forwarded or intercepted. The problem with that is that the
 request object itself, including its headers, doesn't always reveal information about the content type of the requested
 source. Also the filename can't be used to certainly determine the response. The solution for this problem was to make
-a HEAD request in advance. The response of this request contained the response headers which can be relieable used
+a HEAD request in advance. The response of this request contained the response headers which can be reliable used
 to determine the response type. Another issue that made some HbbTV applications fail to load were hostname changes.
 Some apps, e.g. the HbbTV app of RTL2, change the hostname between request and response. In this example the AIT
 package is referencing the HbbTV app at \texttt{\url{www.rtl2.de/hbbtv}}. Due to internal redirectes the response
 contains a different host (\url{http://hbbtv.rtl2.de}). This affects some assets that don't contain a hostname
 in the URL. A JavaScript file referenced with \texttt{/js/app.js} now gets loaded from \url{www.rtl2.de/js/app.js}
-instead of \url{http://hbbtv.rtl2.de/js/app.js}. As result the HbbTV application can't be initialised successfully
+instead of \url{http://hbbtv.rtl2.de/js/app.js}. As result the HbbTV application can't be initialized successfully
 because some important assets were missing. To workaround this issue the proxy filter was enhanced and now checks
 if such host change happened and in case a request fails it retries with a different request url. This works fairly
-well but is definitely not the ultimiate solution for this problem.
+well but is definitely not the ultimate solution for this problem.
 
 \section{Outlook\label{sec:outlook}}
 
@@ -146,7 +146,7 @@ limted to the HbbTV space only. However there are also native applications that 
 into the developing frameworks of each TV platform would allow to provide some sort of test automation also for native
 applications\footnote{For example the TV platform Tizen OS which is deployed on Samsung devices has an interface for
 native applications that is also based on Chromes DevTools Protocol (\url{http://developer.samsung.com/tv/develop/getting-started/using-sdk/web-inspector/}).}.
-These integrations are mainly hidden behind the rest API interface of the Smart TV. Unfortunately they are not well
+These integration are mainly hidden behind the rest API interface of the Smart TV. Unfortunately they are not well
 documented and have to be discovered for each individual platform.
 
 Another really interesting opportunity would be to offer this software as a service and allow anyone access to Smart TV

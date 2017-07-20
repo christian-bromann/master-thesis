@@ -19,7 +19,7 @@ experience. It enables new possibilities for developers to inspect an HbbTV app 
 JavaScript problems within the code. It helps to instrument the application and also to run automated
 WebDriver tests with the Appium HbbTV Driver. This component acts as translator between the WebDriver
 protocol and the Remote Debugging Protocol. To do that on a bigger scale we need the Raspberry Pi to
-deploy that driver to any TV without any manual steps. To manage all these driver we then use a
+deploy that driver to any TV without any manual steps. To manage all these drivers we then use a
 Selenium Grid and with a proper CI/CD server we can leverage that setup to test and release our HbbTV
 apps faster and with more confidence.
 
@@ -34,7 +34,7 @@ manufactures provide some interfaces and APIs to connect to the TV they are bare
 almost different for each TV model. To provide a tool that covers all TVs of all manufactures, it
 requires a different approach than hooking into a native interface. Until all manufactures recognize
 the demand for developers to get a better development support this won't change. We already had a
-similar situation a couple of years ago when the smart phone market started to explode and a lot of
+similar situation a couple of years ago when the smartphone market started to explode and a lot of
 people started writing mobile or hybrid apps for Android and iOS. At that time both vendors had
 almost no support for any debugging tools that would help developers to inspect the page. A tool
 called \textit{Weinre}\footnote{WEb INspector REmote - \url{http://people.apache.org/~pmuellr/weinre/docs/latest/Home.html}}
@@ -48,11 +48,11 @@ This project is the role model for the DevTools Backend component. Similar how i
 debug applications for smartphones, the DevTools Backend will allow it for HbbTV based apps on Smart
 TVs. The idea is simple. A script that gets executed within a targeted environment connects to a
 server to exchange information and commands as utility for a 3rd party authoring tool. The concept works
-independant from the environment and device. As long as the target supports basic web technology
+independent from the environment and device. As long as the target supports basic web technology
 like HTML and JavaScript it will run everywhere. So this component can not only be used to debug HbbTV
 apps on Smart TVs but also to inspect any other IoT device like a fridge or a coffee machine as long
 as their interfaces are based on web technologies\footnote{Infact the screen in the Tesla Model S
-is build on top of a proparitary web browser and therefor all Tesla apps are build with web
+is build on top of a proprietary web browser and therefor all Tesla apps are build with web
 technology. Theoretically the DevTools Backend can be used to debug these apps with modern web
 authoring tools already today.} \footnote{An example application can be found here: \url{http://dash.time4tesla.com/}}.
 
@@ -99,7 +99,7 @@ Protocol that relate to network events or page lifecycles are handled by the bac
 
 In scenarios where a full page load happened the instrumentation script looses the connection with
 the backend. It manages to reconnect to the target, given that the page unique id is still the same,
-and makes sure it propagates the right lifecycle events to the connected clients. They won't recognise
+and makes sure it propagates the right lifecycle events to the connected clients. They won't recognize
 any connection abruption and instead properly handle the page load on their side. In some cases the
 response of the instrumentation script needs to be enhanced with data from the backend. This happens
 when network data is involved which is only stored on the backend side. A middleware handles this
@@ -112,11 +112,11 @@ injects the script inline into the page automatically. The proxy registers the p
 based on the data it gets from the request. This has the advantage that the application doesn't have
 to get modified to instrument it. However running the target device (e.g. the Smart TV) through a
 proxy is not always possible. Therefor the component provides a launcher script that can connect to
-the backend to register the page before the instrumentiation script gets initiated.
+the backend to register the page before the instrumentation script gets initiated.
 
 Once this happened and a remote debugging client connects to the backend they both exchange JSON
 payload over the socket channels. The client usually listens to certain domain events (depending
-of the use case) and fires methods with an id, a method name containing the domain and the request
+on the use case) and fires methods with an id, a method name containing the domain and the request
 (e.g. \textit{CSS.getMatchedStylesForNode}) as well as some parameters that get propagated to the
 method (e.g. a node id). Each domain has to get enabled by the debugging client so that the
 communication can be reduced to the minimum. If the client would enable all domains it would
@@ -135,7 +135,7 @@ the browser.
 
 Based on the DevTools Backend component the Appium HbbTV Driver is now able to run its automated
 tests without having to take care about how to automate WebDriver commands on the TV. Since the
-DevTools Backend is applicable to all HbbTV supported devices the driver can therefor be utilised
+DevTools Backend is applicable to all HbbTV supported devices the driver can therefor be utilized
 on arbitrary TVs or SetUp boxes supporting that format. It uses the already existing framework
 utilities provided by Appium to support all common functionalities that an automation driver
 requires. Appium already provides a variety of drivers that are mainly focused on mobile automation.
@@ -204,7 +204,7 @@ Raspberry Pi is a \textit{''fully customizable and programmable small computer b
 with a size of a credit card. It has a 1.2GHz 64-bit quad-core ARMv8 processor with 1 GB RAM,
 4 USB and 1 Ethernet port. It is known as the mainstay in the world of makers and electronics but
 also as an educational device that brings people the joy of electronics and computer programming.
-With 38\euro{} it is super cheap and yet powerful. People who are familar with Linux have no problems
+With 38\euro{} it is super cheap and yet powerful. People who are familiar with Linux have no problems
 to start building tools and applications with it. With a prebuild Raspbian operating system the
 provisioning of a TV to test HbbTV apps can be reduced to a simple plug\&play step.
 
@@ -238,7 +238,7 @@ on it.
 \vspace{0.5cm}
 
 To seperate the network traffic we have to run both interfaces on different subnets. This can be
-customised depending on the given network. Most local networks will have an IP range of
+customized depending on the given network. Most local networks will have an IP range of
 \textit{192.168.1.1/24} which is why this setup would make the most sense as default. However
 once a proper network is found it is possible to copy the images to other Raspberry Pis. This will
 allow us to provision an already existing TV lab in a simple way and deploy our components to run
@@ -275,7 +275,7 @@ it should be running. The Selenium Grid tries to find the best suiteable device 
 example the developer wants to run a test on a Smart TV with supported HbbTV 1.5 the grid server
 randomly selects a Smart TV that runs that HbbTV version. The same goes for other capabilities. All
 data about registered Smart TVs and their availability can also be consumed as JSON blob using
-the Rest API of the grid server. This allows to create custom dashboards that are more aligned to
+the Rest API of the grid server. This allows creating custom dashboards that are more aligned to
 the TV theme. Instead of just model names it could display the TV model as image with the manufacture
 logo.
 
