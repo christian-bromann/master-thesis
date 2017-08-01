@@ -97,12 +97,12 @@ foundation of a larger Selenium Grid that will allow to run tests on multiple de
 itself will be documented and open sourced so that it can be improved by people that are interested in this software.
 
 In addition to that a talk with the title \textit{''Appium for Couch Potatoes: an HbbTV Driver''} was proposed and
-accepted at the Selenium Conference 2017 in Berlin\footnote{http://seleniumconf.de/}. It will introduce the Appium
-HbbTV Driver component and will show off how to run automated tests on Smart TVs. Being able to test connected
-devices using Appium fits perfectly into its vision. Therefor the thesis was already mentioned in 2016 at the
-Selenium Conference in London in a talk by Jonathan Lipps with the title \textit{''StarDriver Enterprise Appium
-to the Future''}\footnote{Video available on YouTube: \url{https://youtu.be/e61OhZzbsEI?t=16m42s}}. Other abstracts
-and talk proposals had been sent out but haven't got accepted til due date.
+accepted at the Selenium Conference 2017 in Berlin\footnote{Talk proposal: \url{https://www.seleniumconf.de/talks\#christian-bromann}}.
+It will introduce the Appium HbbTV Driver component and will show off how to run automated tests on Smart TVs. Being
+able to test connected devices using Appium fits perfectly into the projects vision. Therefor the thesis was already
+mentioned in 2016 at the Selenium Conference in London in a talk by Jonathan Lipps with the title \textit{''StarDriver
+Enterprise Appium to the Future''}\footnote{Video available on YouTube: \url{https://youtu.be/e61OhZzbsEI?t=16m42s}}.
+Other abstracts and talk proposals had been sent out but haven't got accepted til due date.
 
 \section{Problems Encountered\label{sec:problems}}
 
@@ -121,19 +121,19 @@ skipped.
 
 In addition to that some other interesting issues came up while developing the proxy server. The first version of it
 intercepted all packages which was a lot of overhead since the component was only interested in HbbTV documents in
-order to inject the instrumentation script. All assets only had to be tracked but not modified. In order to achieve that there has
-to be a filter that checks incomming requests to be forwarded or intercepted. The problem with that is that the
-request object itself, including its headers, doesn't always reveal information about the content type of the requested
-source. Also the filename can't be used to certainly determine the response. The solution for this problem was to make
-a HEAD request in advance. The response of this request contained the response headers which can be reliable used
-to determine the response type. Another issue that made some HbbTV applications fail to load were hostname changes.
-Some apps, e.g. the HbbTV app of RTL2, change the hostname between request and response. In this example the AIT
-package is referencing the HbbTV app at \texttt{\url{www.rtl2.de/hbbtv}}. Due to internal redirectes the response
-contains a different host (\url{http://hbbtv.rtl2.de}). This affects some assets that don't contain a hostname
-in the URL. A JavaScript file referenced with \texttt{/js/app.js} now gets loaded from \url{www.rtl2.de/js/app.js}
+order to inject the instrumentation script. All assets only had to be tracked but not modified. In order to achieve
+that there has to be a filter that checks incomming requests to be forwarded or intercepted. The problem with that is
+that the request object itself, including its headers, doesn't always reveal information about the content type of the
+requested source. Also the filename can't be used to certainly determine the response. The solution for this problem
+was to make a HEAD request in advance. The response of this request contained the response headers which can be
+reliable used to determine the response type. Another issue that made some HbbTV applications fail to load were
+hostname changes. Some apps, e.g. the HbbTV app of RTL2, change the hostname between request and response. In this
+example the AIT package is referencing the HbbTV app at \texttt{\url{www.rtl2.de/hbbtv}}. Due to internal redirectes
+the response contains a different host (\url{http://hbbtv.rtl2.de}). This affects some assets that don't contain a
+hostname in the URL. A JavaScript file referenced with \texttt{/js/app.js} now gets loaded from \url{www.rtl2.de/js/app.js}
 instead of \url{http://hbbtv.rtl2.de/js/app.js}. As result the HbbTV application can't be initialized successfully
-because some important assets were missing. To workaround this issue the proxy filter was enhanced and now checks
-if such host change happened and in case a request fails it retries with a different request url. This works fairly
+because some important assets were missing. To workaround this issue the proxy has to indentify all script and link tag
+references and has to make sure that they contain an absolute URI based on the response host name. This works fairly
 well but is definitely not the ultimate solution for this problem.
 
 \section{Outlook\label{sec:outlook}}
