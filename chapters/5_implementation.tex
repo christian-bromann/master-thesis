@@ -10,7 +10,7 @@
 Since we are working in a web environment it only made sense to build all software components with a
 popular web technology too: JavaScript. Both the DevTools Backend and Appium HbbTV Driver components
 are written in NodeJS using a Babel\footnote{\url{https://babeljs.io/}} compiler to use the latest
-EcmaScript features today. They both use Eslint\footnote{\url{http://eslint.org/}} for static code
+EcmaScript\footnote{Ecma is a standards organization that defines the ECMAScript language which was created to standardize JavaScript} features today. They both use Eslint\footnote{\url{http://eslint.org/}} for static code
 analysis and have a Dockerfile so they can get seamlessly deployed on any system that has Docker\footnote{\url{https://www.docker.com/}}
 installed.
 
@@ -62,7 +62,7 @@ The build process not only compiles all server side files down to ES5 using Babe
 all frontend related files (the instrumentation code) to one JavaScript file which gets injected
 into the HbbTV app. This has the advantage that the structure and the way these files are written
 don't differ from each other. Thanks to WebPack\footnote{\url{https://webpack.js.org/}} all frontend
-files are bundled together so that they can get executed in the browser. This makes it super easy
+files are bundled together so that they can get executed in the browser. This makes it really easy
 to structure and share code on server and frontend side. The main server is build on top of Express\footnote{\url{https://expressjs.com/}},
 a minimal and flexible web framework to build web applications in NodeJS. It allows to define API
 endpoints and provides useful utility features to work with Cookies and caching. All application code
@@ -76,19 +76,17 @@ frontend. For simplicity reasons this data is held in memory.
 
 As \textit{''page''} we define a debugging target that can be either an HbbTV app on a SmartTV or
 any other web page where the instrumentation code is injected and connected to the backend. The
-server can be used to debug multiple pages at the same time. Each page has an unique identifier
-that allows to connect a client on the desired page. The communication between the debugging target
+server can be used to debug multiple pages at the same time. Each page has a unique identifier
+that allows to connect with a client to the desired page. The communication between the debugging target
 and the server gets initiated via Socket.io\footnote{\url{https://socket.io/}}. Socket.io is a
-sophisticated NodeJS module that enables real-time bidirectional event-based communication between
-server and client. It is not only super fast and efficient it also works reliable on many web
+sophisticated NodeJS module that enables real-time, bidirectional and event-based communication between
+server and client. It is not only really fast and efficient, it also works reliably on many web
 platforms. Especially on Smart TVs where not all devices have support for WebSockets, Socket.io
 ensures that a connection can be established by using fallback strategies like XHR polling. From
 the server to the debugging client a standard WebSocket server architecture was chosen since
-there are no such fallback requirements to be fulfilled. In addition to that a Socket.io server
-can only connect to clients that are using Socket.io as well which is undesired because it should
-be accessible by arbitrary clients. Every time the proxy injects an instrumentation script or the
-launcher registers itself to the backend a new page instance is created and two new Socket channels
-are opened.
+there are no such fallback requirements to be fulfilled. Every time the proxy injects an
+instrumentation script or the launcher registers itself to the backend a new page instance is created
+and two new Socket channels are opened.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -136,7 +134,7 @@ export default class DevtoolsBackend {
 \end{listing}
 
 The backend module keeps a list of all registered pages and can upgrade the connection properly if
-the event was fired by the server. Depending on the unique page id (uuid) the backend connects the
+the event was fired by the server. Depending on the page id, which is a uuid, the backend connects the
 debugging client to the desired page and enables the communication between client and instrumentation
 code.
 
@@ -170,9 +168,9 @@ in the target environment, e.g. the HbbTV browser on the Smart TV. It connects t
 Socket.io and is used to propagate page events to the debugging client as well as execute commands
 to transform elements or get information about the page state. The instrumentation script should be
 placed at the top of the \texttt{<head>} block to ensure that it gets executed before everything
-else. This is important because it has to capture as much events as possible. In case the HbbTV app
+else. This is important because it has to capture as many events as possible. In case the HbbTV app
 fails to load due to a JavaScript error it only can propagate that error to the debugging client if
-it has registered an error handler before the HbbTV code was executed. It also overwrites certain API
+it has registered an error handler before the HbbTV code was executed. It also overwrites certain APIs
 like the console object to intercept messages and events. All methods for a certain Chrome DevTools
 Protocol domain are stored in one file. Listing \ref{lst:navigate} shows an example of an implemented
 method\footnote{\url{https://chromedevtools.github.io/devtools-protocol/tot/Page/\#method-navigate}}
@@ -183,8 +181,8 @@ Even though these features aren't supported in current browsers (and especially 
 HbbTV browsers of old TV models) they can still be used since the code gets compiled down to a legacy
 JavaScript version. This ensures that the code is fully compatible on the target device. However this
 doesn't replace missing JavaScript APIs. Therefor any APIs that have not been defined within the
-EcmaScript 3 specification, which is the supported version for HbbTV 1.0, is either avoided or used
-in a way that it fails silently if not available.
+EcmaScript 3 specification, which is the supported version for HbbTV 1.0, are either avoided or used
+in a way that any instructions would fail silently.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -232,7 +230,7 @@ export default {
 \end{listing}
 
 This allows us to import one file containing an interface to access the whole domain logic. With only a
-couple of lines we can then register an listener to the Socket.io channel for each domain and execute
+couple of lines we can then register a listener to the Socket.io channel for each domain and execute
 a method based on the message parameters.
 
 \begin{listing}[H]
@@ -301,7 +299,7 @@ initates the instrumentation scripts and starts the communication to the backend
 can be defined manually by adding a \texttt{data-uuid} attribute to the script tag. If this attribute
 can't be found it uses the hostname as unique id. The \texttt{data-origin} attribute is used to hide this
 DOM node from the debugging client. If a client requests DOM nodes from the instrumentation script these
-node will be ignored so that they don't show up in any DOM representation as they actually are not part
+nodes will be ignored so that they don't show up in any DOM representation as they actually are not part
 of the web application.
 
 \subsection{Proxy\label{sec:proxy}}
@@ -318,13 +316,13 @@ from the backend as well as how it tracks your behavior on the page.
 Since we only want to modify packages that contain HTML code and pass on the other packages, e.g. images
 or scripts, we have to make sure that we filter every request depending on its type. This can be done in
 multiple ways. Just by extracting the file ending you can already identify most of the packages by its
-type. Additional some requests have an \texttt{Accept} header that contains the expected mime type that
+type. Additionally some requests have an \texttt{Accept} header that contains the expected mime type that
 is about to be returned by the server. However these informations do not fully ensure that the file that
 is being requested should be modified or not. Given the fact that modifying a wrong file can break the
 whole app we need to have a better way to detect file types. Therefor the proxy has another middleware
 registered that makes an \texttt{OPTIONS}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS}}
 request to actually decide whether to pass it forward or to load its content in order to inject the
-instrumentation script. The HTTP options method can be used to not only detect available HTTP methods
+instrumentation script. The HTTP options method can be used to not only detect available HTTP methods,
 it also returns the content type of the requested resource. Since the response doesn't contain any body
 payload it is really lightweight.
 
@@ -368,7 +366,7 @@ response objects are read/writeable streams.
 The proxy not only ensures that the target page gets instrumented it also allows custom modifications to the
 browser behavior. It is often the case that you want to demo a certain HbbTV application without having to
 setup a broadcast stream that sends an AIT package with the correct address to that app. The DevTools Backend
-component provides for that scenario a setup page\footnote{Available at \url{http://<ip-of-raspberrypi>:9222/settings}}
+component provides a setup page\footnote{Available at \url{http://<ip-of-raspberrypi>:9222/settings}} for that scenario
 that allows to set up an autostart application. When the Smart TV then asks for an HbbTV app it automatically
 redirects the request to the given URL. For the sake of simplicity the autostart url is stored on the filesystem
 in a json file and can be access by a helper function.
@@ -474,7 +472,7 @@ certain functions it also checks if the payload is correct and valid according t
 In addition to the protocol endpoints the Appium HbbTV Driver also registers additional views\footnote{see settings
 view at \url{http://<ip-of-raspberrypi>:4723/settings}} for the developer to e.g. register the driver to a
 Selenium Hub via a simple form. As described in section \ref{sec:history} a Selenium Hub is a central server that
-collects multiple driver in order to have a single access point to all automation server. This allows us to register
+collects multiple drivers in order to have a single access point to all automation servers. This allows us to register
 many Appium HbbTV Driver connected to different Smart TVs to a central point and access all TVs at the same time
 through it. It simplifies adding more Smart TVs to a sophisticated TV infrastructure. In order to register a driver
 manually to a remote hub the Appium HbbTV Driver also has a custom view\footnote{Available at
@@ -488,7 +486,7 @@ The described implementation allows to seamlessly setup and scale a Selenium Gri
 manufactures. All you need is a:
 
 \begin{itemize}
-  \item Smart TV connected to a HbbTV Play Out
+  \item Smart TV connected to an HbbTV Play Out
   \item Raspberry Pi, including:
     \begin{itemize}
       \item 4GB SD card provisioned with a predefined image
@@ -504,7 +502,7 @@ to the TV. The embedded Ethernet port of the Raspberry is then connected to the 
 preconfigured so it starts all components automatically. It runs a DHCP server that should assign an IP address to the
 SmartTV after booting\footnote{If this is not the case the Raspberry Pi has to be rebooted}. The Pi itself will then
 get an IP address assigned by the router. The TV should be then connected to the internet via the Raspberry Pi. The
-last manual step is to open a broadcast stream with a HbbTV signal so that the proxy on the Pi can instrument the page.
+last manual step is to open a broadcast stream with an HbbTV signal so that the proxy on the Pi can instrument the page.
 From that point we can control the HbbTV browser via any WebDriver client. It makes sense to set the hostname of the Pi
 to the name of the TV model it is assigned to in order to easier access the right device. You can change the hostname by accessing
 the Pi via SSH and open the internal configuration menu\footnote{via "\$ sudo raspi-config"}. If you access the DevTools
