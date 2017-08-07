@@ -14,13 +14,13 @@ innovation by 1934, all television systems had been converted to electronic mach
 more popular in humans households so that almost 10 years later the number of U.S. homes with television sets
 could be measured in the thousands and by the late 1990s more than 98\% of U.S. homes had at least one
 television. The TV was one of the first electronic devices that introduced a new generation of entertainment
-equipment that everyone suppose to have.
+equipment that everyone was supposed to have.
 
 Despite innovations like colored displays or flat screen devices the television quickly lost the race against
 the mobile phone as well as the personal computer and later laptop. Although it is still a very popular
 medium, people nowadays use their smartphone or personal computer more frequent as it was at the end of the
 20th century. One of the major reasons was the innovation of the internet. The more people were able to connect
-each other and consume media over the web the more became the television the less frequent choice for
+to each other and consume media over the web the more became the television the less frequent choice for
 entertainment. The new generation of kids grows up with web media portals like YouTube\footnote{\url{https://www.youtube.com/}}
 that generates billions and billions of clicks, views and revenue for advertisement companies every day.
 
@@ -31,8 +31,8 @@ It is the first generation of such devices that are connected to the worldwide w
 digital content in a non-linear way for the first time.
 
 Since then the market and the amount of Smart TVs has been growing fast. With that the HbbTV standard evolved
-and more and more broadcaster have build an app for their broadcast streams. Worldwide more than 25 countries
-(mainly in Europe) have adopted the standard and broadcaster have developed around 300 apps that can
+and more and more broadcasters have build an app for their broadcast streams. Worldwide more than 25 countries
+(mainly in Europe) have adopted the standard and broadcasters have developed around 300 apps that can
 be viewed by more than 43 million sold devices with HbbTV support\footnote{\url{https://www.hbbtv.org/news-events/hbbtv-ibc-2016-services-and-devices/}}.
 Numbers are growing. It shows the tremendous potential of the market and the beginning of a paradigm shift
 from linear TV streams to non-linear media content on demand.
@@ -43,7 +43,7 @@ By introducing Internet to the TV it automatically opened the door for web techn
 on these devices. While early setup boxes like Chromecast\footnote{\url{https://www.google.com/intl/de_de/chromecast/}}
 enabled some web-browsing experience, HbbTV was the first real technology that brought websites to the big screen.
 Instead of just watching a stream with linear content, HbbTV supported devices also provide web sources that
-contextually fits to the viewed content and allows the user to navigate through an app to experience more media
+contextually fit to the viewed content and allows the user to navigate through an app to experience more media
 offers.
 
 These apps are web pages with JavaScript heavy functionality that are rendered in proprietary browsers. Unlike
@@ -68,11 +68,11 @@ the competition between browsers is not based on the question of who can interpr
 render the page more correctly but more which browser supports the latest recommended standards and fanciest
 technologies.
 
-Unfortunately this is not the case for all embedded browser in Smart TVs. The HbbTV standard was developed as
+Unfortunately this is not the case for all embedded browsers in Smart TVs. The HbbTV standard was developed as
 a superset of HTML and JavaScript. The specification itself recommends support for certain APIs but doesn't
 require the manufacture to embed the latest browser and all their features. This is partially due to the fact
 that not all web technologies are applicable on a television. For example there is no WebRTC support because
-most of the TVs don't have a camera built in. Additionally an HbbTV application was suppose to only add contextual
+most of the TVs don't have a camera built in. Additionally an HbbTV application was supposed to only add contextual
 information to the provided broadcast stream. Building complex web applications was never considered becoming
 reality in the first place. However as more broadcaster discovered the opportunities that HbbTV can bring to
 the audience more people were interested in finding new ways to deliver interactive content to anyone in
@@ -84,13 +84,13 @@ of embedded browser not only by adding more computing power to Smart TVs but als
 to already accepted web standards. In addition to that the HbbTV standard itself evolved and requires now certain
 technology to be supported in order to allow the TV to label itself as HbbTV compliant. The problem with this is
 that not everyone buys a new TV as soon as there is a better one on the market. Especially since they last longer
-than usual mobile phones or computer the update cycles of televisions are long. Compared to desktop browser which
-update themself automatically and have reached version numbers in the fifties, the browser within today's Smart
+than usual mobile phones or computers the update cycles of televisions are long. Compared to desktop browsers which
+update themself automatically and have reached version numbers in the fifties, the browsers within today's Smart
 TVs don't update and stick as long as the owner keeps the television. This creates a highly fragmented
 user market with tons of different devices over time that all support a different level of HTML and JavaScript.
 Building qualitative HbbTV apps that suppose to run on the majority of devices in peoples households becomes super
 time-consuming and expensive since you don't know if the device can execute your scripts or if you've used
-functionality that is not supported. As a developer you not only have to have all the TV devices which is literally
+functionality that is not supported. As a developer you not only have to own all the TV devices which is literally
 impossible but you also need to manually test your app on each one of these. This process is cumbersome and not
 scaleable.
 
@@ -101,22 +101,22 @@ building apps for the Smart TV is lagging behind modern web development standard
 of televisions on the market it is almost impossible to ensure 100\% functionality for each individual TV.
 In addition to that since the browser that renders the app is embedded on a remote device it appears to be
 way more difficult to not only build HbbTV applications but also to debug them in case a certain TV doesn't
-run a certain functionality. In addition to that since HbbTV is a fairly new standard on the market it has not
-even closed developed a community around the technology compared to the modern web on desktop and mobile. Not
-more than a handful frameworks has been developed so far that can simplify the work of an HbbTV app developer. Most
-of the problems still have to be solved individually which increases the probability of introducing errors and
-issues that have to be fixed.
+run a certain functionality. Furthermore since HbbTV is a fairly new standard on the market it has not
+even closed attracted a developer community around the technology compared to the modern web on desktop and
+mobile. Not more than a handful frameworks have been open sourced so far that can simplify the work of an HbbTV
+app engineer. Most of the problems still have to be solved individually which increases the probability of
+introducing errors and issues that have to be fixed.
 
 The goal of this thesis is to mitigate common developer issues when building HbbTV applications for arbitrary
 Smart TVs by providing a set of tools that has been proven to be useful for modern web development on desktop
 and mobile. The way how we build apps should not be any different when switching between computer, handheld or
 television devices. Due to standardization and integration work that has been done so far we gathered a reliable
-set of tools that work perfectly with each other and is known by every developer. Current HbbTV app development
+set of tools that work perfectly with each other and is known by every programmer. Current HbbTV app development
 is extremely painful when it comes to debugging and web-authoring. Often people build their homegrown solutions
 which is not more or less than a panel with logging messages. There is no real interaction happening between app
-and app developer. This makes fixing bugs almost a trial and error process.
+and app engineer. This makes fixing bugs almost a trial and error process.
 
-By bringing modern web tooling to the TV we don't only improve dev experience but also increase the velocity
+By bringing modern web tooling to the TV we don't only improve developing experience but also increase the velocity
 and quality of shipping HbbTV apps to the market. Looking at televisions being no different from other internet
 connected devices these days we should try to adapt technologies for quality assurance like automated testing
 approaches to improve the way we test HbbTV apps. Especially since the mobile market is similar fragmented
@@ -127,52 +127,51 @@ app or website he builds.
 
 \section{Scope\label{sec:scope}}
 
-As the title of this thesis discloses I will try to design and implement a development and test automation
-platform for HbbTV based applications. We should look separately on these objectives as they fulfill different
-purposes for the developer.
+As the title of this thesis discloses I will try to design and implement a development and test automation platform
+for HbbTV based applications. We should look separately on these objectives as they fulfill different purposes.
 
-The development platform should provide HbbTV app developer a way to debug and interact with the app on the TV in a
-similar fashion than he would do on the desktop using his favorite browser. Recent browser statistics\footnote{Browser
+The development platform should provide engineers a way to debug and interact with the app on the TV in a similar
+fashion than they would do on the desktop using their favorite browser. Recent browser statistics\footnote{Browser
 statistics is hard to measure and always depends on which user base you track. However regardless if you look at more
 general statistic like StatCounter (\url{http://gs.statcounter.com/}) or a more web developer oriented one like
 W3Schools (\url{https://www.w3schools.com/browsers/}) it shows that Google Chrome has by far the biggest market
 share worldwide.} clearly show that Google Chrome is not only the most used browser in the market but also the most
-preferred browser for web development. The main reason is its built in Chrome Developer Tools\footnote{\url{https://developer.chrome.com/devtools}}
+preferred browser for web development. The main reason is its built-in Chrome Developer Tools\footnote{\url{https://developer.chrome.com/devtools}}
 that \textit{''give[s] developers access to the internal workings of the web browser and web apps''} \cite{devtools}.
-Since it is so popular and well-known to developers I will find and implement a way to use Chrome's DevTools
+Since it is so popular and well-known to engineers I will find and implement a way to use Chrome's DevTools
 application to debug HbbTV apps directly on a Smart TV. The DevTools app itself is nothing more than a usual web app
 that can be used by the Chrome browser. It is publicly available on GitHub\footnote{\url{https://github.com/ChromeDevTools/devtools-frontend}}
 and can be used with respect of Googles license agreement\footnote{\url{https://github.com/ChromeDevTools/devtools-frontend/blob/master/LICENSE}}.
 That being said, the actual technical work here is not to rebuild the DevTools application but to reverse
 engineer the communication that happens between that app and the browser in order to enable information exchange
-and debugging commands. Due to the fact that the browser that renders an HbbTV app on the TV does not disclose
-these informations we need to find a way to provide these by injecting a script that can send us all the details
-of the HbbTV app based on the Chrome DevTools Protocol. Due to limitations in time, implementation and
-technical support of the browser that is running on the TV it won't be possible to support all features
-that the DevTools app provides. The work concentrates only on parts that are relevant to an HbbTV app
-developers and which are feasible with all the limitations of the browser on the TV. To be more specific,
-the developer will be able to see the DOM structure of the app as well as its sources and network traffic.
-He will be able to change attributes of DOM nodes and remove them. In addition to that he will be able to
-use the console tab to run arbitrary JavaScript code getting executed on the TV in the same runtime environment
-as the app. With that the developer will be able to access the global scope of the runtime and therefor
-also inspect certain states of the app. There will be two different ways provided to inject the script that
-enables the communication with the DevTools application.
+and debugging commands. Due to the fact that the browser that renders an HbbTV app does not disclose these
+informations we need to find a way to provide these by injecting a script that can send us all the details
+of the HbbTV app based on the Chrome DevTools Protocol. Due to limitations in time, implementation and technical
+support of the browser that is running on the TV it won't be possible to support all features that the DevTools
+app provides. The work concentrates only on parts that are relevant to HbbTV app developer and which are feasible
+with all the limitations of the browser on the TV. To be more specific, they will be able to see the DOM structure
+of the app as well as its sources and network traffic. Furthermore it will be possible to add attributes to DOM
+nodes, alter or remove them. In addition to that they will be able to use the console tab to run arbitrary JavaScript
+code getting executed on the TV in the same runtime environment as the app. With that the developer will be able
+to access the global scope of the runtime and therefor also inspect certain states of the app. There will be two
+different ways provided to inject the script that enables the communication with the DevTools application.
 
-Based on this work the test automation platform will allow to run automated tests using the WebDriver
-protocol \footnote{\url{https://www.w3.org/TR/webdriver/}} on real TV devices in the lab. As foundation I will build the
-test automation driver based on Appium's base driver. Appium is a framework for mobile test automation and home
-for a lot of drivers that allow us to run automated tests on iOS, Android, Mac OS and even Windows applications.
-Using a Raspberry Pi as automation proxy I will equip TVs in the lab to run that automation driver and connect
-it to a Selenium Grid server in order to run Selenium tests in any programming language and with any framework
-that supports the latest WebDriver protocol. Using continuous integration and delivery (short CI/CD) tools like
-Jenkins\footnote{\url{https://jenkins.io/}} we will hook up an actual HbbTV app that will be tested on different
-TVs every time someone changes the code in the repository. With the help of various test reporters we will be then
-able to identify issues that come up during testing to spot bugs that had been introduced by the developer
-immediately. Since the WebDriver protocol is specialized for browser automation some of its specifications won't
-apply for TV devices. As the only input device for televisions so far is the remote control the test driver won't
-cover the whole protocol. User prompts, element interactions like click and keyboard actions are not designed
-to work on a TV. Also due to time limitations I will not cover screen capturing or frame switching as they are
-not important commands to ensure the quality of HbbTV apps.
+Based on this work the test automation platform will allow to run automated tests using the WebDriver protocol\footnote{\url{https://www.w3.org/TR/webdriver/}}
+on real TV devices at the Fraunhofer Institute. As foundation I will build a test automation driver based on
+Appium's core technologies. Appium\footnote{\url{http://appium.io/}} is a framework for mobile test automation
+and home for a lot of drivers that allow us to run tests on iOS, Android, Mac OS and even Windows applications.
+Using a Raspberry Pi\footnote{\url{https://www.raspberrypi.org/}} as a proxy I will equip TVs in the device farm
+of the Institute to run that driver and connect it to a Selenium\footnote{\url{http://www.seleniumhq.org/}} Grid
+server in order to run these tests in parallel and with any programming language using any library that supports
+the latest WebDriver protocol. With continuous integration and delivery tools like Jenkins\footnote{\url{https://jenkins.io/}}
+we will hook up an actual HbbTV app that will be tested on different TVs every time someone changes the code in
+the repository. With the help of various test reporters we will be then able to identify issues that come up
+during testing to spot bugs that were introduced by the developer immediately. Since the WebDriver protocol is
+specialized for browser automation some of its specifications won't apply for TV devices. As the only input
+device for televisions so far is the remote control the test driver won't cover the whole protocol. User prompts,
+element interactions like click and keyboard actions are not designed to work on a TV. Also due to time
+limitations I will not cover screen capturing or frame switching as they are not important commands to ensure
+the quality of HbbTV apps.
 
 \begin{figure}[htb]
   \centering
@@ -188,10 +187,10 @@ allow the integration to other tooling which makes us less bound to a certain to
 a TV that was equipped with a Raspberry Pi running the automation driver on it. The Pi will act as a proxy
 and allows to automatically inject the automation script as well as track network data to display requests
 and responses made by the HbbTV application in the DevTools app. Because of the amount of edge cases and
-issues this proxy can run into, there will be no guarantee that this approach is a bullet proof and easy to
-use. Running this kind of setup requires some amount of effort to maintain it. That's why there
-will be another way to debug and test HbbTV apps without a Raspberry PI. This solution will require some
-manual changes to the source code of the app to make it work.
+issues this proxy can run into, there will be no guarantee that this approach is bullet proof and easy to
+use. Running this kind of setup requires some amount of effort to maintain it. That's why there will be
+another way to debug and test HbbTV apps without a Raspberry PI. This solution will require some manual
+changes to the source code of the app to make it work.
 
 \section{Outline\label{sec:outline}}
 
