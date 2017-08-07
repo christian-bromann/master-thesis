@@ -48,7 +48,7 @@ This project is the role model for the DevTools Backend component. Similar how i
 debug applications for smartphones, the DevTools Backend will allow it for HbbTV based apps on Smart
 TVs. The idea is simple. A script that gets executed within a targeted environment connects to a
 server to exchange information and commands as utility for a 3rd party authoring tool. The concept works
-independent from the environment and device. As long as the target supports basic web technology
+independently from the environment and device. As long as the target supports basic web technology
 like HTML and JavaScript it will run everywhere. So this component can not only be used to debug HbbTV
 apps on Smart TVs but also to inspect any other IoT device like a fridge or a coffee machine as long
 as their interfaces are based on web technologies\footnote{Infact the screen in the Tesla Model S
@@ -82,7 +82,7 @@ into the environment it has to register itself to the backend. Script and backen
 connection via WebSockets. Since events and methods will be exchanged randomly from both sides
 it is important to have a full duplex connection type so both ends can communicate with each other
 in an asynchronous fashion. To identify the target, the instrumentation script has to identify
-itself with an unique id that can be either the host of the HbbTV app or a random chosen string. The
+itself with an unique id that can be either the host of the HbbTV app or a randomly chosen string. The
 backend will register the page based on that id and some other metadata and will manage any
 connections to it so that arbitrary clients can connect to the page with the backend as proxy. Due
 to some house keeping work the backend will never directly connect a client to the instrumented
@@ -148,7 +148,7 @@ components is shown in figure \ref{fig:hbbtv-driver-components}.
 \vspace{1cm}
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=15cm]{hbbtv-driver-components.png}\\
+  \includegraphics[width=15cm]{hbbtv-driver-components.pdf}\\
   \caption{Appium HbbTV Driver components}\label{fig:hbbtv-driver-components}
 \end{figure}
 \vspace{0.5cm}
@@ -174,7 +174,7 @@ this process in detail.
 \end{figure}
 \vspace{0.5cm}
 
-A session can only be successful initiated if the DevTools backend component is able to successfully
+A session can only be successful initiated if the DevTools Backend component is able to successfully
 connect to the target device. In case the TV is turned off or never got instrumented by the DevTools
 Backend it requires one manual step to finish the initiation process. By pressing the Exit button
 on the remote the HbbTV app gets reloaded and the DevTools Backend can inject the script if used as
@@ -197,7 +197,7 @@ be re-establised a timeout will be hit and causes to return with an error.
 
 \subsection{Raspberry Pi\label{sec:pi}}
 
-To ensure that such connection lost never happens a man in the middle component between network and
+To ensure that such connection loss never happens a man in the middle component between network and
 Smart TV can be used. A peripheral like a Raspberry Pi\footnote{https://www.raspberrypi.org/} is
 an ideal utility to manage a TVs network traffic and instrument any HbbTV app on the fly. A
 Raspberry Pi is a \textit{''fully customizable and programmable small computer board''}\cite{raspberrypi}
@@ -211,13 +211,13 @@ provisioning of a TV to test HbbTV apps can be reduced to a simple plug\&play st
 The idea is that all network traffic of the Smart TV runs through the Raspberry Pi. Running
 the DevTools Backend component it acts as a Proxy between TV and network. This has the advantage
 that every HbbTV app will be instrumented on the fly. There is no need to manually inject an
-instrumentation script. The DevTools Backend proxy modifies every HTTP packages that has an HbbTV
+instrumentation script. The DevTools Backend proxy modifies every HTTP package that has an HbbTV
 mime type before it sends it back to the TV. In addition to that it tracks all application assets
 so that the developer can inspect all files that have been downloaded by the HbbTV app including
 information like request and response headers. This setup allows to not only do that with own
 applications but also with any HbbTV app of any broadcaster that can be received by the Smart TV.
 Having said that it allows to monitor all communications between HbbTV app and server and helps
-to understand how certain application track your behavior while using the app.
+to understand how certain applications track your behavior while using the app.
 
 In order to put this together, it requires an additional ethernet cable as well as an USB to Ethernet
 adapter. The Raspberry Pi has to maintain two network interfaces. One is for the data transfer between
@@ -251,12 +251,12 @@ a Selenium Grid to orchastrate the WebDriver requests. The Appium HbbTV Driver c
 to register to such a grid using an internal settings page that the user can open in the browser.
 The only information that is required is the IP address of the Selenium Grid server. That server
 has to be accessible in the network where the TV and the Raspberry Pi are located in. The driver
-will send a request to the Selenium Grid server containing the capabilities of the TV. It is
-important that the DevTools Backend is able to connect at least once with an HbbTV app to identify
-the TV. It could also just use the provided API of the TV. However this is different depending on
-the manufacture and the TV model. To cover this within this thesis would be out of scope but an
-interesting feature for the future. If the registration to the grid server was successful it will
-automatically ping the Raspberry Pi every once in a while to check its connectivity.
+will send a request to the Selenium Grid server containing the capabilities of the TV. In order to
+receive those from the device it is important that the DevTools Backend is able to connect at least
+once with an HbbTV app to identify the TV by looking on its user agent. It always constains the
+supported HbbTV version as well as the name of the manufacturer and device model. If the registration
+to the grid server was successful it will automatically ping the Raspberry Pi every once in a while
+to check its connectivity and status.
 
 \vspace{1cm}
 \begin{figure}[htb]
