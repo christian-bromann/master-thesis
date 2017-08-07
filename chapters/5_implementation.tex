@@ -7,20 +7,11 @@
 
 \chapter{Implementation\label{cha:implementation}}
 
-Since we are working in a web environment it only made sense to build all software components with a
-popular web technology too: JavaScript. Both the DevTools Backend and Appium HbbTV Driver components
-are written in NodeJS using a Babel\footnote{\url{https://babeljs.io/}} compiler to use the latest
-EcmaScript\footnote{Ecma is a standards organization that defines the ECMAScript language which was created to standardize JavaScript} features today. They both use Eslint\footnote{\url{http://eslint.org/}} for static code
-analysis and have a Dockerfile so they can get seamlessly deployed on any system that has Docker\footnote{\url{https://www.docker.com/}}
-installed.
+Since we are working in a web environment it only made sense to build all software components with a popular web technology too: JavaScript. Both the DevTools Backend and Appium HbbTV Driver components are written in NodeJS using a Babel\footnote{\url{https://babeljs.io/}} compiler to use the latest EcmaScript\footnote{Ecma is a standards organization that defines the ECMAScript language which was created to standardize JavaScript} features today. They both use Eslint\footnote{\url{http://eslint.org/}} for static code analysis and have a Dockerfile so they can get seamlessly deployed on any system that has Docker\footnote{\url{https://www.docker.com/}} installed.
 
 \section{DevTools Backend\label{sec:implDevtoolsBackend}}
 
-The DevTools Backend has a simple NodeJS project structure with a \textit{package.json} that contains
-a handful of CLI commands to operate and build the project. It is stored on the Fraunhofer GitLab
-server and can be cloned with git if permissions are granted. Once it was cloned you can simply install
-the dependencies and build it using the NPM commands. The project requires to run a NodeJS version
-of v7.4.0 as defined in \textit{.nvmrc}.
+The DevTools Backend has a simple NodeJS project structure with a \textit{package.json} that contains a handful of CLI commands to operate and build the project. It is stored on the Fraunhofer GitLab server and can be cloned with git if permissions are granted. Once it was cloned you can simply install the dependencies and build it using the NPM commands. The project requires to run a NodeJS version of v7.4.0 as defined in \textit{.nvmrc}.
 
 \vspace{1cm}
 \begin{listing}[H]
@@ -58,35 +49,9 @@ $ docker run -p 9222:9222 devtools-backend
 \end{listing}
 \vspace{0.5cm}
 
-The build process not only compiles all server side files down to ES5 using Babel, it also compiles
-all frontend related files (the instrumentation code) to one JavaScript file which gets injected
-into the HbbTV app. This has the advantage that the structure and the way these files are written
-don't differ from each other. Thanks to WebPack\footnote{\url{https://webpack.js.org/}} all frontend
-files are bundled together so that they can get executed in the browser. This makes it really easy
-to structure and share code on server and frontend side. The main server is build on top of Express\footnote{\url{https://expressjs.com/}},
-a minimal and flexible web framework to build web applications in NodeJS. It allows to define API
-endpoints and provides useful utility features to work with Cookies and caching. All application code
-can be found within the \textit{lib} directory. Next to the main server and proxy logic most of the
-code is split up in backend and frontend. The backend part is responsible to route all WebSocket
-communication between the remote debugging client (e.g. the DevTools application) and the frontend
-automation code that gets executed on the Smart TV. It also tracks all network traffic that comes
-through the proxy and returns the data to the client if desired. All backend related information
-like registered pages, resource content or metadata are being held there to save the request to the
-frontend. For simplicity reasons this data is held in memory.
+The build process not only compiles all server side files down to ES5 using Babel, it also compiles all frontend related files (the instrumentation code) to one JavaScript file which gets injected into the HbbTV app. This has the advantage that the structure and the way these files are written don't differ from each other. Thanks to WebPack\footnote{\url{https://webpack.js.org/}} all frontend files are bundled together so that they can get executed in the browser. This makes it really easy to structure and share code on server and frontend side. The main server is build on top of Express\footnote{\url{https://expressjs.com/}}, a minimal and flexible web framework to build web applications in NodeJS. It allows to define API endpoints and provides useful utility features to work with Cookies and caching. All application code can be found within the \textit{lib} directory. Next to the main server and proxy logic most of the code is split up in backend and frontend. The backend part is responsible to route all WebSocket communication between the remote debugging client (e.g. the DevTools application) and the frontend automation code that gets executed on the Smart TV. It also tracks all network traffic that comes through the proxy and returns the data to the client if desired. All backend related information like registered pages, resource content or metadata are being held there to save the request to the frontend. For simplicity reasons this data is held in memory.
 
-As \textit{''page''} we define a debugging target that can be either an HbbTV app on a SmartTV or
-any other web page where the instrumentation code is injected and connected to the backend. The
-server can be used to debug multiple pages at the same time. Each page has a unique identifier
-that allows to connect with a client to the desired page. The communication between the debugging target
-and the server gets initiated via Socket.io\footnote{\url{https://socket.io/}}. Socket.io is a
-sophisticated NodeJS module that enables real-time, bidirectional and event-based communication between
-server and client. It is not only really fast and efficient, it also works reliably on many web
-platforms. Especially on Smart TVs where not all devices have support for WebSockets, Socket.io
-ensures that a connection can be established by using fallback strategies like XHR polling. From
-the server to the debugging client a standard WebSocket server architecture was chosen since
-there are no such fallback requirements to be fulfilled. Every time the proxy injects an
-instrumentation script or the launcher registers itself to the backend a new page instance is created
-and two new Socket channels are opened.
+As \textit{''page''} we define a debugging target that can be either an HbbTV app on a SmartTV or any other web page where the instrumentation code is injected and connected to the backend. The server can be used to debug multiple pages at the same time. Each page has a unique identifier that allows to connect with a client to the desired page. The communication between the debugging target and the server gets initiated via Socket.io\footnote{\url{https://socket.io/}}. Socket.io is a sophisticated NodeJS module that enables real-time, bidirectional and event-based communication between server and client. It is not only really fast and efficient, it also works reliably on many web platforms. Especially on Smart TVs where not all devices have support for WebSockets, Socket.io ensures that a connection can be established by using fallback strategies like XHR polling. From the server to the debugging client a standard WebSocket server architecture was chosen since there are no such fallback requirements to be fulfilled. Every time the proxy injects an instrumentation script or the launcher registers itself to the backend a new page instance is created and two new Socket channels are opened.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -110,11 +75,7 @@ export default class Page extends EventEmitter {
 \label{lst:socketServer}
 \end{listing}
 
-It is worth mentioning that the backend doesn't create a WebSocket server every time a page instance
-gets initiated. It instead attaches itself to the Express server and creates a fake server instance
-(see \textit{''noServer: true''} in listing \ref{lst:socketServer}). When a client asks for a WebSocket connection
-an \textit{''upgrade''} event is emitted when the opening handshake takes place. It \textit{''upgrades
-the connection from HTTP to the WebSocket protocol''}\cite{socket}.
+It is worth mentioning that the backend doesn't create a WebSocket server every time a page instance gets initiated. It instead attaches itself to the Express server and creates a fake server instance (see \textit{''noServer: true''} in listing \ref{lst:socketServer}). When a client asks for a WebSocket connection an \textit{''upgrade''} event is emitted when the opening handshake takes place. It \textit{''upgrades the connection from HTTP to the WebSocket protocol''}\cite{socket}.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -133,10 +94,7 @@ export default class DevtoolsBackend {
 \label{lst:socketUpgrade}
 \end{listing}
 
-The backend module keeps a list of all registered pages and can upgrade the connection properly if
-the event was fired by the server. Depending on the page id, which is a uuid, the backend connects the
-debugging client to the desired page and enables the communication between client and instrumentation
-code.
+The backend module keeps a list of all registered pages and can upgrade the connection properly if the event was fired by the server. Depending on the page id, which is a uuid, the backend connects the debugging client to the desired page and enables the communication between client and instrumentation code.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -157,32 +115,11 @@ upgradeWssSocket (req, socket, head) {
 \label{lst:socket}
 \end{listing}
 
-Once the connection was established the debugging client can send commands and receive events from
-the instrumentation code. In most cases the backend only propagates these messages from Socket.io
-to the WebSocket connection and vice versa.
+Once the connection was established the debugging client can send commands and receive events from the instrumentation code. In most cases the backend only propagates these messages from Socket.io to the WebSocket connection and vice versa.
 
 \subsection{Instrumentation Script}
 
-The frontend part of the DevTools Backend component is the instrumentation script. It gets executed
-in the target environment, e.g. the HbbTV browser on the Smart TV. It connects to the backend via
-Socket.io and is used to propagate page events to the debugging client as well as execute commands
-to transform elements or get information about the page state. The instrumentation script should be
-placed at the top of the \texttt{<head>} block to ensure that it gets executed before everything
-else. This is important because it has to capture as many events as possible. In case the HbbTV app
-fails to load due to a JavaScript error it only can propagate that error to the debugging client if
-it has registered an error handler before the HbbTV code was executed. It also overwrites certain APIs
-like the console object to intercept messages and events. All methods for a certain Chrome DevTools
-Protocol domain are stored in one file. Listing \ref{lst:navigate} shows an example of an implemented
-method\footnote{\url{https://chromedevtools.github.io/devtools-protocol/tot/Page/\#method-navigate}}
-for the page domain. As mentioned above it is written using the latest EcmaScript language features
-like the destructuring assignment syntax\footnote{\url{https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment}}
-or the export statement\footnote{\url{https://developer.mozilla.org/en/docs/web/javascript/reference/statements/export}}.
-Even though these features aren't supported in current browsers (and especially not in proprietary
-HbbTV browsers of old TV models) they can still be used since the code gets compiled down to a legacy
-JavaScript version. This ensures that the code is fully compatible on the target device. However this
-doesn't replace missing JavaScript APIs. Therefor any APIs that have not been defined within the
-EcmaScript 3 specification, which is the supported version for HbbTV 1.0, are either avoided or used
-in a way that any instructions would fail silently.
+The frontend part of the DevTools Backend component is the instrumentation script. It gets executed in the target environment, e.g. the HbbTV browser on the Smart TV. It connects to the backend via Socket.io and is used to propagate page events to the debugging client as well as execute commands to transform elements or get information about the page state. The instrumentation script should be placed at the top of the \texttt{<head>} block to ensure that it gets executed before everything else. This is important because it has to capture as many events as possible. In case the HbbTV app fails to load due to a JavaScript error it only can propagate that error to the debugging client if it has registered an error handler before the HbbTV code was executed. It also overwrites certain APIs like the console object to intercept messages and events. All methods for a certain Chrome DevTools Protocol domain are stored in one file. Listing \ref{lst:navigate} shows an example of an implemented method\footnote{\url{https://chromedevtools.github.io/devtools-protocol/tot/Page/\#method-navigate}} for the page domain. As mentioned above it is written using the latest EcmaScript language features like the destructuring assignment syntax\footnote{\url{https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment}} or the export statement\footnote{\url{https://developer.mozilla.org/en/docs/web/javascript/reference/statements/export}}. Even though these features aren't supported in current browsers (and especially not in proprietary HbbTV browsers of old TV models) they can still be used since the code gets compiled down to a legacy JavaScript version. This ensures that the code is fully compatible on the target device. However this doesn't replace missing JavaScript APIs. Therefor any APIs that have not been defined within the EcmaScript 3 specification, which is the supported version for HbbTV 1.0, are either avoided or used in a way that any instructions would fail silently.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -203,10 +140,7 @@ export function navigate ({ url }) {
 \label{lst:navigate}
 \end{listing}
 
-All domain logic is then imported into a single module to export it as central API. This pattern is called
-\textit{''Barrel''} and has its origin from the TypeScript world. \textit{''A barrel is a way to rollup
-exports from several modules into a single convenient module. The barrel itself is a module file that
-re-exports selected exports of other modules''}\cite{barrel}.
+All domain logic is then imported into a single module to export it as central API. This pattern is called \textit{''Barrel''} and has its origin from the TypeScript world. \textit{''A barrel is a way to rollup exports from several modules into a single convenient module. The barrel itself is a module file that re-exports selected exports of other modules''}\cite{barrel}.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -229,9 +163,7 @@ export default {
 \label{lst:barrel}
 \end{listing}
 
-This allows us to import one file containing an interface to access the whole domain logic. With only a
-couple of lines we can then register a listener to the Socket.io channel for each domain and execute
-a method based on the message parameters.
+This allows us to import one file containing an interface to access the whole domain logic. With only a couple of lines we can then register a listener to the Socket.io channel for each domain and execute a method based on the message parameters.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -245,38 +177,13 @@ for (let [name, domain] of Object.entries(domains)) {
 \label{lst:barrel}
 \end{listing}
 
-The \textit{dispatchEvent} method checks if the action that is defined within the arguments is implemented
-and executes it if so. It then either returns the result of the function call back to the backend and
-debugging client or does nothing if no result was returned. This approach allows us to enhance the domain
-logic without having to register new listeners to the socket connection.
+The \textit{dispatchEvent} method checks if the action that is defined within the arguments is implemented and executes it if so. It then either returns the result of the function call back to the backend and debugging client or does nothing if no result was returned. This approach allows us to enhance the domain logic without having to register new listeners to the socket connection.
 
-To reference DOM nodes back and forth between instrumentation script and debugging client every node on
-the page is getting referenced with a node id. As soon as the instrumentation script gets initiated and
-the DOM tree is rendered it runs through the whole tree and sets an internal flag (\texttt{\_nodeId}) on
-every node. In addition to that it saves a reference to that node internally so it can find it based
-on the node id at all times. If a client fetches the document using \texttt{DOM.getDocument}\footnote{\url{https://chromedevtools.github.io/devtools-protocol/tot/DOM/\#method-getDocument}}
-the instrumentation script returns instead of the actual node object a representation of it based on
-the Node\footnote{see lib/frontend/models/Node.js} class. This representation contains the assigned node
-id which allows the client to interact (e.g. change attributes or the content) with that node. In addition
-to that every instance registers a mutation observer\footnote{\url{https://dom.spec.whatwg.org/\#mutation-observers}}
-on itself. This allows to listen to DOM and attributes changes on DOM nodes and helps debugging clients
-to update DOM tree representations in their applications (e.g. Chrome DevTools Elements panel). Other composite
-objects like promises, generators or maps are handled similarly. With the PropertyObject\footnote{see lib/frontend/models/PropertyObject.js}
-class the instrumentation script converts each object into a different representation of itself to allow
-data exchange over the HTTP protocol. Instead of the actual object it returns an object id that is stored
-in an ObjectStore\footnote{see lib/frontend/models/ObjectStore.js} on the page. Since these objects can't
-be serialized they remain there and can be referenced using the object id. Similar to how DOM nodes are
-stored every object in the object store is held in memory. Since every object is passed by reference this
-won't have any affect on the performance of the page.
+To reference DOM nodes back and forth between instrumentation script and debugging client every node on the page is getting referenced with a node id. As soon as the instrumentation script gets initiated and the DOM tree is rendered it runs through the whole tree and sets an internal flag (\texttt{\_nodeId}) on every node. In addition to that it saves a reference to that node internally so it can find it based on the node id at all times. If a client fetches the document using \texttt{DOM.getDocument}\footnote{\url{https://chromedevtools.github.io/devtools-protocol/tot/DOM/\#method-getDocument}} the instrumentation script returns instead of the actual node object a representation of it based on the Node\footnote{see lib/frontend/models/Node.js} class. This representation contains the assigned node id which allows the client to interact (e.g. change attributes or the content) with that node. In addition to that every instance registers a mutation observer\footnote{\url{https://dom.spec.whatwg.org/\#mutation-observers}} on itself. This allows to listen to DOM and attributes changes on DOM nodes and helps debugging clients to update DOM tree representations in their applications (e.g. Chrome DevTools Elements panel). Other composite objects like promises, generators or maps are handled similarly. With the PropertyObject\footnote{see lib/frontend/models/PropertyObject.js} class the instrumentation script converts each object into a different representation of itself to allow data exchange over the HTTP protocol. Instead of the actual object it returns an object id that is stored in an ObjectStore\footnote{see lib/frontend/models/ObjectStore.js} on the page. Since these objects can't be serialized they remain there and can be referenced using the object id. Similar to how DOM nodes are stored every object in the object store is held in memory. Since every object is passed by reference this won't have any affect on the performance of the page.
 
 \subsection{Launcher\label{sec:launcher}}
 
-The Launcher script is what's used to manually inject the instrumentation logic on arbitrary platforms
-without setting up a proxy. It contains next to the Socket.io client library an initialization part and
-the actual instrumentation script. The initialization part is important as the script needs to register
-itself as a page to the DevTools Backend component. If a proxy is used this usually happens on the server
-side. To inject the launcher a script tag has to be placed at the top of the \texttt{<head>} block so
-that it gets executed first. The actual code can be received from the DevTools Backend server.
+The Launcher script is what's used to manually inject the instrumentation logic on arbitrary platforms without setting up a proxy. It contains next to the Socket.io client library an initialization part and the actual instrumentation script. The initialization part is important as the script needs to register itself as a page to the DevTools Backend component. If a proxy is used this usually happens on the server side. To inject the launcher a script tag has to be placed at the top of the \texttt{<head>} block so that it gets executed first. The actual code can be received from the DevTools Backend server.
 
 \vspace{0.3cm}
 \begin{listing}[H]
@@ -293,38 +200,13 @@ that it gets executed first. The actual code can be received from the DevTools B
 \label{lst:launcher}
 \end{listing}
 
-Once the script is downloaded by the browser it sends an XHR request to the server with some page metadata
-(e.g. uuid, url, title, user agent, etc) asking to register this page to the backend. After that it
-initates the instrumentation scripts and starts the communication to the backend via Socket.io. The uuid
-can be defined manually by adding a \texttt{data-uuid} attribute to the script tag. If this attribute
-can't be found it uses the hostname as unique id. The \texttt{data-origin} attribute is used to hide this
-DOM node from the debugging client. If a client requests DOM nodes from the instrumentation script these
-nodes will be ignored so that they don't show up in any DOM representation as they actually are not part
-of the web application.
+Once the script is downloaded by the browser it sends an XHR request to the server with some page metadata (e.g. uuid, url, title, user agent, etc) asking to register this page to the backend. After that it initates the instrumentation scripts and starts the communication to the backend via Socket.io. The uuid can be defined manually by adding a \texttt{data-uuid} attribute to the script tag. If this attribute can't be found it uses the hostname as unique id. The \texttt{data-origin} attribute is used to hide this DOM node from the debugging client. If a client requests DOM nodes from the instrumentation script these nodes will be ignored so that they don't show up in any DOM representation as they actually are not part of the web application.
 
 \subsection{Proxy\label{sec:proxy}}
 
-To automate the script injection the DevTools Backend component provides a proxy that modifies the content
-of certain HTTP packages. It injects the Socket.io client library and the instrumentation script inline so
-that it can establish a socket connection with the backend even before the document has fully loaded.
-Since all network traffic will go through the proxy it is able to track all packages that have been
-requested by the app. With that information we can provide a full network report for each page load
-including timeline information and data on when the first package was loaded and when loading was finished.
-Since you can inspect every network package it allows you to see how certain HbbTV applications load data
-from the backend as well as how it tracks your behavior on the page.
+To automate the script injection the DevTools Backend component provides a proxy that modifies the content of certain HTTP packages. It injects the Socket.io client library and the instrumentation script inline so that it can establish a socket connection with the backend even before the document has fully loaded. Since all network traffic will go through the proxy it is able to track all packages that have been requested by the app. With that information we can provide a full network report for each page load including timeline information and data on when the first package was loaded and when loading was finished. Since you can inspect every network package it allows you to see how certain HbbTV applications load data from the backend as well as how it tracks your behavior on the page.
 
-Since we only want to modify packages that contain HTML code and pass on the other packages, e.g. images
-or scripts, we have to make sure that we filter every request depending on its type. This can be done in
-multiple ways. Just by extracting the file ending you can already identify most of the packages by its
-type. Additionally some requests have an \texttt{Accept} header that contains the expected mime type that
-is about to be returned by the server. However these informations do not fully ensure that the file that
-is being requested should be modified or not. Given the fact that modifying a wrong file can break the
-whole app we need to have a better way to detect file types. Therefor the proxy has another middleware
-registered that makes an \texttt{OPTIONS}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS}}
-request to actually decide whether to pass it forward or to load its content in order to inject the
-instrumentation script. The HTTP options method can be used to not only detect available HTTP methods,
-it also returns the content type of the requested resource. Since the response doesn't contain any body
-payload it is really lightweight.
+Since we only want to modify packages that contain HTML code and pass on the other packages, e.g. images or scripts, we have to make sure that we filter every request depending on its type. This can be done in multiple ways. Just by extracting the file ending you can already identify most of the packages by its type. Additionally some requests have an \texttt{Accept} header that contains the expected mime type that is about to be returned by the server. However these informations do not fully ensure that the file that is being requested should be modified or not. Given the fact that modifying a wrong file can break the whole app we need to have a better way to detect file types. Therefor the proxy has another middleware registered that makes an \texttt{OPTIONS}\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS}} request to actually decide whether to pass it forward or to load its content in order to inject the instrumentation script. The HTTP options method can be used to not only detect available HTTP methods, it also returns the content type of the requested resource. Since the response doesn't contain any body payload it is really lightweight.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -358,18 +240,9 @@ class Proxy {
 \label{lst:proxyFilter}
 \end{listing}
 
-By calling the \texttt{next()} method we pass on the request to the next middleware which actually handles
-script injection. This happens only if the content type contains HbbTV or text/html though. All other
-requests are getting logged and directly piped to the response. This only works because the request and
-response objects are read/writeable streams.
+By calling the \texttt{next()} method we pass on the request to the next middleware which actually handles script injection. This happens only if the content type contains HbbTV or text/html though. All other requests are getting logged and directly piped to the response. This only works because the request and response objects are read/writeable streams.
 
-The proxy not only ensures that the target page gets instrumented it also allows custom modifications to the
-browser behavior. It is often the case that you want to demo a certain HbbTV application without having to
-setup a broadcast stream that sends an AIT package with the correct address to that app. The DevTools Backend
-component provides a setup page\footnote{Available at \url{http://<ip-of-raspberrypi>:9222/settings}} for that scenario
-that allows to set up an autostart application. When the Smart TV then asks for an HbbTV app it automatically
-redirects the request to the given URL. For the sake of simplicity the autostart url is stored on the filesystem
-in a json file and can be access by a helper function.
+The proxy not only ensures that the target page gets instrumented it also allows custom modifications to the browser behavior. It is often the case that you want to demo a certain HbbTV application without having to setup a broadcast stream that sends an AIT package with the correct address to that app. The DevTools Backend component provides a setup page\footnote{Available at \url{http://<ip-of-raspberrypi>:9222/settings}} for that scenario that allows to set up an autostart application. When the Smart TV then asks for an HbbTV app it automatically redirects the request to the given URL. For the sake of simplicity the autostart url is stored on the filesystem in a json file and can be access by a helper function.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -390,34 +263,13 @@ if (autoload && !cues.find(cue => req.get('host').indexOf(cue) > -1)) {
 \label{lst:hbbtvRedirect}
 \end{listing}
 
-As shown in Listing \ref{lst:hbbtvRedirect} the redirect only takes place when a comma seperated list
-of keywords is not part of the actual request host. Given that a lot of HbbTV applications contain subpages
-and sub applications the developer has to define some keywords that have to be whitelisted. Otherwise
-you will always enter the given autoload page when trying to access a subpage.
+As shown in Listing \ref{lst:hbbtvRedirect} the redirect only takes place when a comma seperated list of keywords is not part of the actual request host. Given that a lot of HbbTV applications contain subpages and sub applications the developer has to define some keywords that have to be whitelisted. Otherwise you will always enter the given autoload page when trying to access a subpage.
 
 \section{Appium HbbTV Driver\label{sec:driver}}
 
-Similar to the DevTools Backend component the Appium HbbTV Driver is a Node.JS project that is similar
-structured as the DevTools Backend component. The setup as described in Listing \ref{lst:setupdevtools}
-is identical. The driver itself doesn't contain a lot of code. Most of the logic is hidden within its
-dependencies. As described in section \ref{sec:appiumhbbtvdriver} the Appium HbbTV Driver is using the
-DevTools Backend component to run its automation. It runs on a Raspberry Pi so that it uses the proxy
-feature of that component to inject the script on any HbbTV app automatically. In this case it will
-automatically connect to the page that was modified by the proxy. However you can also run your Selenium
-tests on any arbitrary web page that was instrumented by the DevTools Backend instrumentation script.
-By having a \texttt{pageId} defined there that matches to the uuid of a registered page in the backend
-it can establish a connection to that page to send the DevTools protocol commands. In case the Smart
-TV has no connection to the DevTools Backend the developer has to manually restart the app so the proxy
-can instrument the HbbTV application. If this doesn't happen the WebDriver session fails.
+Similar to the DevTools Backend component the Appium HbbTV Driver is a Node.JS project that is similar structured as the DevTools Backend component. The setup as described in Listing \ref{lst:setupdevtools} is identical. The driver itself doesn't contain a lot of code. Most of the logic is hidden within its dependencies. As described in section \ref{sec:appiumhbbtvdriver} the Appium HbbTV Driver is using the DevTools Backend component to run its automation. It runs on a Raspberry Pi so that it uses the proxy feature of that component to inject the script on any HbbTV app automatically. In this case it will automatically connect to the page that was modified by the proxy. However you can also run your Selenium tests on any arbitrary web page that was instrumented by the DevTools Backend instrumentation script. By having a \texttt{pageId} defined there that matches to the uuid of a registered page in the backend it can establish a connection to that page to send the DevTools protocol commands. In case the Smart TV has no connection to the DevTools Backend the developer has to manually restart the app so the proxy can instrument the HbbTV application. If this doesn't happen the WebDriver session fails.
 
-Once a connection was established the HbbTV driver connects to the WebSocket server of the page (e.g.
-the target HbbTV application). Similar to the Chrome DevTools application it will receive a lot of
-app information that are propagated from the DevTools Backend component. With that it is able to send
-commands to the actual HbbTV page on the Smart TV as well as receive page data. At this point the
-WebDriver session could be established successfully and the developer can start to run his first automated
-commands. The command handling itself depends on whether or not the request triggers a page load or not.
-If it does the driver has to ensure that the DevTools Backend component was able to successfully reconnect
-to the page. This only happens if we are able to receive certain events from the component.
+Once a connection was established the HbbTV driver connects to the WebSocket server of the page (e.g. the target HbbTV application). Similar to the Chrome DevTools application it will receive a lot of app information that are propagated from the DevTools Backend component. With that it is able to send commands to the actual HbbTV page on the Smart TV as well as receive page data. At this point the WebDriver session could be established successfully and the developer can start to run his first automated commands. The command handling itself depends on whether or not the request triggers a page load or not. If it does the driver has to ensure that the DevTools Backend component was able to successfully reconnect to the page. This only happens if we are able to receive certain events from the component.
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -435,55 +287,17 @@ commands.setUrl = async function (url) {
 \label{lst:setUrl}
 \end{listing}
 
-The example in listing \ref{lst:setUrl} shows how a WebDriver command\footnote{As defined in the protocol
-\url{https://www.w3.org/TR/webdriver/\#go}} is translated to a Chrome DevTools Protocol command\footnote{See
-\url{https://chromedevtools.github.io/devtools-protocol/tot/Page/\#method-navigate}} and send to the DevTools
-Backend component using an internal helper method called "\texttt{request}". From there it gets propagated
-to the actual HbbTV app where the instrumentation script handles the action (e.g. navigate to a page given
-by the url in the payload). The third parameter of that function indicates how the driver has to behave after
-the command is triggered. A truthy value would make the driver wait for the exact response. This is used
-mainly for commands that actually return a value (like a CSS property\footnote{when calling the getCssProperty
-command \url{https://www.w3.org/TR/webdriver/\#get-element-css-value}}). In this case however continuing after
-the command would be problematic since the page is about to open a new HbbTV application. By passing in a falsy
-value it therefor indicates that the command handles the waiting by itself and we expect no response for that
-command whatsoever. By calling \texttt{waitForEvent} in the next line we now wait until a custom event is
-propagated by the application. In this case we wait for the \texttt{DOM.documentUpdated} event which is triggered
-\textit{''when [the] Document has been totally updated [and] Node ids are no longer valid''}\cite{devtoolsprotocolDOM}.
-The command resolves once this event was received. At the end of the command we implicitly wait for a half of
-a second in order to give the browser time to render the page. Smart TVs tend to be slow in many situations and
-the HbbTV browser especially is not always quick in rendering the app. This small timeout stabilizes the
-execution flow and prevents the driver from running into arbitrary race conditions.
+The example in listing \ref{lst:setUrl} shows how a WebDriver command\footnote{As defined in the protocol \url{https://www.w3.org/TR/webdriver/\#go}} is translated to a Chrome DevTools Protocol command\footnote{See \url{https://chromedevtools.github.io/devtools-protocol/tot/Page/\#method-navigate}} and send to the DevTools Backend component using an internal helper method called "\texttt{request}". From there it gets propagated to the actual HbbTV app where the instrumentation script handles the action (e.g. navigate to a page given by the url in the payload). The third parameter of that function indicates how the driver has to behave after the command is triggered. A truthy value would make the driver wait for the exact response. This is used mainly for commands that actually return a value (like a CSS property\footnote{when calling the getCssProperty command \url{https://www.w3.org/TR/webdriver/\#get-element-css-value}}). In this case however continuing after the command would be problematic since the page is about to open a new HbbTV application. By passing in a falsy value it therefor indicates that the command handles the waiting by itself and we expect no response for that command whatsoever. By calling \texttt{waitForEvent} in the next line we now wait until a custom event is propagated by the application. In this case we wait for the \texttt{DOM.documentUpdated} event which is triggered \textit{''when [the] Document has been totally updated [and] Node ids are no longer valid''}\cite{devtoolsprotocolDOM}. The command resolves once this event was received. At the end of the command we implicitly wait for a half of a second in order to give the browser time to render the page. Smart TVs tend to be slow in many situations and the HbbTV browser especially is not always quick in rendering the app. This small timeout stabilizes the execution flow and prevents the driver from running into arbitrary race conditions.
 
 \subsection{Driver Architecture\label{sec:implDriver}}
 
-Thanks to Appiums ecosystem building a driver is fairly simple. The basic architecture is provided by Appium itself.
-The device automation is the only part that has to be implemented and differs between all drivers. When the driver
-gets initiated it imports two important modules from the \texttt{appium-base-driver} project which is the main
-dependency of the driver. It requires a \texttt{server} module which is an custom express server that handles
-all WebDriver requests according to the protocol. This module provides a function that is responsible for registering
-all WebDriver endpoints as defined in the protocol. The \texttt{routeConfiguringFunction} method which is also
-imported from the \texttt{appium-base-driver} then simply maps\footnote{The mapping is defined in the appium-base-driver
-project as well: \url{https://github.com/appium/appium-base-driver/blob/master/lib/mjsonwp/routes.js}} all endpoints
-to a certain instance function defined in the Appium HbbTV Driver. With that all requests to e.g. "\texttt{/wd/hub/session}"
-to initialize a WebDriver session are automatically mapped to a function called \texttt{createSession} which then
-initializies the automation as described in the previous section. The base server not only maps the endpoints to
-certain functions it also checks if the payload is correct and valid according to the protocol.
+Thanks to Appiums ecosystem building a driver is fairly simple. The basic architecture is provided by Appium itself. The device automation is the only part that has to be implemented and differs between all drivers. When the driver gets initiated it imports two important modules from the \texttt{appium-base-driver} project which is the main dependency of the driver. It requires a \texttt{server} module which is an custom express server that handles all WebDriver requests according to the protocol. This module provides a function that is responsible for registering all WebDriver endpoints as defined in the protocol. The \texttt{routeConfiguringFunction} method which is also imported from the \texttt{appium-base-driver} then simply maps\footnote{The mapping is defined in the appium-base-driver project as well: \url{https://github.com/appium/appium-base-driver/blob/master/lib/mjsonwp/routes.js}} all endpoints to a certain instance function defined in the Appium HbbTV Driver. With that all requests to e.g. "\texttt{/wd/hub/session}" to initialize a WebDriver session are automatically mapped to a function called \texttt{createSession} which then initializies the automation as described in the previous section. The base server not only maps the endpoints to certain functions it also checks if the payload is correct and valid according to the protocol.
 
-In addition to the protocol endpoints the Appium HbbTV Driver also registers additional views\footnote{see settings
-view at \url{http://<ip-of-raspberrypi>:4723/settings}} for the developer to e.g. register the driver to a
-Selenium Hub via a simple form. As described in section \ref{sec:history} a Selenium Hub is a central server that
-collects multiple drivers in order to have a single access point to all automation servers. This allows us to register
-many Appium HbbTV Driver connected to different Smart TVs to a central point and access all TVs at the same time
-through it. It simplifies adding more Smart TVs to a sophisticated TV infrastructure. In order to register a driver
-manually to a remote hub the Appium HbbTV Driver also has a custom view\footnote{Available at
-\url{http://<ip-of-raspberrypi>:4723/nodeconfig.json}} to receive the node config that is required to register to the
-hub. Based on the capabilities defined in that config and in the payload of the WebDriver request the Hub will select
-the driver registered with that config.
+In addition to the protocol endpoints the Appium HbbTV Driver also registers additional views\footnote{see settings view at \url{http://<ip-of-raspberrypi>:4723/settings}} for the developer to e.g. register the driver to a Selenium Hub via a simple form. As described in section \ref{sec:history} a Selenium Hub is a central server that collects multiple drivers in order to have a single access point to all automation servers. This allows us to register many Appium HbbTV Driver connected to different Smart TVs to a central point and access all TVs at the same time through it. It simplifies adding more Smart TVs to a sophisticated TV infrastructure. In order to register a driver manually to a remote hub the Appium HbbTV Driver also has a custom view\footnote{Available at \url{http://<ip-of-raspberrypi>:4723/nodeconfig.json}} to receive the node config that is required to register to the hub. Based on the capabilities defined in that config and in the payload of the WebDriver request the Hub will select the driver registered with that config.
 
 \subsection{Selenium Grid Setup and Scaling\label{sec:setupscaling}}
 
-The described implementation allows to seamlessly setup and scale a Selenium Grid with multiple TVs from different
-manufactures. All you need is a:
+The described implementation allows to seamlessly setup and scale a Selenium Grid with multiple TVs from different manufactures. All you need is a:
 
 \begin{itemize}
   \item Smart TV connected to an HbbTV Play Out
@@ -497,32 +311,11 @@ manufactures. All you need is a:
   \item Router that is connected to the internet and all TVs in a single network
 \end{itemize}
 
-The Ethernet port of the Smart TV has to be wired with the USB to Ethernet adapter of the Raspberry Pi that belongs
-to the TV. The embedded Ethernet port of the Raspberry is then connected to the router. The image on the Pi is
-preconfigured so it starts all components automatically. It runs a DHCP server that should assign an IP address to the
-SmartTV after booting\footnote{If this is not the case the Raspberry Pi has to be rebooted}. The Pi itself will then
-get an IP address assigned by the router. The TV should be then connected to the internet via the Raspberry Pi. The
-last manual step is to open a broadcast stream with an HbbTV signal so that the proxy on the Pi can instrument the page.
-From that point we can control the HbbTV browser via any WebDriver client. It makes sense to set the hostname of the Pi
-to the name of the TV model it is assigned to in order to easier access the right device. You can change the hostname by accessing
-the Pi via SSH and open the internal configuration menu\footnote{via "\$ sudo raspi-config"}. If you access the DevTools
-Backend component on the Pi via opening a browser at e.g. \url{http://ue46f8090sl.local:9222} you should then see the
-list of inspectable pages which at that point should be the HbbTV app you just opened. Note that the DevTools Backend
-component is per default registered on port 9222 (standard remote debugging port) and the Appium HbbTV Driver on port
-4723 (standard Appium port). Another static server is registered on port 8080 and gives you a list of logs that are
-captured from both components.
+The Ethernet port of the Smart TV has to be wired with the USB to Ethernet adapter of the Raspberry Pi that belongs to the TV. The embedded Ethernet port of the Raspberry is then connected to the router. The image on the Pi is preconfigured so it starts all components automatically. It runs a DHCP server that should assign an IP address to the SmartTV after booting\footnote{If this is not the case the Raspberry Pi has to be rebooted}. The Pi itself will then get an IP address assigned by the router. The TV should be then connected to the internet via the Raspberry Pi. The last manual step is to open a broadcast stream with an HbbTV signal so that the proxy on the Pi can instrument the page. From that point we can control the HbbTV browser via any WebDriver client. It makes sense to set the hostname of the Pi to the name of the TV model it is assigned to in order to easier access the right device. You can change the hostname by accessing the Pi via SSH and open the internal configuration menu\footnote{via "\$ sudo raspi-config"}. If you access the DevTools Backend component on the Pi via opening a browser at e.g. \url{http://ue46f8090sl.local:9222} you should then see the list of inspectable pages which at that point should be the HbbTV app you just opened. Note that the DevTools Backend component is per default registered on port \texttt{9222} (standard remote debugging port) and the Appium HbbTV Driver on port \texttt{4723} (standard Appium port). Another static server is registered on port 8080 and gives you a list of logs that are captured from both components.
 
-The image for the Raspberry Pi is preconfigured and has all necessary components installed. You can download it under
-the following Owncloud link: \url{https://tubcloud.tu-berlin.de/s/DU6R40CoHvHgVk3}. Using tools like Etcher\footnote{\url{https://etcher.io/}}
-you can flash it on a 4GB SD card. As mentioned above make sure to SSH into the PI to configure the hostname. The
-default hostname is \texttt{appium-hbbtv-driver} so you can log into the Pi via "\texttt{\$ ssh pi@appium-hbbtv-driver.local}".
-The password is the default Raspberry Pi password ("\texttt{raspberry}").
+The image for the Raspberry Pi is preconfigured and has all necessary components installed. You can download it under the following Owncloud link: \url{https://tubcloud.tu-berlin.de/s/DU6R40CoHvHgVk3}. Using tools like Etcher\footnote{\url{https://etcher.io/}} you can flash it on a 4GB SD card. As mentioned above make sure to SSH into the PI to configure the hostname. The default hostname is \texttt{appium-hbbtv-driver} so you can log into the Pi via "\texttt{\$ ssh pi@appium-hbbtv-driver.local}". The password is the default Raspberry Pi password ("\texttt{raspberry}").
 
-Once you have connected the Pi as described to the Smart TV you can start running automated WebDriver tests on them.
-There are hundreds of WebDriver client libraries publicly available\footnote{A curated list of can be found at
-\url{https://github.com/christian-bromann/awesome-selenium\#tools}}. If you want to run your test on a specific TV
-you can just point the client to the corresponding Raspberry Pi in the network. Using a popular WebDriver client in
-JavaScript called WebdriverIO\footnote{\url{http://webdriver.io}} a simple automation script would look like:
+Once you have connected the Pi as described to the Smart TV you can start running automated WebDriver tests on them. There are hundreds of WebDriver client libraries publicly available\footnote{A curated list of can be found at \url{https://github.com/christian-bromann/awesome-selenium\#tools}}. If you want to run your test on a specific TV you can just point the client to the corresponding Raspberry Pi in the network. Using a popular WebDriver client in JavaScript called WebdriverIO\footnote{\url{http://webdriver.io}} a simple automation script would look like:
 
 \begin{listing}[H]
 \begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
@@ -551,9 +344,7 @@ browser
 \label{lst:wdioExample}
 \end{listing}
 
-As shown in the example you don't need to define any capabilities since the automation driver is accessed directly.
-Based on that you can build more sophisticated test suites for any kind of HbbTV applications. An example of such
-test suite can be found in the demo directory in the Appium HbbTV Driver repository\footnote{\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/appium-hbbtv-driver/tree/master/demo}}
+As shown in the example you don't need to define any capabilities since the automation driver is accessed directly. Based on that you can build more sophisticated test suites for any kind of HbbTV applications. An example of such test suite can be found in the demo directory in the Appium HbbTV Driver repository\footnote{\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/appium-hbbtv-driver/tree/master/demo}}
 
 % \section{Setup Evaluation\label{sec:setupevaluation}}
 %
