@@ -10,7 +10,7 @@ The major objective of this study is to improve the process of building HbbTV ap
 
 With that technology in place results demonstrate how powerful debugging HbbTV applications can be and how much information a developer can receive. From the full DOM tree to a JavaScript console up to a detailed report about all received network packages, the state of the app is accessible at any given point in time. Moreover, proves the new HbbTV driver that running automated tests in a continuous delivery pipeline using a tool like Jenkins is fast, reliable and interoperable. A comparison at the end reveals that this approach provides a higher scaleability, functionality and flexibility for debugging and automated testing than any other existing solution in the market before.
 
-You can get the compiled PDF here: TBD.
+You can get the compiled PDF here: <http://www.christian-bromann.com/thesis.pdf>.
 
 © 2017 Christian Bromann
 
