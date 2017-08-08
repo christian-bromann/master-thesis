@@ -1,0 +1,64 @@
+\author{Christian Bromann}
+\title{Design and Implementation of a Development and Test Automation Platform for HbbTV}
+
+\input{config/basic}
+
+\begin{document}
+
+% ---------------------------------------------------------------
+\frontmatter
+    \include{./misc/titlepage}
+   	\thispagestyle{empty}
+    \cleardoublepage
+
+    \include{./misc/copyright}
+    \thispagestyle{empty}
+    \cleardoublepage
+
+    \include{./misc/thanx}
+    \thispagestyle{empty}
+    \cleardoublepage
+
+    \include{./misc/self-assertion}
+    \thispagestyle{empty}
+    \cleardoublepage
+
+
+    \include{./misc/abstract}
+    \thispagestyle{empty}
+    \cleardoublepage
+
+    \include{./misc/abstract_de}
+    \thispagestyle{empty}
+
+    \tableofcontents
+    \thispagestyle{empty}
+
+% --------------------------------------------------------------
+\mainmatter % comment single chapters for faster compilation
+
+    \input{./chapters/1_introduction}
+    \input{./chapters/2_state_of_the_art}
+    \input{./chapters/3_requirements}
+    \input{./chapters/4_concept}
+    \input{./chapters/5_implementation}
+    \input{./chapters/6_evaluation}
+    \input{./chapters/7_conclusion}
+
+% ---------------------------------------------------------------
+\backmatter % no page numbering from here
+    \listoffigures
+    \thispagestyle{empty}
+
+    \listoflistings
+    \thispagestyle{empty}
+
+    \input{./misc/acronyms}
+
+    % if you want to provide a glossary with explanations of important terms put it in here
+    \bibliographystyle{config/apalike-url}
+    \bibliography{./bib/references}
+
+    \input{./misc/annex}
+
+\end{document}
