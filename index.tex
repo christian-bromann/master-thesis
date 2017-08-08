@@ -24,6 +24,13 @@
 % set path where images are stored
 \graphicspath{{./img/}}
 
+\addto\captionsngerman{%
+  \renewcommand{\figurename}{Fig.}%
+  \renewcommand{\contentsname}{Contents}%
+  \renewcommand{\listfigurename}{List of Figures}
+  \renewcommand{\bibname}{Bibliography}
+}
+
 \input{./misc/hyphenation}    % use this file to set explicit hyphenations (doesn't seem to work correctly)
 
 \begin{document}
@@ -53,14 +60,7 @@
     \include{./misc/abstract_de}
     \thispagestyle{empty}
 
-
     \tableofcontents
-    \thispagestyle{empty}
-
-    \listoffigures
-    \thispagestyle{empty}
-
-    \listoflistings
     \thispagestyle{empty}
 
 % --------------------------------------------------------------
@@ -77,10 +77,16 @@
 
 % ---------------------------------------------------------------
 \backmatter % no page numbering from here
+    \listoffigures
+    \thispagestyle{empty}
+
+    \listoflistings
+    \thispagestyle{empty}
+
     \input{./misc/acronyms}
 
     % if you want to provide a glossary with explanations of important terms put it in here
-    \bibliographystyle{geralpha}
+    \bibliographystyle{apalike-url}
     \bibliography{./bib/references}
 
     \input{./misc/annex}
