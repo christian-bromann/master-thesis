@@ -46,7 +46,7 @@ Not only on the debugging side fulfills this tool all requirements that were sta
 
 \section{Automated HbbTV Test in CI/CD}
 
-At the end of the thesis a project was setup that should simulate a continous delivery pipeline for a real HbbTV application. The goal was to setup an automated process that tests the app everytime a change was about to get introduced as e.g. a pull request in project that is managed with a version control system like Git\footnote{\url{https://git-scm.com/}}. For this reason a Jenkins server was setup in the TV lab at the Fraunhofer Fokus. Like in other common pipelines a job within Jenkins should get triggered once a patch was proposed to the project. Depending on the result of that test it should approve or reject the code change within the version control system. To accelerate the test execution a Selenium Grid server was setup to allow running tests in parallel on multiple TVs. Four different TV devices were equipped with a Raspberry Pi running the DevTools Backend and the Appium HbbTV Driver on them. All driver got registered to the grid server so that each test is properly directed to the right TV depending on its capabilities. For simplicity reasons the test project\footnote{\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/mpat-webdriver-demo}} only contained the test files and not the app itself so that an already deployed HbbTV\footnote{The application to test here is the MPAT demo application of the Fraunhofer Fokus that is often to show off HbbTV demos at web media symposia. It can be found at \url{http://52.58.133.10/MPAT-core/web/mws/}} application can be used as guinea pig. To show that running functional tests with WebDriver is language agnostic the same test suite was written in 3 different programming language: Python, Ruby and Node.JS. It contained the following tests:
+At the end of the thesis a project was setup that should simulate a continous delivery pipeline for a real HbbTV application. The goal was to create an automated process that tests the app everytime a change was about to get introduced as e.g. a pull request in a project that is managed with a version control system like Git\footnote{\url{https://git-scm.com/}}. For this reason a Jenkins server was deployed in the TV lab at the Fraunhofer Fokus. Like in other common pipeline models a job within Jenkins should get triggered once a patch was proposed to the project. Depending on the result of that test it should approve or reject the code change within the version control system. To accelerate the test execution a Selenium Grid server was setup to allow running tests in parallel on multiple TVs. Two different TV devices were equipped with a Raspberry Pi running the DevTools Backend and the Appium HbbTV Driver on them. All driver got registered to the grid server so that each test is properly directed to the right TV depending on its capabilities. For simplicity reasons the test project\footnote{\url{https://gitlab.fokus.fraunhofer.de/christian.bromann/mpat-webdriver-demo}} only contained the test files and not the app itself so that an already deployed HbbTV\footnote{The application to test here is the MPAT demo application of the Fraunhofer Fokus that is often to show off HbbTV demos at web media symposia. It can be found at \url{http://52.58.133.10/MPAT-core/web/mws/}} application can be used as guinea pig. To show that running functional tests with WebDriver is language agnostic the same test suite was written in 3 different programming languages: Python, Ruby and Node.JS. It contained the following tests:
 
 \noindent
 \begin{table}[h!]
@@ -74,6 +74,74 @@ At the end of the thesis a project was setup that should simulate a continous de
     \label{tab:table1}
 \end{table}
 
+The test basically goes through 3 different pages on the HbbTV app and checks if the app has properly changed the view and shows the right content. Next to checking whether or not the menu can collapse and expand when switching between menu and content back and forth, it tests if videos are automatically playing or if they play on click. When using the page object pattern\footnote{\url{https://martinfowler.com/bliki/PageObject.html}} the test for the \textit{DVB-T2 Broadcast Probing System} page can look as simple as:
+
+\hspace*{0.5cm}
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+import BPS from '../page_objects/bps.page'
+import { expect } from 'chai'
+
+describe('MPAT HbbTV App - DVB-T2 Broadcast Probing System', () => {
+    // ...
+    it('should start the video', () => {
+        browser.keys('right')
+        browser.keys('enter')
+        expect(BPS.video.isExisting()).to.be.equal(true)
+    })
+
+    it('should play video', () => {
+        expect(BPS.isVideoPlaying()).to.be.equal(true)
+    })
+})
+\end{minted}
+\caption{Example Test for the MPAT HbbTV Application}
+\label{lst:exmapleTestMpat}
+\end{listing}
+
+Listing \ref{lst:exmapleTestMpat} above shows a snippet of one test written in Node.JS. It uses WebdriverIO\footnote{\url{http://webdriver.io/}} as automation client. The page object contains all selectors and assertion helpers to abstract away the automation details in the test file. Listing \ref{lst:exmaplePOMpat} shows an excerpt of the corresponding page object.
+
+\hspace*{0.5cm}
+\begin{listing}[H]
+\begin{minted}[mathescape, linenos, numbersep=8pt, gobble=0, framesep=2mm]{js}
+import { Page } from './mpat.page'
+
+class DynamicAdInsertionPage extends Page {
+    // ...
+    get video () {
+        return $('.video-wrapper > object')
+    }
+
+    isVideoPlaying () {
+        return browser.waitUntil(() => {
+            return browser.execute(function () {
+                var videoSelector = '.video-wrapper > object'
+                var videoObject = document.querySelector(videoSelector)
+                return videoObject.playState === 1
+            }).value
+        }, 10000, 'video never started')
+    }
+}
+
+export default new DynamicAdInsertionPage()
+export { DynamicAdInsertionPage as Page }
+\end{minted}
+\caption{Page Object in WebdriverIO}
+\label{lst:exmaplePOMpat}
+\end{listing}
+
+To test if the video is playing the page object executes a JavaScript snippet directly in the HbbTV environment that checks if the video object is in the right playing state. If this doesn't happen within 10 seconds the command throw an assertion error and would cause the test to fail.
+
+The testsuite that was setup was running on 3 different Smart TVs\footnote{An LG with WebOS2.0 and HbbTV 1.5, a Samsung with HbbTV 1.0 and a Philips on a Presto OS with HbbTV 1.5} in parallel\footnote{A video of this can be seen at \url{https://twitter.com/bromann/status/890199053467885578}}. It took about 24 seconds until all devices have finished the tests. Doing this test in a manual old fashioned way would have taken around ~4-5 minutes. Interestingly the oldest TV model (the Samsung SmartTV) always took the longest time and even failed sometimes the test because the browser crashed and the TV had to reboot. Other than that the suite was running stable and no flakiness could be determined. Unfortunately the network to which all TVs where connected to was closed up so that a Jenkins integration with the in-house version control system was not possible. Therefor it was not possible to create pull request gatekeepers that would run functional tests for each single code change on a real Smart TV. However in a real world scenario building sophisticated pipelines with Jenkins allows a variety of possibilities. It starts on the test reporter level and ends on triggering Jenkins jobs when certain events happen, e.g. a pull request or a code push to the master branch happen.
+
+\begin{figure}[htb]
+  \centering
+  \hspace*{-0.5cm}
+  \includegraphics[width=15.5cm]{wdio-reports.pdf}\\
+  \caption{Test Reports (left: Allure Reporter, right: JUnit Reporter)}\label{fig:wdioreports}
+\end{figure}
+
+Figure \ref{fig:wdioreports} shows two different test reports for the same test suite generated by WebdriverIO. These test reporters are like simple plugins and easy setup. Other test frameworks in other languages can generate similar reports depending on the desires of the development team. With this solution such team can decided in which language to run their functional tests, on which Smart TVs supporting which HbbTV version and when to run these tests at what frequency.
 
 \section{Comparison To Other Testing Solutions\label{sec:businessmodel}}
 
@@ -89,4 +157,4 @@ The test environment developed with this thesis follows a completely different g
 
 To summarize these points, the Suitest solution is a legitimized approach for quality assurance of HbbTV applications. The SaaS company sells a prescribed solution that is quite expensive though for a developer without much budget. The solution provided in this theses is build on top of established industry standards with proven success in other software markets. It is much more affordable and easier to integrate in common software pipelines. In long term has this approach a higher likelihood of being adapted in HbbTV developer workflows than the one provided by Suitest.
 
-Even though their patent describes a similar approach to the one outlined in this thesis, it still doesn't violate their claims since all components are based on open standards and protocols. In fact their patent description explicitely talks about a \textit{''test scenario [that] is run and monitored by a test driver system separate from the at least one TV device''} \cite{krocek2016method} which describes a system that only purpose is to test an interactive application. The components developed in this thesis individually have a different purpose but can be setup in a way to achieve a similar goal. Important here is that the Appium HbbTV Driver can not only be used for testing, it is an instrument for automation in general. This is supported by the fact that the driver theoretically could also be used to automate any WebKit based browser not only televisions. Therefor non of the components sole function is to test an interactive application. There is no functionality in neither of them that would provide a testing mechanism. With that it is up to the person who uses the components whether to test something or to just run a set of automated steps on the TV. The focus here is on automation and not testing. This is a major differentiation.
+Even though their patent describes a similar approach to the one outlined in this thesis, it still doesn't violate their claims since all components are based on open standards and protocols. In fact their patent description explicitely talks about a \textit{''test scenario [that] is run and monitored by a test driver system separate from the at least one TV device''} \cite{krocek2016method} which describes a system that has the only purpose to test an interactive application. The components developed in this thesis individually have a different purpose but can be setup in a way to achieve a similar goal. Important here is that the Appium HbbTV Driver can not only be used for testing, it is an instrument for automation in general. This is supported by the fact that the driver theoretically could also be used to automate any WebKit based desktop browser and not only televisions. Therefor non of the components sole function is to test an interactive application. There is no functionality in neither of them that would provide a testing mechanism. With that it is up to the person who uses the components whether to test something or to just run a set of automated steps on the TV. The focus here is on automation and not testing. This is a major differentiation.
